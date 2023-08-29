@@ -6,7 +6,7 @@ where
     fn dot(self, other: Self) -> T;
     fn length(self) -> T;
     fn length_sq(self) -> T;
-    fn length_inv(self) -> crate::Result<T>;
+    fn length_inv(self) -> T;
 }
 pub trait Vector2<T>: Vector<T>
 where

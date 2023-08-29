@@ -10,15 +10,13 @@ pub(crate) enum ErrorKind {
     MathError(MathError),
 }
 
-pub(crate) enum MathError {
-    LengthHasNoInverse,
-}
+pub(crate) enum MathError {}
 
 impl Debug for Error {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
         f.write_str(match self.0 {
             ErrorKind::Unknown => "Unknown Error",
-            ErrorKind::MathError(MathError::LengthHasNoInverse) => "Unable to calculate inverse of length. The vector is at the origin.",
+            ErrorKind::MathError(_) => "Math Error",
         })
     }
 }

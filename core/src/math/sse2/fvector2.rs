@@ -177,33 +177,24 @@ impl Vector<f32> for FVector2 {
     }
 
     //// Returns the inverse of the length (reciprocal of the magnitude) of the vector,
-    /// or an error if the vector has zero length.
+    /// If the length of the vector is zero, this function will return an `f32::INFINITY`.
     ///
-    /// The inverse length of a vector can be used in graphics programming to normalize a vector.
-    /// Normalization refers to the process of scaling the vector to make its length equal to one,
-    /// while preserving its direction. By multiplying a vector by its inverse length, we can quickly obtain a unit vector.
     ///
     /// The inverse length is calculated by taking the reciprocal of the length of the vector (`length` function).
-    ///
-    /// If the vector has zero length (both x and y components are zero), this function will return an error.
-    /// This error indicates that the length of the vector has no inverse
-    /// because division by zero is undefined.
     ///
     /// # Examples
     ///
     /// ```
     /// use vector::FVector2;
     /// let v = FVector2::new(3.0, 4.0);
-    /// let inv_length = v.length_inv().unwrap();
+    /// let inv_length = v.length_inv();
     /// println!("{}", inv_length); // prints: 0.2
     /// ```
-    /// # Errors
-    ///
-    /// If the length of the vector is zero, this function will return an error.
+
     #[inline]
     #[allow(clippy::uninit_assumed_init)]
     #[allow(invalid_value)]
-    fn length_inv(self) -> crate::Result<f32> {
+    fn length_inv(self) -> f32 {
         unsafe {
             let mut length_inv: f32 = MaybeUninit::uninit().assume_init();
             let product = _mm_mul_ps(self.0, self.0);
@@ -213,12 +204,7 @@ impl Vector<f32> for FVector2 {
 
             _mm_store_ss(&mut length_inv, recip);
 
-            if length_inv.is_infinite() {
-                return crate::error::MathError::LengthHasNoInverse
-                    .into_result();
-            }
-
-            Ok(length_inv)
+            length_inv
         }
     }
 }
