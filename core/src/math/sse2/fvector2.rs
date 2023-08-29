@@ -155,16 +155,37 @@ impl Vector<f32> for FVector2 {
         self.dot(self)
     }
 
-    /// Returns the inverse of the length (reciprocal of the magnitude) of the vector.
+    //// Returns the inverse of the length (reciprocal of the magnitude) of the vector,
+    /// or an error if the vector has zero length.
     ///
-    /// The inverse length may be used in graphics programming to normalize a vector. Normalization refers to the process
-    /// of scaling the vector to make its length equal to one, while preserving its direction. By multiplying a vector
-    /// by its inverse length, we can quickly obtain a unit vector.
+    /// The inverse length of a vector can be used in graphics programming to normalize a vector.
+    /// Normalization refers to the process of scaling the vector to make its length equal to one,
+    /// while preserving its direction. By multiplying a vector by its inverse length, we can quickly obtain a unit vector.
     ///
     /// The inverse length is calculated by taking the reciprocal of the length of the vector (`length` function).
+    ///
+    /// If the vector has zero length (both x and y components are zero), this function will return an error.
+    /// This error indicates that the length of the vector has no inverse
+    /// because division by zero is undefined.
+    ///
+    /// # Examples
+    ///
+    /// ```
+    /// use vector::FVector2;
+    /// let v = FVector2::new(3.0, 4.0);
+    /// let inv_length = v.length_inv().unwrap();
+    /// println!("{}", inv_length); // prints: 0.2
+    /// ```
+    /// # Errors
+    ///
+    /// If the length of the vector is zero, this function will return an error.
     #[inline]
-    fn length_inv(self) -> f32 {
-        self.length().recip()
+    fn length_inv(self) -> crate::Result<f32> {
+        if self.xy() == (0.0, 0.0) {
+            return crate::error::MathError::LengthHasNoInverse.into_result();
+        }
+
+        Ok(self.length().recip())
     }
 }
 
