@@ -1,5 +1,6 @@
 // Public modules
 
+#[cfg(feature = "math")]
 /// A module containing various mathematical types and utilities.
 pub mod math;
 
