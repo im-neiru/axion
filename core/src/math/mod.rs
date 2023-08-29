@@ -2,6 +2,7 @@
 
 // Sub modules
 #[cfg(feature = "simd")]
+#[cfg(any(target_arch = "x86_64", target_arch = "x86"))]
 mod sse2;
 
 mod vector;
