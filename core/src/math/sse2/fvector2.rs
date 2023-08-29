@@ -122,15 +122,30 @@ fn test_fvector2_sse2() {
     let ref_time = SystemTime::now();
     let dot = a.dot(b);
 
-    let span = SystemTime::now()
+    let span_dot = SystemTime::now()
+        .duration_since(ref_time)
+        .unwrap()
+        .as_nanos();
+
+    let ref_time = SystemTime::now();
+    let length = a.length();
+
+    let span_length = SystemTime::now()
         .duration_since(ref_time)
         .unwrap()
         .as_nanos();
 
     assert!(dot == 17.6, "FVector2::dot | Wrong output");
+    assert!(length == 3.6055512, "FVector2::length | Wrong output");
+
     println!(
-        "FVector2::dot | {span} ns | {:?} {:?} = {dot}",
+        "FVector2::dot | {span_dot} ns | {:?} {:?} = {dot}",
         a.xy(),
         b.xy()
+    );
+
+    println!(
+        "FVector2::length | {span_length} ns | {:?} = {length}",
+        a.xy(),
     );
 }
