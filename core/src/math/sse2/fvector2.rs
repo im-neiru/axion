@@ -1,6 +1,13 @@
+// Imports from core
+#[cfg(target_arch = "x86")]
+use core::arch::x86::*;
+#[cfg(target_arch = "x86_64")]
 use core::arch::x86_64::*;
+
+// Imports from std
 use std::mem::MaybeUninit;
 
+// Import from crate
 use crate::math::{Vector, Vector2};
 
 #[derive(Clone, Copy)]
