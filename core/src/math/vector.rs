@@ -18,4 +18,6 @@ where
     fn y(self) -> T;
     fn xy(self) -> (T, T);
     fn yx(self) -> (T, T);
+    fn xx(self) -> (T, T);
+    fn yy(self) -> (T, T);
 }

@@ -67,6 +67,18 @@ impl Vector2<f32> for FVector2 {
         let xy = self.xy();
         (xy.1, xy.0)
     }
+
+    #[inline]
+    fn xx(self) -> (f32, f32) {
+        let x = self.x();
+        (x, x)
+    }
+
+    #[inline]
+    fn yy(self) -> (f32, f32) {
+        let y = self.y();
+        (y, y)
+    }
 }
 
 impl Vector<f32> for FVector2 {
