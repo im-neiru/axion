@@ -207,13 +207,47 @@ impl Vector<f32> for FVector2 {
             length_inv
         }
     }
+
+    /// The `normalize` function normalizes a vector using SIMD instructions for efficiency.
+    /// if the vector is at the origin `(0.0, 0.0)`, as this would lead
+    /// to a division by zero when calculating the reciprocal of the root. The result in such case
+    /// would be `(f32::NAN, f32::NAN)`. It is recommended to check if the vector is at the origin before
+    /// calling this function.
+    ///
+    /// # Arguments
+    ///
+    /// * `self` - A FVector2 to be normalized.
+    ///
+    /// # Returns
+    ///
+    /// * `FVector2` - A new Vector2 that is the normalized version of `self`.
+    /// # Example
+    ///
+    /// ```rust
+    /// let v = FVector2::new(3.0, 4.0);
+    /// let normalized_v = v.normalize();
+    /// ```
+    #[inline]
+    #[allow(clippy::uninit_assumed_init)]
+    #[allow(invalid_value)]
+    fn normalize(self) -> Self {
+        unsafe {
+            let product = _mm_mul_ps(self.0, self.0);
+            let sum = _mm_hadd_ps(product, product);
+            let root = _mm_sqrt_ps(sum);
+            let recip = _mm_set1_ps(_mm_cvtss_f32(_mm_rcp_ps(root)));
+            let normalized = _mm_mul_ps(self.0, recip);
+
+            Self(normalized)
+        }
+    }
 }
 
 #[test]
 fn test_fvector2_sse2() {
     use std::time::SystemTime;
 
-    let a = FVector2::new(3.0, 3.0);
+    let a = FVector2::new(3.0, 4.0);
     let b = FVector2::new(4.0, 3.2);
     let ref_time = SystemTime::now();
     let dot = a.dot(b);
@@ -224,15 +258,15 @@ fn test_fvector2_sse2() {
         .as_nanos();
 
     let ref_time = SystemTime::now();
-    let length = a.length_inv();
+    let length = a.length();
 
     let span_length = SystemTime::now()
         .duration_since(ref_time)
         .unwrap()
         .as_nanos();
 
-    // assert!(dot == 17.6, "FVector2::dot | Wrong output");
-    // assert!(length == 3.6055512, "FVector2::length | Wrong output");
+    assert!(dot == 24.8, "FVector2::dot | Wrong output");
+    assert!(length == 5.0, "FVector2::length | Wrong output");
 
     println!(
         "FVector2::dot | {span_dot} ns | {:?} {:?} = {dot}",
@@ -241,7 +275,7 @@ fn test_fvector2_sse2() {
     );
 
     println!(
-        "FVector2::length | {span_length} ns | {:?} = {length:?}",
+        "FVector2::length | {span_length} ns | {:?} = {length}",
         a.xy(),
     );
 }
