@@ -17,13 +17,15 @@ use crate::math::{Vector, Vector2};
 /// This structure is implemented with SIMD (Single Instruction, Multiple Data) which is a type of parallel computing
 /// involving vectors that allows for multiple data points to be processed at once, resulting in performance improvements.
 #[derive(Clone, Copy)]
-#[repr(transparent)]
-pub struct FVector2(pub(crate) __m128);
+pub struct FVector2 {
+    pub x: f32,
+    pub y: f32,
+}
 
 impl Default for FVector2 {
     #[inline]
     fn default() -> Self {
-        Self(unsafe { _mm_setzero_ps() })
+        Self { x: 0.0, y: 0.0 }
     }
 }
 
@@ -37,73 +39,31 @@ impl Vector2<f32> for FVector2 {
     /// * `y` - A float that holds the y component of the vector.
     #[inline]
     fn new(x: f32, y: f32) -> Self {
-        Self(unsafe { _mm_set_ps(0.0, 0.0, y, x) })
-    }
-
-    /// Returns the x component of the vector.
-    #[inline]
-    #[allow(clippy::uninit_assumed_init)]
-    #[allow(invalid_value)]
-    fn x(self) -> f32 {
-        unsafe {
-            let mut x: f32 = MaybeUninit::uninit().assume_init();
-            _mm_store_ss(&mut x, self.0);
-
-            x
-        }
-    }
-
-    /// Returns the y component of the vector.
-    #[inline]
-    #[allow(clippy::uninit_assumed_init)]
-    #[allow(invalid_value)]
-    fn y(self) -> f32 {
-        unsafe {
-            let mut y: f32 = MaybeUninit::uninit().assume_init();
-
-            let v = _mm_shuffle_ps::<1>(self.0, self.0);
-            _mm_store_ss(&mut y, v);
-
-            y
-        }
+        Self { x, y }
     }
 
     /// Returns the x and y components of the vector as a tuple.
     #[inline]
-    #[allow(clippy::uninit_assumed_init)]
-    #[allow(invalid_value)]
     fn xy(self) -> (f32, f32) {
-        unsafe {
-            let mut x: f32 = MaybeUninit::uninit().assume_init();
-            let mut y: f32 = MaybeUninit::uninit().assume_init();
-
-            _mm_store_ss(&mut x, self.0);
-            let v = _mm_shuffle_ps::<1>(self.0, self.0);
-            _mm_store_ss(&mut y, v);
-
-            (x, y)
-        }
+        (self.x, self.y)
     }
 
     /// Returns the y and x components of the vector as a tuple.
     #[inline]
     fn yx(self) -> (f32, f32) {
-        let xy = self.xy();
-        (xy.1, xy.0)
+        (self.y, self.x)
     }
 
     /// Returns the x component of the vector twice as a tuple.
     #[inline]
     fn xx(self) -> (f32, f32) {
-        let x = self.x();
-        (x, x)
+        (self.x, self.x)
     }
 
     /// Returns the y component of the vector twice as a tuple.
     #[inline]
     fn yy(self) -> (f32, f32) {
-        let y = self.y();
-        (y, y)
+        (self.y, self.y)
     }
 }
 
@@ -118,8 +78,11 @@ impl Vector<f32> for FVector2 {
     #[allow(invalid_value)]
     fn dot(self, other: Self) -> f32 {
         unsafe {
+            let a = _mm_set_ps(0.0, 0.0, self.y, self.x);
+            let b = _mm_set_ps(0.0, 0.0, other.y, other.x);
+
             let mut dot_product: f32 = MaybeUninit::uninit().assume_init();
-            let product = _mm_mul_ps(self.0, other.0);
+            let product = _mm_mul_ps(a, b);
             let sum = _mm_hadd_ps(product, product);
 
             _mm_store_ss(&mut dot_product, sum);
@@ -143,8 +106,10 @@ impl Vector<f32> for FVector2 {
     #[allow(invalid_value)]
     fn length(self) -> f32 {
         unsafe {
+            let a = _mm_set_ps(0.0, 0.0, self.y, self.x);
+
             let mut length: f32 = MaybeUninit::uninit().assume_init();
-            let product = _mm_mul_ps(self.0, self.0);
+            let product = _mm_mul_ps(a, a);
             let sum = _mm_hadd_ps(product, product);
             let root = _mm_sqrt_ps(sum);
 
@@ -166,8 +131,10 @@ impl Vector<f32> for FVector2 {
     #[allow(invalid_value)]
     fn length_sq(self) -> f32 {
         unsafe {
+            let a = _mm_set_ps(0.0, 0.0, self.y, self.x);
+
             let mut length_sq: f32 = MaybeUninit::uninit().assume_init();
-            let product = _mm_mul_ps(self.0, self.0);
+            let product = _mm_mul_ps(a, a);
             let sum = _mm_hadd_ps(product, product);
 
             _mm_store_ss(&mut length_sq, sum);
@@ -196,8 +163,10 @@ impl Vector<f32> for FVector2 {
     #[allow(invalid_value)]
     fn length_inv(self) -> f32 {
         unsafe {
+            let a = _mm_set_ps(0.0, 0.0, self.y, self.x);
+
             let mut length_inv: f32 = MaybeUninit::uninit().assume_init();
-            let product = _mm_mul_ps(self.0, self.0);
+            let product = _mm_mul_ps(a, a);
             let sum = _mm_hadd_ps(product, product);
             let root = _mm_sqrt_ps(sum);
             let recip = _mm_rcp_ps(root);
@@ -236,8 +205,11 @@ impl Vector<f32> for FVector2 {
     #[allow(invalid_value)]
     fn distance(self, other: Self) -> f32 {
         unsafe {
+            let a = _mm_set_ps(0.0, 0.0, self.y, self.x);
+            let b = _mm_set_ps(0.0, 0.0, other.y, other.x);
+
             let mut distance: f32 = MaybeUninit::uninit().assume_init();
-            let sub = _mm_sub_ps(self.0, other.0);
+            let sub = _mm_sub_ps(a, b);
             let product = _mm_mul_ps(sub, sub);
             let sum = _mm_hadd_ps(product, product);
             let root = _mm_sqrt_ps(sum);
@@ -272,13 +244,21 @@ impl Vector<f32> for FVector2 {
     #[allow(invalid_value)]
     fn normalize(self) -> Self {
         unsafe {
-            let product = _mm_mul_ps(self.0, self.0);
+            let a = _mm_set_ps(0.0, 0.0, self.y, self.x);
+            let mut normalized_vec: (Self, Self) =
+                MaybeUninit::uninit().assume_init();
+
+            let product = _mm_mul_ps(a, a);
             let sum = _mm_hadd_ps(product, product);
             let root = _mm_sqrt_ps(sum);
             let recip = _mm_set1_ps(_mm_cvtss_f32(_mm_rcp_ps(root)));
-            let normalized = _mm_mul_ps(self.0, recip);
+            let normalized = _mm_mul_ps(a, recip);
 
-            Self(normalized)
+            _mm_store_ps(
+                (&mut normalized_vec as *mut (Self, Self)) as *mut f32,
+                normalized,
+            );
+            normalized_vec.0
         }
     }
 }
