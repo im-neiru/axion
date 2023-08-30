@@ -12,6 +12,6 @@ axion-macro = { path = "../macro" }
 criterion = "0.5.1"
 
 [features]
-default=["math"]
+default=["math", "simd"]
 math=[]
 simd=[]
