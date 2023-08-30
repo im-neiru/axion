@@ -185,7 +185,7 @@ impl Vector<f32> for FVector2 {
     /// # Examples
     ///
     /// ```
-    /// use vector::FVector2;
+    /// use axion::math::*;
     /// let v = FVector2::new(3.0, 4.0);
     /// let inv_length = v.length_inv();
     /// println!("{}", inv_length); // prints: 0.2
@@ -224,9 +224,9 @@ impl Vector<f32> for FVector2 {
     /// # Example
     ///
     /// ```rust
-    /// # use some_vector_library::Vector2;
-    /// let vector1 = Vector2::new(1.0, 2.0);
-    /// let vector2 = Vector2::new(4.0, 6.0);
+    /// use axion::math::*;
+    /// let vector1 = FVector2::new(1.0, 2.0);
+    /// let vector2 = FVector2::new(4.0, 6.0);
     /// let distance = vector1.distance(vector2);
     /// println!("Distance: {}", distance);
     /// ```
