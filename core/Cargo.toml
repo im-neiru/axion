@@ -8,6 +8,9 @@ edition = "2021"
 [dependencies]
 axion-macro = { path = "../macro" }
 
+[dev-dependencies]
+criterion = "0.5.1"
+
 [features]
 default=["math"]
 math=[]
