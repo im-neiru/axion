@@ -11,4 +11,5 @@ pub use axion_macro;
 mod error;
 
 // Public struct & enums
+#[allow(unused)]
 pub use error::{Error, Result};
