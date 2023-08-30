@@ -208,6 +208,46 @@ impl Vector<f32> for FVector2 {
         }
     }
 
+    /// Calculates the Euclidean distance between two 2D vectors.
+    ///
+    /// This function computes the Euclidean distance between two `FVector2`
+    ///
+    /// # Arguments
+    ///
+    /// * `self` - The first vector for which to calculate the distance.
+    /// * `other` - The second vector to which the distance is calculated.
+    ///
+    /// # Returns
+    ///
+    /// The calculated Euclidean distance between the two input vectors as a `f32`.
+    ///
+    /// # Example
+    ///
+    /// ```rust
+    /// # use some_vector_library::Vector2;
+    /// let vector1 = Vector2::new(1.0, 2.0);
+    /// let vector2 = Vector2::new(4.0, 6.0);
+    /// let distance = vector1.distance(vector2);
+    /// println!("Distance: {}", distance);
+    /// ```
+    ///
+    #[inline]
+    #[allow(clippy::uninit_assumed_init)]
+    #[allow(invalid_value)]
+    fn distance(self, other: Self) -> f32 {
+        unsafe {
+            let mut distance: f32 = MaybeUninit::uninit().assume_init();
+            let sub = _mm_sub_ps(self.0, other.0);
+            let product = _mm_mul_ps(sub, sub);
+            let sum = _mm_hadd_ps(product, product);
+            let root = _mm_sqrt_ps(sum);
+
+            _mm_store_ss(&mut distance, root);
+
+            distance
+        }
+    }
+
     /// The `normalize` function normalizes a vector using SIMD instructions for efficiency.
     /// if the vector is at the origin `(0.0, 0.0)`, as this would lead
     /// to a division by zero when calculating the reciprocal of the root. The result in such case
@@ -249,6 +289,9 @@ fn test_fvector2_sse2() {
 
     let a = FVector2::new(3.0, 4.0);
     let b = FVector2::new(4.0, 3.2);
+    let w = a.dot(b); // warm up
+    println!("Warm up dot = {w}");
+
     let ref_time = SystemTime::now();
     let dot = a.dot(b);
 
@@ -265,6 +308,22 @@ fn test_fvector2_sse2() {
         .unwrap()
         .as_nanos();
 
+    let ref_time = SystemTime::now();
+    let normalize = a.normalize();
+
+    let span_normalize = SystemTime::now()
+        .duration_since(ref_time)
+        .unwrap()
+        .as_nanos();
+
+    let ref_time = SystemTime::now();
+    let distance = a.distance(b);
+
+    let span_distance = SystemTime::now()
+        .duration_since(ref_time)
+        .unwrap()
+        .as_nanos();
+
     assert!(dot == 24.8, "FVector2::dot | Wrong output");
     assert!(length == 5.0, "FVector2::length | Wrong output");
 
@@ -277,5 +336,17 @@ fn test_fvector2_sse2() {
     println!(
         "FVector2::length | {span_length} ns | {:?} = {length}",
         a.xy(),
+    );
+
+    println!(
+        "FVector2::normalize | {span_normalize} ns | {:?} = {:?}",
+        a.xy(),
+        normalize.xy()
+    );
+
+    println!(
+        "FVector2::distance | {span_distance} ns | {:?} {:?} = {distance}",
+        a.xy(),
+        b.xy()
     );
 }

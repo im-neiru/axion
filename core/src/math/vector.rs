@@ -7,6 +7,7 @@ where
     fn length(self) -> T;
     fn length_sq(self) -> T;
     fn length_inv(self) -> T;
+    fn distance(self, other: Self) -> T;
     fn normalize(self) -> Self;
 }
 pub trait Vector2<T>: Vector<T>
