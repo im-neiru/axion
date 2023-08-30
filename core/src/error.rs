@@ -4,6 +4,7 @@ pub struct Error(ErrorKind);
 
 pub type Result<T> = std::result::Result<T, self::Error>;
 
+#[allow(dead_code)]
 pub(crate) enum ErrorKind {
     #[allow(unused)]
     Unknown,
@@ -21,6 +22,7 @@ impl Debug for Error {
     }
 }
 
+#[allow(dead_code)]
 impl MathError {
     #[inline]
     pub(crate) fn into_result<T>(self) -> self::Result<T> {
