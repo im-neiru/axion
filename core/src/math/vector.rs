@@ -16,8 +16,6 @@ where
     T: Copy + Clone + Default,
 {
     fn new(x: T, y: T) -> Self;
-    fn x(self) -> T;
-    fn y(self) -> T;
     fn xy(self) -> (T, T);
     fn yx(self) -> (T, T);
     fn xx(self) -> (T, T);
