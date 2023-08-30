@@ -2,3 +2,6 @@
 
 // Sub modules
 mod fvector2;
+
+// Public structs
+pub use fvector2::FVector2;
