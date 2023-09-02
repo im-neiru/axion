@@ -365,6 +365,44 @@ impl FVector2 {
             normalized_vec.0
         }
     }
+
+    #[inline]
+    pub fn is_zero(self) -> bool {
+        unsafe {
+            let a = UnionCast {
+                v2: (self, Self::ZERO),
+            }
+            .m128;
+
+            let b = UnionCast {
+                v2: (Self::ZERO, Self::ZERO),
+            }
+            .m128;
+
+            let cmp_result = _mm_cmpeq_ps(a, b);
+
+            _mm_movemask_ps(cmp_result) == 0xf
+        }
+    }
+
+    #[inline]
+    pub fn is_nan(self) -> bool {
+        unsafe {
+            let a = UnionCast {
+                v2: (self, Self::ZERO),
+            }
+            .m128;
+
+            let cmp_result = _mm_cmpunord_ps(a, a);
+
+            _mm_movemask_ps(cmp_result) != 0
+        }
+    }
+
+    #[inline]
+    pub fn is_finite(self) -> bool {
+        self.x.is_finite() || self.y.is_finite()
+    }
 }
 
 #[test]
@@ -408,6 +446,30 @@ fn test_fvector2_sse2() {
         .unwrap()
         .as_nanos();
 
+    let ref_time = SystemTime::now();
+    let is_zero = FVector2::ZERO.is_zero();
+
+    let span_is_zero = SystemTime::now()
+        .duration_since(ref_time)
+        .unwrap()
+        .as_nanos();
+
+    let ref_time = SystemTime::now();
+    let is_nan = FVector2::NAN.is_nan();
+
+    let span_is_nan = SystemTime::now()
+        .duration_since(ref_time)
+        .unwrap()
+        .as_nanos();
+
+    let ref_time = SystemTime::now();
+    let is_finite = FVector2::INFINITY.is_finite();
+
+    let span_is_finite = SystemTime::now()
+        .duration_since(ref_time)
+        .unwrap()
+        .as_nanos();
+
     assert!(dot == 24.8, "FVector2::dot | Wrong output");
     assert!(length == 5.0, "FVector2::length | Wrong output");
 
@@ -432,5 +494,20 @@ fn test_fvector2_sse2() {
         "FVector2::distance | {span_distance} ns | {:?} {:?} = {distance}",
         a.xy(),
         b.xy()
+    );
+
+    println!(
+        "FVector2::is_nan | {span_is_nan} ns | {:?}  = {is_nan}",
+        FVector2::NAN.xy(),
+    );
+
+    println!(
+        "FVector2::is_nan | {span_is_zero} ns | {:?}  = {is_zero}",
+        FVector2::ZERO.xy(),
+    );
+
+    println!(
+        "FVector2::is_finite | {span_is_finite} ns | {:?}  = {is_finite}",
+        FVector2::INFINITY.xy(),
     );
 }
