@@ -366,11 +366,58 @@ impl FVector2 {
         }
     }
 
+    /// Clamps each component of the `FVector2` to be within the specified range.
+    ///
+    /// This function takes an `FVector2` instance and ensures that each component is
+    /// within the specified `min` and `max` bounds. If a component is less than `min`,
+    /// it will be set to `min`, and if it is greater than `max`, it will be set to `max`.
+    ///
+    /// # Arguments
+    ///
+    /// * `min` - The minimum bounds for each component.
+    /// * `max` - The maximum bounds for each component.
+    ///
+    /// # Returns
+    ///
+    /// A new `FVector2` instance with each component clamped to the specified range.
+    ///
+    /// # Example
+    ///
+    /// ```
+    /// use axion::math::FVector2;
+    ///
+    /// let vector = FVector2::new(2.0, 5.0);
+    /// let clamped = vector.clamp(FVector2::new(1.0, 3.0), FVector2::new(4.0, 6.0));
+    /// assert_eq!(clamped, FVector2::new(2.0, 5.0));
+    /// ```
     #[inline]
     pub fn clamp(self, min: Self, max: Self) -> Self {
         self.max(min).min(max)
     }
 
+    /// Returns an `FVector2` with each component set to the minimum of the corresponding components of `self` and `value`.
+    ///
+    /// This function compares each component of `self` and `value` and returns a new `FVector2`
+    /// with each component set to the minimum of the corresponding components of `self` and `value`.
+    ///
+    /// # Arguments
+    ///
+    /// * `value` - The `FVector2` to compare with `self`.
+    ///
+    /// # Returns
+    ///
+    /// A new `FVector2` instance with each component set to the minimum of the corresponding components of `self` and `value`.
+    ///
+    /// # Example
+    ///
+    /// ```
+    /// use axion::math::FVector2;
+    ///
+    /// let vector1 = FVector2::new(2.0, 5.0);
+    /// let vector2 = FVector2::new(1.0, 3.0);
+    /// let min_vector = vector1.min(vector2);
+    /// assert_eq!(min_vector, FVector2::new(1.0, 3.0));
+    /// ```
     #[inline]
     #[allow(clippy::uninit_assumed_init)]
     #[allow(invalid_value)]
@@ -394,6 +441,29 @@ impl FVector2 {
         }
     }
 
+    /// Returns an `FVector2` with each component set to the maximum of the corresponding components of `self` and `value`.
+    ///
+    /// This function compares each component of `self` and `value` and returns a new `FVector2`
+    /// with each component set to the maximum of the corresponding components of `self` and `value`.
+    ///
+    /// # Arguments
+    ///
+    /// * `value` - The `FVector2` to compare with `self`.
+    ///
+    /// # Returns
+    ///
+    /// A new `FVector2` instance with each component set to the maximum of the corresponding components of `self` and `value`.
+    ///
+    /// # Example
+    ///
+    /// ```
+    /// use axion::math::FVector2;
+    ///
+    /// let vector1 = FVector2::new(2.0, 5.0);
+    /// let vector2 = FVector2::new(1.0, 3.0);
+    /// let max_vector = vector1.max(vector2);
+    /// assert_eq!(max_vector, FVector2::new(2.0, 5.0));
+    /// ```
     #[inline]
     #[allow(clippy::uninit_assumed_init)]
     #[allow(invalid_value)]
@@ -417,6 +487,26 @@ impl FVector2 {
         }
     }
 
+    /// Checks if all components of the `FVector2` are equal to zero.
+    ///
+    /// This function compares each component of the `FVector2` with zero and returns
+    /// `true` if all components are equal to zero, and `false` otherwise.
+    ///
+    /// # Returns
+    ///
+    /// `true` if all components of the `FVector2` are equal to zero, `false` otherwise.
+    ///
+    /// # Example
+    ///
+    /// ```
+    /// use axion::math::FVector2;
+    ///
+    /// let zero_vector = FVector2::ZERO;
+    /// let non_zero_vector = FVector2::new(2.0, 0.0);
+    ///
+    /// assert_eq!(zero_vector.is_zero(), true);
+    /// assert_eq!(non_zero_vector.is_zero(), false);
+    /// ```
     #[inline]
     pub fn is_zero(self) -> bool {
         unsafe {
@@ -436,6 +526,26 @@ impl FVector2 {
         }
     }
 
+    /// Checks if any component of the `FVector2` is NaN (Not-a-Number).
+    ///
+    /// This function checks each component of the `FVector2` for NaN and returns `true`
+    /// if at least one component is NaN, and `false` otherwise.
+    ///
+    /// # Returns
+    ///
+    /// `true` if any component of the `FVector2` is NaN, `false` otherwise.
+    ///
+    /// # Example
+    ///
+    /// ```
+    /// use axion::math::FVector2;
+    ///
+    /// let nan_vector = FVector2::new(f32::NAN, 2.0);
+    /// let valid_vector = FVector2::new(1.0, 3.0);
+    ///
+    /// assert_eq!(nan_vector.is_nan(), true);
+    /// assert_eq!(valid_vector.is_nan(), false);
+    /// ```
     #[inline]
     pub fn is_nan(self) -> bool {
         unsafe {
@@ -450,6 +560,26 @@ impl FVector2 {
         }
     }
 
+    /// Checks if any component of the `FVector2` is finite.
+    ///
+    /// This function checks each component of the `FVector2` for finiteness and returns
+    /// `true` if at least one component is finite, and `false` otherwise.
+    ///
+    /// # Returns
+    ///
+    /// `true` if any component of the `FVector2` is finite, `false` otherwise.
+    ///
+    /// # Example
+    ///
+    /// ```
+    /// use axion::math::FVector2;
+    ///
+    /// let finite_vector = FVector2::new(2.0, 3.0);
+    /// let infinite_vector = FVector2::new(f32::INFINITY, 2.0);
+    ///
+    /// assert_eq!(finite_vector.is_finite(), true);
+    /// assert_eq!(infinite_vector.is_finite(), false);
+    /// ```
     #[inline]
     pub fn is_finite(self) -> bool {
         self.x.is_finite() || self.y.is_finite()
@@ -457,6 +587,29 @@ impl FVector2 {
 }
 
 impl fmt::Display for FVector2 {
+    /// Formats the `FVector2` as a string in the form *(x, y)*.
+    ///
+    /// This implementation allows you to format an `FVector2` instance as a string,
+    /// where the `x` and `y` components are enclosed in parentheses and separated by a comma.
+    ///
+    /// # Arguments
+    ///
+    /// * `formatter` - A mutable reference to the `fmt::Formatter` used for formatting.
+    ///
+    /// # Returns
+    ///
+    /// A `fmt::Result` indicating whether the formatting was successful.
+    ///
+    /// # Example
+    ///
+    /// ```
+    /// use axion::math::FVector2;
+    ///
+    /// let vector = FVector2::new(2.0, 5.0);
+    /// let formatted = format!("{}", vector);
+    ///
+    /// assert_eq!(formatted, "(2.0, 5.0)");
+    /// ```
     #[inline]
     fn fmt(&self, formatter: &mut fmt::Formatter<'_>) -> fmt::Result {
         write!(formatter, "({}, {})", self.x, self.y)
