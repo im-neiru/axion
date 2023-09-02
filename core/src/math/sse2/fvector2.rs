@@ -366,6 +366,59 @@ impl FVector2 {
         }
     }
 
+    /// Performs linear interpolation between two `FVector2` instances.
+    ///
+    /// Linear interpolation, or lerp, blends between two `FVector2` instances using a specified
+    /// interpolation factor `end`. The result is a new `FVector2` where each component is interpolated
+    /// between the corresponding components of `self` and `end` based on `end`.
+    ///
+    /// # Arguments
+    ///
+    /// * `end` - The target `FVector2` to interpolate towards.
+    /// * `scalar` - The interpolation factor, typically in the range [0.0, 1.0], where:
+    ///   - `scalar = 0.0` returns `self`.
+    ///   - `scalar = 1.0` returns `end`.
+    ///   - Values in between interpolate linearly.
+    ///
+    /// # Returns
+    ///
+    /// A new `FVector2` instance resulting from the linear interpolation of `self` and `end` with factor `end`.
+    ///
+    /// # Example
+    ///
+    /// ```
+    /// use axion::math::FVector2;
+    ///
+    /// let start = FVector2::new(1.0, 2.0);
+    /// let end = FVector2::new(3.0, 4.0);
+    /// let interpolated = start.lerp(end, 0.5);
+    ///
+    /// assert_eq!(interpolated, FVector2::new(2.0, 3.0));
+    /// ```
+    #[inline]
+    pub fn lerp(self, end: Self, scalar: f32) -> Self {
+        unsafe {
+            let a = UnionCast {
+                v2: (self, Self::ZERO),
+            }
+            .m128;
+
+            let b = UnionCast {
+                v2: (end, Self::ZERO),
+            }
+            .m128;
+
+            UnionCast {
+                m128: _mm_add_ps(
+                    a,
+                    _mm_mul_ps(_mm_sub_ps(b, a), _mm_set1_ps(scalar)),
+                ),
+            }
+            .v2
+            .0
+        }
+    }
+
     /// Clamps each component of the `FVector2` to be within the specified range.
     ///
     /// This function takes an `FVector2` instance and ensures that each component is
@@ -706,4 +759,18 @@ fn test_fvector2_sse2() {
         "FVector2::is_finite | {span_is_finite} ns | {}  = {is_finite}",
         FVector2::INFINITY,
     );
+
+    let start = FVector2::new(1.0, 2.0);
+    let end = FVector2::new(3.0, 4.0);
+
+    let ref_time = SystemTime::now();
+
+    let lerp = start.lerp(end, 0.5);
+
+    let span_lerp = SystemTime::now()
+        .duration_since(ref_time)
+        .unwrap()
+        .as_nanos();
+
+    println!("FVector2::lerp | {span_lerp} ns | {start} {end} = {lerp}");
 }
