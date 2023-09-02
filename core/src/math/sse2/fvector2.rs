@@ -5,7 +5,7 @@ use core::arch::x86::*;
 use core::arch::x86_64::*;
 
 // Imports from std
-use std::mem::MaybeUninit;
+use std::{fmt, mem::MaybeUninit};
 
 /// `FVector2` is a structure that represents a 2D vector with `f32` components.
 /// It encapsulates two floating-point values and is used for various purposes in graphical applications
@@ -405,6 +405,13 @@ impl FVector2 {
     }
 }
 
+impl fmt::Display for FVector2 {
+    #[inline]
+    fn fmt(&self, formatter: &mut fmt::Formatter<'_>) -> fmt::Result {
+        write!(formatter, "({}, {})", self.x, self.y)
+    }
+}
+
 #[test]
 fn test_fvector2_sse2() {
     use std::time::SystemTime;
@@ -473,41 +480,26 @@ fn test_fvector2_sse2() {
     assert!(dot == 24.8, "FVector2::dot | Wrong output");
     assert!(length == 5.0, "FVector2::length | Wrong output");
 
+    println!("FVector2::dot | {span_dot} ns | {a} ⋅ {b} = {dot}",);
+
+    println!("FVector2::length | {span_length} ns | {a} = {length}",);
+
+    println!("FVector2::normalize | {span_normalize} ns | {a} = {normalize}",);
+
+    println!("FVector2::distance | {span_distance} ns | {a} {b} = {distance}",);
+
     println!(
-        "FVector2::dot | {span_dot} ns | {:?} {:?} = {dot}",
-        a.xy(),
-        b.xy()
+        "FVector2::is_nan | {span_is_nan} ns | {}  = {is_nan}",
+        FVector2::NAN,
     );
 
     println!(
-        "FVector2::length | {span_length} ns | {:?} = {length}",
-        a.xy(),
+        "FVector2::is_nan | {span_is_zero} ns | {}  = {is_zero}",
+        FVector2::ZERO,
     );
 
     println!(
-        "FVector2::normalize | {span_normalize} ns | {:?} = {:?}",
-        a.xy(),
-        normalize.xy()
-    );
-
-    println!(
-        "FVector2::distance | {span_distance} ns | {:?} {:?} = {distance}",
-        a.xy(),
-        b.xy()
-    );
-
-    println!(
-        "FVector2::is_nan | {span_is_nan} ns | {:?}  = {is_nan}",
-        FVector2::NAN.xy(),
-    );
-
-    println!(
-        "FVector2::is_nan | {span_is_zero} ns | {:?}  = {is_zero}",
-        FVector2::ZERO.xy(),
-    );
-
-    println!(
-        "FVector2::is_finite | {span_is_finite} ns | {:?}  = {is_finite}",
-        FVector2::INFINITY.xy(),
+        "FVector2::is_finite | {span_is_finite} ns | {}  = {is_finite}",
+        FVector2::INFINITY,
     );
 }
