@@ -7,9 +7,6 @@ use core::arch::x86_64::*;
 // Imports from std
 use std::mem::MaybeUninit;
 
-// Import from crate
-use crate::math::{Vector, Vector2};
-
 /// `FVector2` is a structure that represents a 2D vector with `f32` components.
 /// It encapsulates two floating-point values and is used for various purposes in graphical applications
 /// including points, vectors, and texture coordinates.
@@ -34,8 +31,7 @@ impl Default for FVector2 {
     }
 }
 
-/// This is a Vector2 implementation for f32 type.
-impl Vector2<f32> for FVector2 {
+impl FVector2 {
     /// Constructs a new `FVector2`.
     ///
     /// # Arguments
@@ -43,36 +39,34 @@ impl Vector2<f32> for FVector2 {
     /// * `x` - A float that holds the x component of the vector.
     /// * `y` - A float that holds the y component of the vector.
     #[inline]
-    fn new(x: f32, y: f32) -> Self {
+    pub const fn new(x: f32, y: f32) -> Self {
         Self { x, y }
     }
 
     /// Returns the x and y components of the vector as a tuple.
     #[inline]
-    fn xy(self) -> (f32, f32) {
+    pub const fn xy(self) -> (f32, f32) {
         (self.x, self.y)
     }
 
     /// Returns the y and x components of the vector as a tuple.
     #[inline]
-    fn yx(self) -> (f32, f32) {
+    pub const fn yx(self) -> (f32, f32) {
         (self.y, self.x)
     }
 
     /// Returns the x component of the vector twice as a tuple.
     #[inline]
-    fn xx(self) -> (f32, f32) {
+    pub const fn xx(self) -> (f32, f32) {
         (self.x, self.x)
     }
 
     /// Returns the y component of the vector twice as a tuple.
     #[inline]
-    fn yy(self) -> (f32, f32) {
+    pub const fn yy(self) -> (f32, f32) {
         (self.y, self.y)
     }
-}
 
-impl Vector<f32> for FVector2 {
     /// Returns the dot product of the vector and another vector.
     ///
     /// # Arguments
@@ -81,7 +75,7 @@ impl Vector<f32> for FVector2 {
     #[inline]
     #[allow(clippy::uninit_assumed_init)]
     #[allow(invalid_value)]
-    fn dot(self, other: Self) -> f32 {
+    pub fn dot(self, other: Self) -> f32 {
         unsafe {
             let a = UnionCast {
                 v2: (self, Self::default()),
@@ -115,7 +109,7 @@ impl Vector<f32> for FVector2 {
     #[inline]
     #[allow(clippy::uninit_assumed_init)]
     #[allow(invalid_value)]
-    fn length(self) -> f32 {
+    pub fn length(self) -> f32 {
         unsafe {
             let a = UnionCast {
                 v2: (self, Self::default()),
@@ -143,7 +137,7 @@ impl Vector<f32> for FVector2 {
     #[inline]
     #[allow(clippy::uninit_assumed_init)]
     #[allow(invalid_value)]
-    fn length_sq(self) -> f32 {
+    pub fn length_sq(self) -> f32 {
         unsafe {
             let a = UnionCast {
                 v2: (self, Self::default()),
@@ -178,7 +172,7 @@ impl Vector<f32> for FVector2 {
     #[inline]
     #[allow(clippy::uninit_assumed_init)]
     #[allow(invalid_value)]
-    fn length_inv(self) -> f32 {
+    pub fn length_inv(self) -> f32 {
         unsafe {
             let a = UnionCast {
                 v2: (self, Self::default()),
@@ -223,7 +217,7 @@ impl Vector<f32> for FVector2 {
     #[inline]
     #[allow(clippy::uninit_assumed_init)]
     #[allow(invalid_value)]
-    fn distance(self, other: Self) -> f32 {
+    pub fn distance(self, other: Self) -> f32 {
         unsafe {
             let a = UnionCast {
                 v2: (self, Self::default()),
@@ -268,7 +262,7 @@ impl Vector<f32> for FVector2 {
     #[inline]
     #[allow(clippy::uninit_assumed_init)]
     #[allow(invalid_value)]
-    fn normalize(self) -> Self {
+    pub fn normalize(self) -> Self {
         unsafe {
             let a = UnionCast {
                 v2: (self, Self::default()),

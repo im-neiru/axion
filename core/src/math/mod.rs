@@ -4,12 +4,6 @@
 #[cfg(feature = "simd")]
 #[cfg(any(target_arch = "x86_64", target_arch = "x86"))]
 mod sse2;
-mod vector;
-
-// Private trait
-
-// Public trait
-pub use vector::{Vector, Vector2};
 
 // Public structs
 #[cfg(feature = "simd")]
