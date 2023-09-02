@@ -16,14 +16,19 @@ use crate::math::{Vector, Vector2};
 ///
 /// This structure is implemented with SIMD (Single Instruction, Multiple Data) which is a type of parallel computing
 /// involving vectors that allows for multiple data points to be processed at once, resulting in performance improvements.
-#[derive(Clone, Copy)]
+#[derive(Clone, Copy, Debug)]
 pub struct FVector2 {
     pub x: f32,
     pub y: f32,
 }
 
+union UnionCast {
+    v2: (FVector2, FVector2),
+    m128: __m128,
+}
+
 impl Default for FVector2 {
-    #[inline]
+    #[inline(always)]
     fn default() -> Self {
         Self { x: 0.0, y: 0.0 }
     }
@@ -78,8 +83,14 @@ impl Vector<f32> for FVector2 {
     #[allow(invalid_value)]
     fn dot(self, other: Self) -> f32 {
         unsafe {
-            let a = _mm_set_ps(0.0, 0.0, self.y, self.x);
-            let b = _mm_set_ps(0.0, 0.0, other.y, other.x);
+            let a = UnionCast {
+                v2: (self, Self::default()),
+            }
+            .m128;
+            let b = UnionCast {
+                v2: (other, Self::default()),
+            }
+            .m128;
 
             let mut dot_product: f32 = MaybeUninit::uninit().assume_init();
             let product = _mm_mul_ps(a, b);
@@ -106,7 +117,10 @@ impl Vector<f32> for FVector2 {
     #[allow(invalid_value)]
     fn length(self) -> f32 {
         unsafe {
-            let a = _mm_set_ps(0.0, 0.0, self.y, self.x);
+            let a = UnionCast {
+                v2: (self, Self::default()),
+            }
+            .m128;
 
             let mut length: f32 = MaybeUninit::uninit().assume_init();
             let product = _mm_mul_ps(a, a);
@@ -131,7 +145,10 @@ impl Vector<f32> for FVector2 {
     #[allow(invalid_value)]
     fn length_sq(self) -> f32 {
         unsafe {
-            let a = _mm_set_ps(0.0, 0.0, self.y, self.x);
+            let a = UnionCast {
+                v2: (self, Self::default()),
+            }
+            .m128;
 
             let mut length_sq: f32 = MaybeUninit::uninit().assume_init();
             let product = _mm_mul_ps(a, a);
@@ -163,7 +180,10 @@ impl Vector<f32> for FVector2 {
     #[allow(invalid_value)]
     fn length_inv(self) -> f32 {
         unsafe {
-            let a = _mm_set_ps(0.0, 0.0, self.y, self.x);
+            let a = UnionCast {
+                v2: (self, Self::default()),
+            }
+            .m128;
 
             let mut length_inv: f32 = MaybeUninit::uninit().assume_init();
             let product = _mm_mul_ps(a, a);
@@ -205,8 +225,14 @@ impl Vector<f32> for FVector2 {
     #[allow(invalid_value)]
     fn distance(self, other: Self) -> f32 {
         unsafe {
-            let a = _mm_set_ps(0.0, 0.0, self.y, self.x);
-            let b = _mm_set_ps(0.0, 0.0, other.y, other.x);
+            let a = UnionCast {
+                v2: (self, Self::default()),
+            }
+            .m128;
+            let b = UnionCast {
+                v2: (other, Self::default()),
+            }
+            .m128;
 
             let mut distance: f32 = MaybeUninit::uninit().assume_init();
             let sub = _mm_sub_ps(a, b);
@@ -244,7 +270,10 @@ impl Vector<f32> for FVector2 {
     #[allow(invalid_value)]
     fn normalize(self) -> Self {
         unsafe {
-            let a = _mm_set_ps(0.0, 0.0, self.y, self.x);
+            let a = UnionCast {
+                v2: (self, Self::default()),
+            }
+            .m128;
             let mut normalized_vec: (Self, Self) =
                 MaybeUninit::uninit().assume_init();
 
