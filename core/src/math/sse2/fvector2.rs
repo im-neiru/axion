@@ -32,6 +32,60 @@ impl Default for FVector2 {
 }
 
 impl FVector2 {
+    /// A constant `FVector2` instance with both `x` and `y` components set to 0.0.
+    ///
+    /// This constant represents an `FVector2` with both `x` and `y` components
+    /// initialized to 0.0.
+    pub const ZERO: Self = Self::splat(0.0);
+
+    /// A constant `FVector2` instance with both `x` and `y` components set to 1.0.
+    ///
+    /// This constant represents an `FVector2` with both `x` and `y` components
+    /// initialized to 1.0.
+    pub const ONE: Self = Self::splat(1.0);
+
+    /// A constant `FVector2` instance with both `x` and `y` components set to -1.0.
+    ///
+    /// This constant represents an `FVector2` with both `x` and `y` components
+    /// initialized to -1.0.
+    pub const NEG_ONE: Self = Self::splat(-1.0);
+
+    /// A constant `FVector2` instance with both `x` and `y` components set to the minimum finite value representable by `f32`.
+    ///
+    /// This constant represents an `FVector2` with both `x` and `y` components
+    /// initialized to the minimum finite value representable by `f32`.
+    pub const MIN: Self = Self::splat(f32::MIN);
+
+    /// A constant `FVector2` instance with both `x` and `y` components set to the maximum finite value representable by `f32`.
+    ///
+    /// This constant represents an `FVector2` with both `x` and `y` components
+    /// initialized to the maximum finite value representable by `f32`.
+    pub const MAX: Self = Self::splat(f32::MAX);
+
+    /// A constant `FVector2` instance with both `x` and `y` components set to a NaN (Not-a-Number) value.
+    ///
+    /// This constant represents an `FVector2` with both `x` and `y` components
+    /// initialized to a NaN (Not-a-Number) value.
+    pub const NAN: Self = Self::splat(f32::NAN);
+
+    /// A constant `FVector2` instance with both `x` and `y` components set to positive infinity.
+    ///
+    /// This constant represents an `FVector2` with both `x` and `y` components
+    /// initialized to positive infinity.
+    pub const INFINITY: Self = Self::splat(f32::INFINITY);
+
+    /// A constant `FVector2` instance with both `x` and `y` components set to negative infinity.
+    ///
+    /// This constant represents an `FVector2` with both `x` and `y` components
+    /// initialized to negative infinity.
+    pub const NEG_INFINITY: Self = Self::splat(f32::NEG_INFINITY);
+
+    /// A constant `FVector2` instance with both `x` and `y` components set to the smallest positive value representable by `f32`.
+    ///
+    /// This constant represents an `FVector2` with both `x` and `y` components
+    /// initialized to the smallest positive value representable by `f32`.
+    pub const EPSILON: Self = Self::splat(f32::EPSILON);
+
     /// Constructs a new `FVector2`.
     ///
     /// # Arguments
