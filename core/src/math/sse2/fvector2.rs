@@ -43,6 +43,33 @@ impl FVector2 {
         Self { x, y }
     }
 
+    /// Create a new instance of `FVector2` with both `x` and `y` components set to the given `value`.
+    ///
+    /// This function creates a new `FVector2` instance with both `x` and `y` components
+    /// initialized to the specified `value`.
+    ///
+    /// # Arguments
+    ///
+    /// * `value` - The value to set for both `x` and `y` components of the `FVector2`.
+    ///
+    /// # Returns
+    ///
+    /// A new `FVector2` instance with both `x` and `y` components set to `value`.
+    ///
+    /// # Example
+    ///
+    /// ```
+    /// use axion::math::FVector2;
+    ///
+    /// let vector = FVector2::splat(5.0);
+    /// assert_eq!(vector.x, 5.0);
+    /// assert_eq!(vector.y, 5.0);
+    /// ```
+    #[inline]
+    pub const fn splat(value: f32) -> Self {
+        Self { x: value, y: value }
+    }
+
     /// Returns the x and y components of the vector as a tuple.
     #[inline]
     pub const fn xy(self) -> (f32, f32) {
@@ -252,7 +279,7 @@ impl FVector2 {
     ///
     /// # Returns
     ///
-    /// * `FVector2` - A new Vector2 that is the normalized version of `self`.
+    /// * `FVector2` - A new FVector2 that is the normalized version of `self`.
     /// # Example
     ///
     /// ```rust
