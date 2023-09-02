@@ -367,6 +367,57 @@ impl FVector2 {
     }
 
     #[inline]
+    pub fn clamp(self, min: Self, max: Self) -> Self {
+        self.max(min).min(max)
+    }
+
+    #[inline]
+    #[allow(clippy::uninit_assumed_init)]
+    #[allow(invalid_value)]
+    pub fn min(self, value: Self) -> Self {
+        unsafe {
+            let a = UnionCast {
+                v2: (self, Self::default()),
+            }
+            .m128;
+
+            let b = UnionCast {
+                v2: (value, Self::default()),
+            }
+            .m128;
+
+            UnionCast {
+                m128: _mm_min_ps(a, b),
+            }
+            .v2
+            .0
+        }
+    }
+
+    #[inline]
+    #[allow(clippy::uninit_assumed_init)]
+    #[allow(invalid_value)]
+    pub fn max(self, value: Self) -> Self {
+        unsafe {
+            let a = UnionCast {
+                v2: (self, Self::default()),
+            }
+            .m128;
+
+            let b = UnionCast {
+                v2: (value, Self::default()),
+            }
+            .m128;
+
+            UnionCast {
+                m128: _mm_max_ps(a, b),
+            }
+            .v2
+            .0
+        }
+    }
+
+    #[inline]
     pub fn is_zero(self) -> bool {
         unsafe {
             let a = UnionCast {
