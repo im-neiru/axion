@@ -640,6 +640,31 @@ impl FVector2 {
 }
 
 impl PartialEq for FVector2 {
+    /// Checks if two `FVector2` instances are equal.
+    ///
+    /// This implementation compares each component of two `FVector2` instances for equality
+    /// and returns `true` if all components are equal, and `false` otherwise.
+    ///
+    /// # Arguments
+    ///
+    /// * `rhs` - The right-hand side `FVector2` to compare with.
+    ///
+    /// # Returns
+    ///
+    /// `true` if all components of the two `FVector2` instances are equal, `false` otherwise.
+    ///
+    /// # Example
+    ///
+    /// ```
+    /// use axion::math::FVector2;
+    ///
+    /// let vector1 = FVector2::new(2.0, 3.0);
+    /// let vector2 = FVector2::new(2.0, 3.0);
+    /// let vector3 = FVector2::new(1.0, 2.0);
+    ///
+    /// assert_eq!(vector1, vector2);
+    /// assert_ne!(vector1, vector3);
+    /// ```
     #[inline]
     fn eq(&self, rhs: &Self) -> bool {
         unsafe {
@@ -657,6 +682,31 @@ impl PartialEq for FVector2 {
             _mm_movemask_ps(cmp_result) == 0xf
         }
     }
+
+    /// Checks if two `FVector2` instances are not equal.
+    ///
+    /// This implementation compares each component of two `FVector2` instances for inequality
+    /// and returns `true` if at least one component is not equal, and `false` if all components
+    /// are equal.
+    ///
+    /// # Arguments
+    ///
+    /// * `rhs` - The right-hand side `FVector2` to compare with.
+    ///
+    /// # Returns
+    ///
+    /// `true` if at least one component of the two `FVector2` instances is not equal, `false` if all components are equal.
+    ///
+    /// # Example
+    ///
+    /// ```
+    /// use axion::math::FVector2;
+    ///
+    /// let vector1 = FVector2::new(2.0, 3.0);
+    /// let vector2 = FVector2::new(1.0, 2.0);
+    ///
+    /// assert_ne!(vector1, vector2);
+    /// ```
 
     #[inline]
     #[allow(clippy::partialeq_ne_impl)]
