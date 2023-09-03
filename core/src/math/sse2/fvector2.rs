@@ -5,7 +5,7 @@ use core::arch::x86::*;
 use core::arch::x86_64::*;
 
 // Imports from std
-use std::{fmt, mem::MaybeUninit};
+use std::{fmt, mem::MaybeUninit, ops};
 
 /// `FVector2` is a structure that represents a 2D vector with `f32` components.
 /// It encapsulates two floating-point values and is used for various purposes in graphical applications
@@ -755,6 +755,166 @@ impl fmt::Display for FVector2 {
     #[inline]
     fn fmt(&self, formatter: &mut fmt::Formatter<'_>) -> fmt::Result {
         write!(formatter, "({}, {})", self.x, self.y)
+    }
+}
+
+impl ops::Index<usize> for FVector2 {
+    type Output = f32;
+
+    /// Indexes the `FVector2` by a `usize` index.
+    ///
+    /// This implementation allows you to access the components of an `FVector2` using a
+    /// `usize` index where `0` corresponds to `x` and `1` corresponds to `y`. It returns
+    /// a reference to the component at the specified index.
+    ///
+    /// # Arguments
+    ///
+    /// * `index` - The index to access, where `0` represents `x` and `1` represents `y`.
+    ///
+    /// # Returns
+    ///
+    /// A reference to the specified component of the `FVector2`.
+    ///
+    /// # Panics
+    ///
+    /// Panics if the index is out of bounds (not 0 or 1).
+    ///
+    /// # Example
+    ///
+    /// ```
+    /// use axion::math::FVector2;
+    ///
+    /// let vector = FVector2::new(2.0, 3.0);
+    /// let x_component = vector[0];
+    ///
+    /// assert_eq!(x_component, 2.0);
+    /// ```
+    #[inline]
+    fn index(&self, index: usize) -> &Self::Output {
+        match index {
+            0 => &self.x,
+            1 => &self.y,
+            _ => panic!("index out of bounds"),
+        }
+    }
+}
+
+impl ops::IndexMut<usize> for FVector2 {
+    /// Mutable indexing for the `FVector2` by a `usize` index.
+    ///
+    /// This implementation allows you to mutably access and modify the components of an `FVector2`
+    /// using a `usize` index where `0` corresponds to `x` and `1` corresponds to `y`. It returns
+    /// a mutable reference to the component at the specified index.
+    ///
+    /// # Arguments
+    ///
+    /// * `index` - The index to access and modify, where `0` represents `x` and `1` represents `y`.
+    ///
+    /// # Returns
+    ///
+    /// A mutable reference to the specified component of the `FVector2`.
+    ///
+    /// # Panics
+    ///
+    /// Panics if the index is out of bounds (not 0 or 1).
+    ///
+    /// # Example
+    ///
+    /// ```
+    /// use axion::math::FVector2;
+    ///
+    /// let mut vector = FVector2::new(2.0, 3.0);
+    /// vector[0] = 4.0;
+    ///
+    /// assert_eq!(vector[0], 4.0);
+    /// ```
+    #[inline]
+    fn index_mut(&mut self, index: usize) -> &mut Self::Output {
+        match index {
+            0 => &mut self.x,
+            1 => &mut self.y,
+            _ => panic!("index out of bounds"),
+        }
+    }
+}
+
+impl ops::Index<u32> for FVector2 {
+    type Output = f32;
+
+    /// Indexes the `FVector2` by a `u32` index.
+    ///
+    /// This implementation allows you to access the components of an `FVector2` using a
+    /// `u32` index where `0` corresponds to `x` and `1` corresponds to `y`. It returns
+    /// a reference to the component at the specified index.
+    ///
+    /// # Arguments
+    ///
+    /// * `index` - The index to access, where `0` represents `x` and `1` represents `y`.
+    ///
+    /// # Returns
+    ///
+    /// A reference to the specified component of the `FVector2`.
+    ///
+    /// # Panics
+    ///
+    /// Panics if the index is out of bounds (not 0 or 1).
+    ///
+    /// # Example
+    ///
+    /// ```
+    /// use axion::math::FVector2;
+    ///
+    /// let vector = FVector2::new(2.0, 3.0);
+    /// let x_component = vector[0u32];
+    ///
+    /// assert_eq!(x_component, 2.0);
+    /// ```
+    #[inline]
+    fn index(&self, index: u32) -> &Self::Output {
+        match index {
+            0 => &self.x,
+            1 => &self.y,
+            _ => panic!("index out of bounds"),
+        }
+    }
+}
+
+impl ops::IndexMut<u32> for FVector2 {
+    /// Mutable indexing for the `FVector2` by a `u32` index.
+    ///
+    /// This implementation allows you to mutably access and modify the components of an `FVector2`
+    /// using a `u32` index where `0` corresponds to `x` and `1` corresponds to `y`. It returns
+    /// a mutable reference to the component at the specified index.
+    ///
+    /// # Arguments
+    ///
+    /// * `index` - The index to access and modify, where `0` represents `x` and `1` represents `y`.
+    ///
+    /// # Returns
+    ///
+    /// A mutable reference to the specified component of the `FVector2`.
+    ///
+    /// # Panics
+    ///
+    /// Panics if the index is out of bounds (not 0 or 1).
+    ///
+    /// # Example
+    ///
+    /// ```
+    /// use axion::math::FVector2;
+    ///
+    /// let mut vector = FVector2::new(2.0, 3.0);
+    /// vector[0u32] = 4.0;
+    ///
+    /// assert_eq!(vector[0u32], 4.0);
+    /// ```
+    #[inline]
+    fn index_mut(&mut self, index: u32) -> &mut Self::Output {
+        match index {
+            0 => &mut self.x,
+            1 => &mut self.y,
+            _ => panic!("index out of bounds"),
+        }
     }
 }
 
