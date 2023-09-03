@@ -159,11 +159,11 @@ impl FVector2 {
     pub fn dot(self, other: Self) -> f32 {
         unsafe {
             let a = UnionCast {
-                v2: (self, Self::default()),
+                v2: (self, Self::ZERO),
             }
             .m128;
             let b = UnionCast {
-                v2: (other, Self::default()),
+                v2: (other, Self::ZERO),
             }
             .m128;
 
@@ -193,7 +193,7 @@ impl FVector2 {
     pub fn length(self) -> f32 {
         unsafe {
             let a = UnionCast {
-                v2: (self, Self::default()),
+                v2: (self, Self::ZERO),
             }
             .m128;
 
@@ -221,7 +221,7 @@ impl FVector2 {
     pub fn length_sq(self) -> f32 {
         unsafe {
             let a = UnionCast {
-                v2: (self, Self::default()),
+                v2: (self, Self::ZERO),
             }
             .m128;
 
@@ -256,7 +256,7 @@ impl FVector2 {
     pub fn length_inv(self) -> f32 {
         unsafe {
             let a = UnionCast {
-                v2: (self, Self::default()),
+                v2: (self, Self::ZERO),
             }
             .m128;
 
@@ -301,11 +301,11 @@ impl FVector2 {
     pub fn distance(self, other: Self) -> f32 {
         unsafe {
             let a = UnionCast {
-                v2: (self, Self::default()),
+                v2: (self, Self::ZERO),
             }
             .m128;
             let b = UnionCast {
-                v2: (other, Self::default()),
+                v2: (other, Self::ZERO),
             }
             .m128;
 
@@ -346,7 +346,7 @@ impl FVector2 {
     pub fn normalize(self) -> Self {
         unsafe {
             let a = UnionCast {
-                v2: (self, Self::default()),
+                v2: (self, Self::ZERO),
             }
             .m128;
             let mut normalized_vec: (Self, Self) =
@@ -477,12 +477,12 @@ impl FVector2 {
     pub fn min(self, value: Self) -> Self {
         unsafe {
             let a = UnionCast {
-                v2: (self, Self::default()),
+                v2: (self, Self::ZERO),
             }
             .m128;
 
             let b = UnionCast {
-                v2: (value, Self::default()),
+                v2: (value, Self::ZERO),
             }
             .m128;
 
@@ -523,12 +523,12 @@ impl FVector2 {
     pub fn max(self, value: Self) -> Self {
         unsafe {
             let a = UnionCast {
-                v2: (self, Self::default()),
+                v2: (self, Self::ZERO),
             }
             .m128;
 
             let b = UnionCast {
-                v2: (value, Self::default()),
+                v2: (value, Self::ZERO),
             }
             .m128;
 
