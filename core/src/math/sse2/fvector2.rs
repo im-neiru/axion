@@ -639,6 +639,45 @@ impl FVector2 {
     }
 }
 
+impl PartialEq for FVector2 {
+    #[inline]
+    fn eq(&self, rhs: &Self) -> bool {
+        unsafe {
+            let a = UnionCast {
+                v2: (*self, Self::ZERO),
+            }
+            .m128;
+            let b = UnionCast {
+                v2: (*rhs, Self::ZERO),
+            }
+            .m128;
+
+            let cmp_result = _mm_cmpeq_ps(a, b);
+
+            _mm_movemask_ps(cmp_result) == 0xf
+        }
+    }
+
+    #[inline]
+    #[allow(clippy::partialeq_ne_impl)]
+    fn ne(&self, rhs: &Self) -> bool {
+        unsafe {
+            let a = UnionCast {
+                v2: (*self, Self::ZERO),
+            }
+            .m128;
+            let b = UnionCast {
+                v2: (*rhs, Self::ZERO),
+            }
+            .m128;
+
+            let cmp_result = _mm_cmpeq_ps(a, b);
+
+            _mm_movemask_ps(cmp_result) != 0xf
+        }
+    }
+}
+
 impl fmt::Display for FVector2 {
     /// Formats the `FVector2` as a string in the form *(x, y)*.
     ///
@@ -760,17 +799,51 @@ fn test_fvector2_sse2() {
         FVector2::INFINITY,
     );
 
-    let start = FVector2::new(1.0, 2.0);
-    let end = FVector2::new(3.0, 4.0);
+    {
+        let start = FVector2::new(1.0, 2.0);
+        let end = FVector2::new(3.0, 4.0);
 
-    let ref_time = SystemTime::now();
+        let ref_time = SystemTime::now();
 
-    let lerp = start.lerp(end, 0.5);
+        let lerp = start.lerp(end, 0.5);
 
-    let span_lerp = SystemTime::now()
-        .duration_since(ref_time)
-        .unwrap()
-        .as_nanos();
+        let span_lerp = SystemTime::now()
+            .duration_since(ref_time)
+            .unwrap()
+            .as_nanos();
 
-    println!("FVector2::lerp | {span_lerp} ns | {start} {end} = {lerp}");
+        println!("FVector2::lerp | {span_lerp} ns | {start} {end} = {lerp}");
+    }
+
+    {
+        let a = FVector2::new(1.0, 2.0);
+        let b = FVector2::new(1.0, 2.0);
+
+        let ref_time = SystemTime::now();
+
+        let eq = a == b;
+
+        let span = SystemTime::now()
+            .duration_since(ref_time)
+            .unwrap()
+            .as_nanos();
+
+        println!("FVector2::eq | {span} ns | {a} == {b} = {eq}");
+    }
+
+    {
+        let a = FVector2::new(1.0, 2.0);
+        let b = FVector2::new(1.0, 2.0);
+
+        let ref_time = SystemTime::now();
+
+        let ne = a != b;
+
+        let span = SystemTime::now()
+            .duration_since(ref_time)
+            .unwrap()
+            .as_nanos();
+
+        println!("FVector2::ne | {span} ns | {a} != {b} = {ne}");
+    }
 }
