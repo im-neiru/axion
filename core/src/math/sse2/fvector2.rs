@@ -918,6 +918,384 @@ impl ops::IndexMut<u32> for FVector2 {
     }
 }
 
+impl ops::Add<Self> for FVector2 {
+    type Output = Self;
+
+    /// Adds two `FVector2` instances component-wise.
+    ///
+    /// This implementation allows you to add two `FVector2` instances together
+    /// component-wise, resulting in a new `FVector2` where each component is the
+    /// sum of the corresponding components of `self` and `rhs`.
+    ///
+    /// # Arguments
+    ///
+    /// * `rhs` - The right-hand side `FVector2` to add to `self`.
+    ///
+    /// # Returns
+    ///
+    /// A new `FVector2` instance resulting from the component-wise addition of `self` and `rhs`.
+    ///
+    /// # Example
+    ///
+    /// ```
+    /// use axion::math::FVector2;
+    ///
+    /// let vector1 = FVector2::new(2.0, 3.0);
+    /// let vector2 = FVector2::new(1.0, 2.0);
+    /// let result = vector1 + vector2;
+    ///
+    /// assert_eq!(result, FVector2::new(3.0, 5.0));
+    /// ```
+    #[inline]
+    fn add(self, rhs: Self) -> Self::Output {
+        unsafe {
+            let a = UnionCast {
+                v2: (self, Self::ZERO),
+            }
+            .m128;
+            let b = UnionCast {
+                v2: (rhs, Self::ZERO),
+            }
+            .m128;
+
+            UnionCast {
+                m128: _mm_add_ps(a, b),
+            }
+            .v2
+            .0
+        }
+    }
+}
+
+impl ops::Sub<Self> for FVector2 {
+    type Output = Self;
+
+    /// Subtracts one `FVector2` from another component-wise.
+    ///
+    /// This implementation allows you to subtract one `FVector2` from another
+    /// component-wise, resulting in a new `FVector2` where each component is the
+    /// difference between the corresponding components of `self` and `rhs`.
+    ///
+    /// # Arguments
+    ///
+    /// * `rhs` - The right-hand side `FVector2` to subtract from `self`.
+    ///
+    /// # Returns
+    ///
+    /// A new `FVector2` instance resulting from the component-wise subtraction of `self` and `rhs`.
+    ///
+    /// # Example
+    ///
+    /// ```
+    /// use axion::math::FVector2;
+    ///
+    /// let vector1 = FVector2::new(2.0, 3.0);
+    /// let vector2 = FVector2::new(1.0, 2.0);
+    /// let result = vector1 - vector2;
+    ///
+    /// assert_eq!(result, FVector2::new(1.0, 1.0));
+    /// ```
+    #[inline]
+    fn sub(self, rhs: Self) -> Self::Output {
+        unsafe {
+            let a = UnionCast {
+                v2: (self, Self::ZERO),
+            }
+            .m128;
+            let b = UnionCast {
+                v2: (rhs, Self::ZERO),
+            }
+            .m128;
+
+            UnionCast {
+                m128: _mm_sub_ps(a, b),
+            }
+            .v2
+            .0
+        }
+    }
+}
+
+impl ops::Mul<Self> for FVector2 {
+    type Output = Self;
+
+    /// Multiplies two `FVector2` instances component-wise.
+    ///
+    /// This implementation allows you to multiply two `FVector2` instances together
+    /// component-wise, resulting in a new `FVector2` where each component is the
+    /// product of the corresponding components of `self` and `rhs`.
+    ///
+    /// # Arguments
+    ///
+    /// * `rhs` - The right-hand side `FVector2` to multiply with `self`.
+    ///
+    /// # Returns
+    ///
+    /// A new `FVector2` instance resulting from the component-wise multiplication of `self` and `rhs`.
+    ///
+    /// # Example
+    ///
+    /// ```
+    /// use axion::math::FVector2;
+    ///
+    /// let vector1 = FVector2::new(2.0, 3.0);
+    /// let vector2 = FVector2::new(1.0, 2.0);
+    /// let result = vector1 * vector2;
+    ///
+    /// assert_eq!(result, FVector2::new(2.0, 6.0));
+    /// ```
+    #[inline]
+    fn mul(self, rhs: Self) -> Self::Output {
+        unsafe {
+            let a = UnionCast {
+                v2: (self, Self::ZERO),
+            }
+            .m128;
+            let b = UnionCast {
+                v2: (rhs, Self::ZERO),
+            }
+            .m128;
+
+            UnionCast {
+                m128: _mm_mul_ps(a, b),
+            }
+            .v2
+            .0
+        }
+    }
+}
+
+impl ops::Div<Self> for FVector2 {
+    type Output = Self;
+
+    /// Divides one `FVector2` by another component-wise.
+    ///
+    /// This implementation allows you to divide one `FVector2` by another component-wise,
+    /// resulting in a new `FVector2` where each component is the result of dividing the
+    /// corresponding components of `self` by `rhs`.
+    ///
+    /// # Arguments
+    ///
+    /// * `rhs` - The right-hand side `FVector2` to divide `self` by.
+    ///
+    /// # Returns
+    ///
+    /// A new `FVector2` instance resulting from the component-wise division of `self` by `rhs`.
+    ///
+    /// # Example
+    ///
+    /// ```
+    /// use axion::math::FVector2;
+    ///
+    /// let vector1 = FVector2::new(2.0, 6.0);
+    /// let vector2 = FVector2::new(1.0, 2.0);
+    /// let result = vector1 / vector2;
+    ///
+    /// assert_eq!(result, FVector2::new(2.0, 3.0));
+    /// ```
+    #[inline]
+    fn div(self, rhs: Self) -> Self::Output {
+        unsafe {
+            let a = UnionCast {
+                v2: (self, Self::ZERO),
+            }
+            .m128;
+            let b = UnionCast {
+                v2: (rhs, Self::ZERO),
+            }
+            .m128;
+
+            UnionCast {
+                m128: _mm_div_ps(a, b),
+            }
+            .v2
+            .0
+        }
+    }
+}
+
+impl ops::Rem<Self> for FVector2 {
+    type Output = Self;
+
+    /// Computes the remainder of dividing one `FVector2` by another component-wise.
+    ///
+    /// This implementation allows you to compute the remainder of dividing one `FVector2`
+    /// by another component-wise, resulting in a new `FVector2` where each component is
+    /// the remainder of dividing the corresponding components of `self` by `rhs`.
+    ///
+    /// # Arguments
+    ///
+    /// * `rhs` - The right-hand side `FVector2` to compute the remainder of division with `self`.
+    ///
+    /// # Returns
+    ///
+    /// A new `FVector2` instance resulting from the component-wise remainder of division of `self` by `rhs`.
+    ///
+    /// # Example
+    ///
+    /// ```
+    /// use axion::math::FVector2;
+    ///
+    /// let vector1 = FVector2::new(7.0, 10.0);
+    /// let vector2 = FVector2::new(3.0, 4.0);
+    /// let result = vector1 % vector2;
+    ///
+    /// assert_eq!(result, FVector2::new(1.0, 2.0));
+    /// ```
+    #[inline]
+    fn rem(self, rhs: Self) -> Self::Output {
+        unsafe {
+            let a = UnionCast {
+                v2: (self, Self::ZERO),
+            }
+            .m128;
+            let b = UnionCast {
+                v2: (rhs, Self::ZERO),
+            }
+            .m128;
+
+            UnionCast {
+                m128: _mm_sub_ps(
+                    a,
+                    _mm_mul_ps(b, _mm_floor_ps(_mm_div_ps(a, b))),
+                ),
+            }
+            .v2
+            .0
+        }
+    }
+}
+
+impl ops::AddAssign<Self> for FVector2 {
+    /// Adds another `FVector2` to `self` in place.
+    ///
+    /// This implementation allows you to add another `FVector2` to `self` in place, modifying
+    /// `self` to be the result of the addition.
+    ///
+    /// # Arguments
+    ///
+    /// * `rhs` - The right-hand side `FVector2` to add to `self`.
+    ///
+    /// # Example
+    ///
+    /// ```
+    /// use axion::math::FVector2;
+    ///
+    /// let mut vector = FVector2::new(2.0, 3.0);
+    /// vector += FVector2::new(1.0, 2.0);
+    ///
+    /// assert_eq!(vector, FVector2::new(3.0, 5.0));
+    /// ```
+    #[inline]
+    fn add_assign(&mut self, rhs: Self) {
+        *self = *self + rhs;
+    }
+}
+
+impl ops::SubAssign<Self> for FVector2 {
+    /// Subtracts another `FVector2` from `self` in place.
+    ///
+    /// This implementation allows you to subtract another `FVector2` from `self` in place,
+    /// modifying `self` to be the result of the subtraction.
+    ///
+    /// # Arguments
+    ///
+    /// * `rhs` - The right-hand side `FVector2` to subtract from `self`.
+    ///
+    /// # Example
+    ///
+    /// ```
+    /// use axion::math::FVector2;
+    ///
+    /// let mut vector = FVector2::new(2.0, 3.0);
+    /// vector -= FVector2::new(1.0, 2.0);
+    ///
+    /// assert_eq!(vector, FVector2::new(1.0, 1.0));
+    /// ```
+    #[inline]
+    fn sub_assign(&mut self, rhs: Self) {
+        *self = *self - rhs;
+    }
+}
+
+impl ops::MulAssign<Self> for FVector2 {
+    /// Multiplies `self` by another `FVector2` in place.
+    ///
+    /// This implementation allows you to multiply `self` by another `FVector2` in place,
+    /// modifying `self` to be the result of the multiplication.
+    ///
+    /// # Arguments
+    ///
+    /// * `rhs` - The right-hand side `FVector2` to multiply `self` with.
+    ///
+    /// # Example
+    ///
+    /// ```
+    /// use axion::math::FVector2;
+    ///
+    /// let mut vector = FVector2::new(2.0, 3.0);
+    /// vector *= FVector2::new(1.0, 2.0);
+    ///
+    /// assert_eq!(vector, FVector2::new(2.0, 6.0));
+    /// ```
+    #[inline]
+    fn mul_assign(&mut self, rhs: Self) {
+        *self = *self * rhs;
+    }
+}
+
+impl ops::DivAssign<Self> for FVector2 {
+    /// Divides `self` by another `FVector2` in place.
+    ///
+    /// This implementation allows you to divide `self` by another `FVector2` in place,
+    /// modifying `self` to be the result of the division.
+    ///
+    /// # Arguments
+    ///
+    /// * `rhs` - The right-hand side `FVector2` to divide `self` by.
+    ///
+    /// # Example
+    ///
+    /// ```
+    /// use axion::math::FVector2;
+    ///
+    /// let mut vector = FVector2::new(2.0, 6.0);
+    /// vector /= FVector2::new(1.0, 2.0);
+    ///
+    /// assert_eq!(vector, FVector2::new(2.0, 3.0));
+    /// ```
+    #[inline]
+    fn div_assign(&mut self, rhs: Self) {
+        *self = *self / rhs;
+    }
+}
+
+impl ops::RemAssign<Self> for FVector2 {
+    /// Computes the remainder of dividing `self` by another `FVector2` in place.
+    ///
+    /// This implementation allows you to compute the remainder of dividing `self` by another
+    /// `FVector2` in place, modifying `self` to be the result of the remainder operation.
+    ///
+    /// # Arguments
+    ///
+    /// * `rhs` - The right-hand side `FVector2` to compute the remainder of division with `self`.
+    ///
+    /// # Example
+    ///
+    /// ```
+    /// use axion::math::FVector2;
+    ///
+    /// let mut vector = FVector2::new(7.0, 10.0);
+    /// vector %= FVector2::new(3.0, 4.0);
+    ///
+    /// assert_eq!(vector, FVector2::new(1.0, 2.0));
+    /// ```
+    #[inline]
+    fn rem_assign(&mut self, rhs: Self) {
+        *self = *self % rhs;
+    }
+}
+
 #[test]
 fn test_fvector2_sse2() {
     use std::time::SystemTime;
