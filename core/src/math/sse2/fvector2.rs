@@ -321,6 +321,55 @@ impl FVector2 {
         }
     }
 
+    /// Computes the squared Euclidean distance between two `FVector2` instances.
+    ///
+    /// This method calculates the squared Euclidean distance between `self` and `other`, which is a
+    /// more efficient version of the Euclidean distance as it avoids the square root operation.
+    ///
+    /// # Arguments
+    ///
+    /// * `other` - The `FVector2` instance representing the other point in space.
+    ///
+    /// # Returns
+    ///
+    /// The squared Euclidean distance between `self` and `other` as a `f32` value.
+    ///
+    /// # Example
+    ///
+    /// ```
+    /// use axion::math::FVector2;
+    ///
+    /// let point1 = FVector2::new(2.0, 3.0);
+    /// let point2 = FVector2::new(1.0, 2.0);
+    /// let distance_sq = point1.distance_sq(point2);
+    ///
+    /// assert_eq!(distance_sq, 2.0);
+    /// ```
+    #[inline]
+    #[allow(clippy::uninit_assumed_init)]
+    #[allow(invalid_value)]
+    pub fn distance_sq(self, other: Self) -> f32 {
+        unsafe {
+            let a = UnionCast {
+                v2: (self, Self::ZERO),
+            }
+            .m128;
+            let b = UnionCast {
+                v2: (other, Self::ZERO),
+            }
+            .m128;
+
+            let mut distance: f32 = MaybeUninit::uninit().assume_init();
+            let sub = _mm_sub_ps(a, b);
+            let product = _mm_mul_ps(sub, sub);
+            let sum = _mm_hadd_ps(product, product);
+
+            _mm_store_ss(&mut distance, sum);
+
+            distance
+        }
+    }
+
     /// The `normalize` function normalizes a vector using SIMD instructions for efficiency.
     /// if the vector is at the origin `(0.0, 0.0)`, as this would lead
     /// to a division by zero when calculating the reciprocal of the root. The result in such case
@@ -1433,5 +1482,17 @@ fn test_fvector2_sse2() {
             .as_nanos();
 
         println!("FVector2::ne | {span} ns | {a} != {b} = {ne}");
+    }
+
+    {
+        let ref_time = SystemTime::now();
+        let distance_sq = a.distance_sq(b);
+
+        let span = SystemTime::now()
+            .duration_since(ref_time)
+            .unwrap()
+            .as_nanos();
+
+        println!("FVector2::distance_sq | {span} ns | {a} {b} = {distance_sq}");
     }
 }
