@@ -359,14 +359,14 @@ impl FVector2 {
             }
             .m128;
 
-            let mut distance: f32 = MaybeUninit::uninit().assume_init();
+            let mut distance_sq: f32 = MaybeUninit::uninit().assume_init();
             let sub = _mm_sub_ps(a, b);
             let product = _mm_mul_ps(sub, sub);
             let sum = _mm_hadd_ps(product, product);
 
-            _mm_store_ss(&mut distance, sum);
+            _mm_store_ss(&mut distance_sq, sum);
 
-            distance
+            distance_sq
         }
     }
 
