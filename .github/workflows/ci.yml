@@ -11,7 +11,7 @@ env:
 
 jobs:
   build:
-    runs-on: self-hosted
+    runs-on: "cirun-gpu-runner--${{ github.run_id }}"
 
     steps:
       - uses: actions/checkout@v3
