@@ -182,6 +182,51 @@ impl FVector3 {
         }
     }
 
+    /// Calculates the cross product of two `FVector3` instances.
+    ///
+    /// This method computes the cross product between `self` and `other`. The result is another
+    /// `FVector3` that is orthogonal to both input vectors, representing the direction of the cross
+    /// product. The cross product is commonly used for various geometric calculations.
+    ///
+    /// # Arguments
+    ///
+    /// * `other` - The `FVector3` instance representing the other vector.
+    ///
+    /// # Returns
+    ///
+    /// The cross product of `self` and `other` as a new `FVector3`.
+    ///
+    /// # Example
+    ///
+    /// ```
+    /// use axion::math::FVector3;
+    ///
+    /// let vector1 = FVector3::new(1.0, 0.0, 0.0);
+    /// let vector2 = FVector3::new(0.0, 1.0, 0.0);
+    /// let cross_product = vector1.cross(vector2);
+    ///
+    /// assert_eq!(cross_product, FVector3::new(0.0, 0.0, 1.0));
+    /// ```
+    #[inline]
+    #[allow(clippy::uninit_assumed_init)]
+    #[allow(invalid_value)]
+    pub fn cross(self, other: Self) -> Self {
+        unsafe {
+            let a = UnionCast { v3: (self, 0.0) }.m128;
+            let b = UnionCast { v3: (other, 0.0) }.m128;
+
+            let a_yzx = _mm_shuffle_ps(a, a, super::mm_shuffle(3, 0, 2, 1));
+            let b_yzx = _mm_shuffle_ps(b, b, super::mm_shuffle(3, 0, 2, 1));
+            let c = _mm_sub_ps(_mm_mul_ps(a, b_yzx), _mm_mul_ps(a_yzx, b));
+
+            UnionCast {
+                m128: _mm_shuffle_ps(c, c, super::mm_shuffle(3, 0, 2, 1)),
+            }
+            .v3
+            .0
+        }
+    }
+
     /// Returns the length (magnitude) of the vector.
     ///
     /// The length of a vector is a non-negative number that describes the extent of the vector in space. It is always
@@ -1474,5 +1519,21 @@ fn test_fvector3_sse3() {
             .as_nanos();
 
         println!("FVector3::distance_sq | {span} ns | {a} {b} = {distance_sq}");
+    }
+
+    {
+        let a = FVector3::new(1.0, 2.0, -1.0);
+        let b = FVector3::new(1.0, 2.0, 3.0);
+
+        let ref_time = SystemTime::now();
+
+        let cross = a.cross(b);
+
+        let span = SystemTime::now()
+            .duration_since(ref_time)
+            .unwrap()
+            .as_nanos();
+
+        println!("FVector3::cross | {span} ns | {a} × {b} = {cross}");
     }
 }
