@@ -140,10 +140,34 @@ impl FVector3 {
         (self.x, self.y)
     }
 
+    /// Returns the x and z components of the vector as a tuple.
+    #[inline]
+    pub const fn xz(self) -> (f32, f32) {
+        (self.x, self.z)
+    }
+
     /// Returns the y and x components of the vector as a tuple.
     #[inline]
     pub const fn yx(self) -> (f32, f32) {
         (self.y, self.x)
+    }
+
+    /// Returns the y and z components of the vector as a tuple.
+    #[inline]
+    pub const fn yz(self) -> (f32, f32) {
+        (self.y, self.z)
+    }
+
+    /// Returns the z and x components of the vector as a tuple.
+    #[inline]
+    pub const fn zx(self) -> (f32, f32) {
+        (self.z, self.x)
+    }
+
+    /// Returns the z and y components of the vector as a tuple.
+    #[inline]
+    pub const fn zy(self) -> (f32, f32) {
+        (self.z, self.y)
     }
 
     /// Returns the x component of the vector twice as a tuple.
@@ -156,6 +180,66 @@ impl FVector3 {
     #[inline]
     pub const fn yy(self) -> (f32, f32) {
         (self.y, self.y)
+    }
+
+    /// Returns the z component of the vector twice as a tuple.
+    #[inline]
+    pub const fn zz(self) -> (f32, f32) {
+        (self.z, self.z)
+    }
+
+    /// Returns the x, y, and z components of the vector as a tuple.
+    #[inline]
+    pub const fn xyz(self) -> (f32, f32, f32) {
+        (self.x, self.y, self.z)
+    }
+
+    /// Returns the z, y, and x components of the vector as a tuple.
+    #[inline]
+    pub const fn zyx(self) -> (f32, f32, f32) {
+        (self.z, self.y, self.x)
+    }
+
+    /// Returns the x, z, and y components of the vector as a tuple.
+    #[inline]
+    pub const fn xzy(self) -> (f32, f32, f32) {
+        (self.x, self.z, self.y)
+    }
+
+    /// Returns the y, z, and x components of the vector as a tuple.
+    #[inline]
+    pub const fn yzx(self) -> (f32, f32, f32) {
+        (self.y, self.z, self.x)
+    }
+
+    /// Returns the y, x, and z components of the vector as a tuple.
+    #[inline]
+    pub const fn yxz(self) -> (f32, f32, f32) {
+        (self.y, self.x, self.z)
+    }
+
+    /// Returns the z, x, and y components of the vector as a tuple.
+    #[inline]
+    pub const fn zxy(self) -> (f32, f32, f32) {
+        (self.z, self.x, self.y)
+    }
+
+    /// Returns the x component of the vector three times as a tuple.
+    #[inline]
+    pub const fn xxx(self) -> (f32, f32, f32) {
+        (self.x, self.x, self.x)
+    }
+
+    /// Returns the y component of the vector three times as a tuple.
+    #[inline]
+    pub const fn yyy(self) -> (f32, f32, f32) {
+        (self.y, self.y, self.y)
+    }
+
+    /// Returns the z component of the vector three times as a tuple.
+    #[inline]
+    pub const fn zzz(self) -> (f32, f32, f32) {
+        (self.z, self.z, self.z)
     }
 
     /// Returns the dot product of the vector and another vector.
