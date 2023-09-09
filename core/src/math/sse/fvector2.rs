@@ -204,6 +204,33 @@ impl FVector2 {
         (self.y, self.y)
     }
 
+    /// Returns the y and x components of the vector as an FVector2.
+    #[inline]
+    pub const fn axis_yx(self) -> Self {
+        Self {
+            x: self.y,
+            y: self.x,
+        }
+    }
+
+    /// Returns the x component of the vector twice as an FVector2.
+    #[inline]
+    pub const fn axis_xx(self) -> Self {
+        Self {
+            x: self.x,
+            y: self.x,
+        }
+    }
+
+    /// Returns the y component of the vector twice as an FVector2.
+    #[inline]
+    pub const fn axis_yy(self) -> Self {
+        Self {
+            x: self.y,
+            y: self.y,
+        }
+    }
+
     /// Returns the dot product of the vector and another vector.
     ///
     /// # Arguments
