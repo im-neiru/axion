@@ -97,6 +97,42 @@ impl FVector2 {
         Self { x, y }
     }
 
+    /// Adds the `z` axis value to a `FVector2`, creating a new `FVector3`.
+    ///
+    /// This function takes a `FVector2` and a `z` value, and returns a new `FVector3`
+    /// with the `x` and `y` components from the input `FVector2` and the provided `z` value.
+    ///
+    /// # Arguments
+    ///
+    /// * `self` - The input `FVector2` that will serve as the basis for the `x` and `y` components of the resulting `FVector3`.
+    /// * `z` - The value to be used as the `z` component of the resulting `FVector3`.
+    ///
+    /// # Returns
+    ///
+    /// A new `FVector3` with `x` and `y` components inherited from the input `FVector2`
+    /// and the `z` component set to the provided `z` value.
+    ///
+    /// # Example
+    ///
+    /// ```rust
+    /// use your_module::FVector2;
+    ///
+    /// let f2 = FVector2::new(1.0, 2.0);
+    /// let f3 = f2.add_axis(3.0); // New FVector3
+    ///
+    /// assert_eq!(f3.x, 1.0);
+    /// assert_eq!(f3.y, 2.0);
+    /// assert_eq!(f3.z, 3.0);
+    /// ```
+    #[inline]
+    pub const fn add_axis(self, z: f32) -> super::FVector3 {
+        super::FVector3 {
+            x: self.x,
+            y: self.y,
+            z,
+        }
+    }
+
     /// Create a new instance of `FVector2` with both `x` and `y` components set to the given `value`.
     ///
     /// This function creates a new `FVector2` instance with both `x` and `y` components
