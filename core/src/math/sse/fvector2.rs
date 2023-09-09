@@ -115,7 +115,7 @@ impl FVector2 {
     /// # Example
     ///
     /// ```rust
-    /// use your_module::FVector2;
+    /// use axion::math::FVector2;
     ///
     /// let f2 = FVector2::new(1.0, 2.0);
     /// let f3 = f2.add_axis(3.0); // New FVector3
