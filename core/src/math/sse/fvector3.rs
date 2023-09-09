@@ -296,6 +296,167 @@ impl FVector3 {
         (self.z, self.z, self.z)
     }
 
+    /// Returns the x and y components of the vector as an FVector2.
+    #[inline]
+    pub const fn axis_xy(self) -> super::FVector2 {
+        super::FVector2 {
+            x: self.x,
+            y: self.y,
+        }
+    }
+
+    /// Returns the x and z components of the vector as an FVector2.
+    #[inline]
+    pub const fn axis_xz(self) -> super::FVector2 {
+        super::FVector2 {
+            x: self.x,
+            y: self.z,
+        }
+    }
+
+    /// Returns the y and x components of the vector as an FVector2.
+    #[inline]
+    pub const fn axis_yx(self) -> super::FVector2 {
+        super::FVector2 {
+            x: self.y,
+            y: self.x,
+        }
+    }
+
+    /// Returns the y and z components of the vector as an FVector2.
+    #[inline]
+    pub const fn axis_yz(self) -> super::FVector2 {
+        super::FVector2 {
+            x: self.y,
+            y: self.z,
+        }
+    }
+
+    /// Returns the z and x components of the vector as an FVector2.
+    #[inline]
+    pub const fn axis_zx(self) -> super::FVector2 {
+        super::FVector2 {
+            x: self.z,
+            y: self.x,
+        }
+    }
+
+    /// Returns the z and y components of the vector as an FVector2.
+    #[inline]
+    pub const fn axis_zy(self) -> super::FVector2 {
+        super::FVector2 {
+            x: self.z,
+            y: self.y,
+        }
+    }
+
+    /// Returns the x component of the vector twice as an FVector2.
+    #[inline]
+    pub const fn axis_xx(self) -> super::FVector2 {
+        super::FVector2 {
+            x: self.x,
+            y: self.x,
+        }
+    }
+
+    /// Returns the y component of the vector twice as an FVector2.
+    #[inline]
+    pub const fn axis_yy(self) -> super::FVector2 {
+        super::FVector2 {
+            x: self.y,
+            y: self.y,
+        }
+    }
+
+    /// Returns the z component of the vector twice as an FVector2.
+    #[inline]
+    pub const fn axis_zz(self) -> super::FVector2 {
+        super::FVector2 {
+            x: self.z,
+            y: self.z,
+        }
+    }
+
+    /// Returns the z, y, and x components of the vector as an FVector3.
+    #[inline]
+    pub const fn axis_zyx(self) -> FVector3 {
+        FVector3 {
+            x: self.z,
+            y: self.y,
+            z: self.x,
+        }
+    }
+
+    /// Returns the x, z, and y components of the vector as an FVector3.
+    #[inline]
+    pub const fn axis_xzy(self) -> FVector3 {
+        FVector3 {
+            x: self.x,
+            y: self.z,
+            z: self.y,
+        }
+    }
+
+    /// Returns the y, z, and x components of the vector as an FVector3.
+    #[inline]
+    pub const fn axis_yzx(self) -> FVector3 {
+        FVector3 {
+            x: self.y,
+            y: self.z,
+            z: self.x,
+        }
+    }
+
+    /// Returns the y, x, and z components of the vector as an FVector3.
+    #[inline]
+    pub const fn axis_yxz(self) -> FVector3 {
+        FVector3 {
+            x: self.y,
+            y: self.x,
+            z: self.z,
+        }
+    }
+
+    /// Returns the z, x, and y components of the vector as an FVector3.
+    #[inline]
+    pub const fn axis_zxy(self) -> FVector3 {
+        FVector3 {
+            x: self.z,
+            y: self.x,
+            z: self.y,
+        }
+    }
+
+    /// Returns the x component of the vector three times as an FVector3.
+    #[inline]
+    pub const fn axis_xxx(self) -> FVector3 {
+        FVector3 {
+            x: self.x,
+            y: self.x,
+            z: self.x,
+        }
+    }
+
+    /// Returns the y component of the vector three times as an FVector3.
+    #[inline]
+    pub const fn axis_yyy(self) -> FVector3 {
+        FVector3 {
+            x: self.y,
+            y: self.y,
+            z: self.y,
+        }
+    }
+
+    /// Returns the z component of the vector three times as an FVector3.
+    #[inline]
+    pub const fn axis_zzz(self) -> FVector3 {
+        FVector3 {
+            x: self.z,
+            y: self.z,
+            z: self.z,
+        }
+    }
+
     /// Returns the dot product of the vector and another vector.
     ///
     /// # Arguments
