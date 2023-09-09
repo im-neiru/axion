@@ -3,9 +3,9 @@
 // Sub modules
 #[cfg(feature = "simd")]
 #[cfg(any(target_arch = "x86_64", target_arch = "x86"))]
-mod sse2;
+mod sse;
 
 // Public structs
 #[cfg(feature = "simd")]
 #[cfg(any(target_arch = "x86_64", target_arch = "x86"))]
-pub use sse2::FVector2;
+pub use sse::FVector2;
