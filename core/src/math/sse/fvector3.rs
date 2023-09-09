@@ -91,6 +91,60 @@ impl FVector3 {
     /// initialized to the smallest positive value representable by `f32`.
     pub const EPSILON: Self = Self::splat(f32::EPSILON);
 
+    /// A constant `FVector3` representing the positive X-axis.
+    ///
+    /// This constant vector has a value of (1.0, 0.0, 0.0), representing the positive X-axis in 3D space.
+    pub const AXIS_X: Self = Self {
+        x: 1.0,
+        y: 0.0,
+        z: 0.0,
+    };
+
+    /// A constant `FVector3` representing the positive Y-axis.
+    ///
+    /// This constant vector has a value of (0.0, 1.0, 0.0), representing the positive Y-axis in 3D space.
+    pub const AXIS_Y: Self = Self {
+        x: 0.0,
+        y: 1.0,
+        z: 0.0,
+    };
+
+    /// A constant `FVector3` representing the positive Z-axis.
+    ///
+    /// This constant vector has a value of (0.0, 0.0, 1.0), representing the positive Z-axis in 3D space.
+    pub const AXIS_Z: Self = Self {
+        x: 0.0,
+        y: 0.0,
+        z: 1.0,
+    };
+
+    /// A constant `FVector3` representing the negative X-axis.
+    ///
+    /// This constant vector has a value of (-1.0, 0.0, 0.0), representing the negative X-axis in 3D space.
+    pub const NEG_AXIS_X: Self = Self {
+        x: -1.0,
+        y: 0.0,
+        z: 0.0,
+    };
+
+    /// A constant `FVector3` representing the negative Y-axis.
+    ///
+    /// This constant vector has a value of (0.0, -1.0, 0.0), representing the negative Y-axis in 3D space.
+    pub const NEG_AXIS_Y: Self = Self {
+        x: 0.0,
+        y: -1.0,
+        z: 0.0,
+    };
+
+    /// A constant `FVector3` representing the negative Z-axis.
+    ///
+    /// This constant vector has a value of (0.0, 0.0, -1.0), representing the negative Z-axis in 3D space.
+    pub const NEG_AXIS_Z: Self = Self {
+        x: 0.0,
+        y: 0.0,
+        z: -1.0,
+    };
+
     /// Constructs a new `FVector3`.
     ///
     /// # Arguments
