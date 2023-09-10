@@ -1230,7 +1230,6 @@ impl ops::Index<usize> for FVector4 {
     /// assert_ne!(vector1, vector2); // Check if vector1 is not equal to vector2 due to differing components
     /// ```
     #[inline]
-    #[inline]
     fn index(&self, index: usize) -> &Self::Output {
         match index {
             0 => &self.x,
