@@ -157,6 +157,40 @@ impl FVector3 {
         Self { x, y, z }
     }
 
+    /// Converts the `FVector3` into a `FVector4` by adding a fourth component `w`.
+    ///
+    /// This method creates a new `FVector4` by taking the `x`, `y`, and `z` components of the
+    /// `FVector3` and adding a fourth component `w`. This can be useful when working with
+    /// homogeneous coordinates, where the fourth component typically represents a weight or scale.
+    ///
+    /// # Arguments
+    ///
+    /// * `w` - The value of the fourth component to add to the resulting `FVector4`.
+    ///
+    /// # Returns
+    ///
+    /// A new `FVector4` with `x`, `y`, `z`, and `w` components.
+    ///
+    /// # Example
+    ///
+    /// ```
+    /// use axion::math::FVector3;
+    ///
+    /// let vector3 = FVector3::new(2.0, 3.0, 4.0);
+    /// let vector4 = vector3.add_axis(1.0);
+    ///
+    /// assert_eq!(vector4, FVector4::new(2.0, 3.0, 4.0, 1.0));
+    /// ```
+    #[inline]
+    pub const fn add_axis(self, w: f32) -> super::FVector4 {
+        super::FVector4 {
+            x: self.x,
+            y: self.y,
+            z: self.z,
+            w,
+        }
+    }
+
     /// Create a new instance of `FVector3` with all `x`, `y` and `z` components set to the given `value`.
     ///
     /// This function creates a new `FVector3` instance with all `x`, `y` and `z` components
