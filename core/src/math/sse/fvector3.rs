@@ -8,7 +8,7 @@ use core::arch::x86_64::*;
 use std::{fmt, mem::MaybeUninit, ops};
 
 /// `FVector3` is a structure that represents a 3D vector with `f32` components.
-/// It encapsulates two floating-point values and is used for various purposes in graphical applications
+/// It encapsulates three floating-point values and is used for various purposes in graphical applications
 /// including points, vectors, and texture coordinates.
 ///
 /// This structure is implemented with SIMD (Single Instruction, Multiple Data) which is a type of parallel computing
