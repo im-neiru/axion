@@ -1,5 +1,5 @@
 [package]
-name = "axion-core"
+name = "axion"
 version = "0.1.0"
 edition = "2021"
 
@@ -7,3 +7,11 @@ edition = "2021"
 
 [dependencies]
 axion-macro = { path = "../macro" }
+
+[dev-dependencies]
+criterion = "0.5.1"
+
+[features]
+default=["math", "simd"]
+math=[]
+simd=[]
