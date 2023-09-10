@@ -767,7 +767,7 @@ impl FVector2 {
     /// ```
     #[inline]
     pub fn is_finite(self) -> bool {
-        self.x.is_finite() || self.y.is_finite()
+        self.x.is_finite() && self.y.is_finite()
     }
 }
 
