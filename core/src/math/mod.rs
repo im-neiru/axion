@@ -5,10 +5,17 @@
 #[cfg(any(target_arch = "x86_64", target_arch = "x86"))]
 mod sse;
 
+#[cfg(not(feature = "simd"))]
+mod ordinary;
+
 // Public structs
 #[cfg(feature = "simd")]
 #[cfg(any(target_arch = "x86_64", target_arch = "x86"))]
 pub use sse::{FVector2, FVector3, FVector4};
+
+// Public structs
+#[cfg(not(feature = "simd"))]
+pub use ordinary::{FVector2, FVector3, FVector4};
 
 /// Convenience function for creating a 4D vector (FVector4).
 ///
