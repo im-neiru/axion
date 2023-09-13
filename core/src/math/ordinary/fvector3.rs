@@ -470,7 +470,7 @@ impl FVector3 {
     #[inline]
     pub fn dot(self, other: Self) -> f32 {
         self.x
-            .mul_add(other.x, self.y.mul_add(other.y, self.z * self.z))
+            .mul_add(other.x, self.y.mul_add(other.y, self.z * other.z))
     }
 
     /// Calculates the cross product of two `FVector3` instances.
