@@ -1,6 +1,7 @@
 // Within this module, is the implementations for vectors, matrices, and more...
 
 // Sub modules
+mod common;
 #[cfg(feature = "simd")]
 #[cfg(any(target_arch = "x86_64", target_arch = "x86"))]
 mod sse;
@@ -9,13 +10,53 @@ mod sse;
 mod ordinary;
 
 // Public structs
+
+/// `FVector2` is a structure that represents a 2D vector with `f32` components.
+/// It encapsulates two floating-point values and is used for various purposes in graphical applications
+/// including points, vectors, and texture coordinates.
+#[derive(Clone, Copy, Debug)]
+pub struct FVector2 {
+    /// The X component of the vector.
+    pub x: f32,
+    /// The Y component of the vector.
+    pub y: f32,
+}
+
+/// `FVector3` is a structure that represents a 3D vector with `f32` components.
+/// It encapsulates three floating-point values and is used for various purposes in graphical applications
+/// including points, vectors, and texture coordinates.
+#[derive(Clone, Copy, Debug)]
+pub struct FVector3 {
+    /// The X component of the vector.
+    pub x: f32,
+    /// The Y component of the vector.
+    pub y: f32,
+    /// The Z component of the vector.
+    pub z: f32,
+}
+
+/// `FVector4` is a structure that represents a 3D vector with `f32` components.
+/// It encapsulates three floating-point values and is used for various purposes in graphical applications
+/// including points, vectors, and texture coordinates.
+#[derive(Clone, Copy, Debug)]
+pub struct FVector4 {
+    /// The X component of the vector.
+    pub x: f32,
+    /// The Y component of the vector.
+    pub y: f32,
+    /// The Z component of the vector.
+    pub z: f32,
+    /// The W component of the vector.
+    pub w: f32,
+}
+
 #[cfg(feature = "simd")]
 #[cfg(any(target_arch = "x86_64", target_arch = "x86"))]
-pub use sse::{FVector2, FVector3, FVector4};
+pub use sse::*;
 
 // Public structs
 #[cfg(not(feature = "simd"))]
-pub use ordinary::{FVector2, FVector3, FVector4};
+pub use ordinary::*;
 
 /// Convenience function for creating a 4D vector (FVector4).
 ///
