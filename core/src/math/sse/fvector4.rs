@@ -358,6 +358,58 @@ impl FVector4 {
         }
     }
 
+    /// Project the vector onto another vector.
+    ///
+    /// This function calculates the projection of the current vector onto
+    /// the `normal` vector. To ensure accurate results, normalize the `normal`
+    /// vector before passing it to this function. Failure to normalize `normal`
+    /// may lead to incorrect or undesirable results.
+    ///
+    /// # Arguments
+    ///
+    /// - `self`: The vector to be projected.
+    /// - `normal`: The normalized vector onto which the projection is made.
+    ///
+    /// # Returns
+    ///
+    /// A new `FVector4` representing the projection of the current vector onto `normal`.
+    ///
+    /// # Example
+    ///
+    /// ```rust
+    /// use axion::math::FVector4;
+    ///
+    /// let vec1 = FVector4::new(1.0, 2.0, 3.0, 5.0);
+    /// let normalized = FVector4::new(4.0, 5.0, 6.0, 5.0).normalize();
+    ///
+    /// let projection = vec1.project(normalized);
+    /// println!("Projection: {:?}", projection);
+    /// ```
+    ///
+    /// Note: Ensure that the `normal` vector is normalized before passing it to this function.
+    #[inline]
+    #[allow(clippy::uninit_assumed_init)]
+    #[allow(invalid_value)]
+    pub fn project(self, normal: Self) -> Self {
+        unsafe {
+            let a = UnionCast { v4: self }.m128;
+            let b = UnionCast { v4: normal }.m128;
+
+            let mut dot_product: f32 = MaybeUninit::uninit().assume_init();
+            let product = _mm_mul_ps(a, b);
+            let sum = _mm_hadd_ps(product, product);
+            let sum = _mm_hadd_ps(sum, sum);
+            let sum = _mm_hadd_ps(sum, sum);
+
+            _mm_store_ss(&mut dot_product, sum);
+
+            UnionCast {
+                m128: _mm_mul_ps(_mm_shuffle_ps::<0x00>(sum, sum), b),
+            }
+            .v4
+        }
+    }
+
     /// Performs linear interpolation between two `FVector4` instances.
     ///
     /// Linear interpolation, or lerp, blends between two `FVector4` instances using a specified

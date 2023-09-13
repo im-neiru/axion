@@ -226,6 +226,46 @@ impl FVector3 {
         }
     }
 
+    /// Project the vector onto another vector.
+    ///
+    /// This function calculates the projection of the current vector onto
+    /// the `normal` vector. To ensure accurate results, normalize the `normal`
+    /// vector before passing it to this function. Failure to normalize `normal`
+    /// may lead to incorrect or undesirable results.
+    ///
+    /// # Arguments
+    ///
+    /// - `self`: The vector to be projected.
+    /// - `normal`: The normalized vector onto which the projection is made.
+    ///
+    /// # Returns
+    ///
+    /// A new `FVector3` representing the projection of the current vector onto `normal`.
+    ///
+    /// # Example
+    ///
+    /// ```rust
+    /// use axion::math::FVector3;
+    ///
+    /// let vec1 = FVector3::new(1.0, 2.0, 3.0);
+    /// let normalized = FVector3::new(4.0, 5.0, 6.0).normalize();
+    ///
+    /// let projection = vec1.project(normalized);
+    /// println!("Projection: {:?}", projection);
+    /// ```
+    ///
+    /// Note: Ensure that the `normal` vector is normalized before passing it to this function.
+    #[inline]
+    pub fn project(self, normal: Self) -> Self {
+        let dot_product = self.dot(normal);
+
+        Self {
+            x: dot_product * normal.x,
+            y: dot_product * normal.y,
+            z: dot_product * normal.z,
+        }
+    }
+
     /// Performs linear interpolation between two `FVector3` instances.
     ///
     /// Linear interpolation, or lerp, blends between two `FVector3` instances using a specified
