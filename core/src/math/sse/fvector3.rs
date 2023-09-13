@@ -5,7 +5,8 @@ use core::arch::x86::*;
 use core::arch::x86_64::*;
 
 // Imports from std
-use std::{mem::MaybeUninit, ops};
+use std::mem::MaybeUninit;
+use std::ops;
 
 use crate::math::FVector3;
 

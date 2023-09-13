@@ -5,9 +5,10 @@ use core::arch::x86::*;
 use core::arch::x86_64::*;
 
 // Imports from std
-use std::{fmt, mem::MaybeUninit, ops};
+use std::mem::MaybeUninit;
+use std::ops;
 
-use crate::math::{FVector2, FVector3, FVector4};
+use crate::math::FVector4;
 
 /// A union used for type punning between `FVector4` and `__m128`.
 ///
