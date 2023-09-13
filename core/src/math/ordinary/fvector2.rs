@@ -1,19 +1,6 @@
-// Imports from core
-#[cfg(target_arch = "x86")]
-use core::arch::x86::*;
-#[cfg(target_arch = "x86_64")]
-use core::arch::x86_64::*;
-
-// Imports from std
-use std::mem::MaybeUninit;
 use std::ops;
 
 use crate::math::FVector2;
-
-union UnionCast {
-    v2: (FVector2, FVector2),
-    m128: __m128,
-}
 
 impl FVector2 {
     /// Returns the dot product of the vector and another vector.
@@ -22,27 +9,8 @@ impl FVector2 {
     ///
     /// * `other` - Another vector to calculate the dot product with.
     #[inline]
-    #[allow(clippy::uninit_assumed_init)]
-    #[allow(invalid_value)]
     pub fn dot(self, other: Self) -> f32 {
-        unsafe {
-            let a = UnionCast {
-                v2: (self, Self::ZERO),
-            }
-            .m128;
-            let b = UnionCast {
-                v2: (other, Self::ZERO),
-            }
-            .m128;
-
-            let mut dot_product: f32 = MaybeUninit::uninit().assume_init();
-            let product = _mm_mul_ps(a, b);
-            let sum = _mm_hadd_ps(product, product);
-
-            _mm_store_ss(&mut dot_product, sum);
-
-            dot_product
-        }
+        self.x.mul_add(other.x, self.y * other.y)
     }
 
     /// Returns the length (magnitude) of the vector.
@@ -56,24 +24,8 @@ impl FVector2 {
     /// This function may be used in graphics programming to determine the distance of a point represented by the vector
     /// from the origin of the vector space. As such, it can be used to calculate distances between points.
     #[inline]
-    #[allow(clippy::uninit_assumed_init)]
-    #[allow(invalid_value)]
     pub fn length(self) -> f32 {
-        unsafe {
-            let a = UnionCast {
-                v2: (self, Self::ZERO),
-            }
-            .m128;
-
-            let mut length: f32 = MaybeUninit::uninit().assume_init();
-            let product = _mm_mul_ps(a, a);
-            let sum = _mm_hadd_ps(product, product);
-            let root = _mm_sqrt_ps(sum);
-
-            _mm_store_ss(&mut length, root);
-
-            length
-        }
+        self.length_sq().sqrt()
     }
 
     /// Returns the squared length of the vector.
@@ -84,23 +36,8 @@ impl FVector2 {
     ///
     /// The squared length is calculated by performing the dot product of the vector with itself (`dot` function).
     #[inline]
-    #[allow(clippy::uninit_assumed_init)]
-    #[allow(invalid_value)]
     pub fn length_sq(self) -> f32 {
-        unsafe {
-            let a = UnionCast {
-                v2: (self, Self::ZERO),
-            }
-            .m128;
-
-            let mut length_sq: f32 = MaybeUninit::uninit().assume_init();
-            let product = _mm_mul_ps(a, a);
-            let sum = _mm_hadd_ps(product, product);
-
-            _mm_store_ss(&mut length_sq, sum);
-
-            length_sq
-        }
+        self.x.mul_add(self.x, self.y * self.y)
     }
 
     //// Returns the inverse of the length (reciprocal of the magnitude) of the vector,
@@ -119,25 +56,8 @@ impl FVector2 {
     /// ```
 
     #[inline]
-    #[allow(clippy::uninit_assumed_init)]
-    #[allow(invalid_value)]
     pub fn length_inv(self) -> f32 {
-        unsafe {
-            let a = UnionCast {
-                v2: (self, Self::ZERO),
-            }
-            .m128;
-
-            let mut length_inv: f32 = MaybeUninit::uninit().assume_init();
-            let product = _mm_mul_ps(a, a);
-            let sum = _mm_hadd_ps(product, product);
-            let root = _mm_sqrt_ps(sum);
-            let recip = _mm_rcp_ps(root);
-
-            _mm_store_ss(&mut length_inv, recip);
-
-            length_inv
-        }
+        self.length_sq().sqrt().recip()
     }
 
     /// Calculates the Euclidean distance between two 2D vectors.
@@ -164,29 +84,8 @@ impl FVector2 {
     /// ```
     ///
     #[inline]
-    #[allow(clippy::uninit_assumed_init)]
-    #[allow(invalid_value)]
     pub fn distance(self, other: Self) -> f32 {
-        unsafe {
-            let a = UnionCast {
-                v2: (self, Self::ZERO),
-            }
-            .m128;
-            let b = UnionCast {
-                v2: (other, Self::ZERO),
-            }
-            .m128;
-
-            let mut distance: f32 = MaybeUninit::uninit().assume_init();
-            let sub = _mm_sub_ps(a, b);
-            let product = _mm_mul_ps(sub, sub);
-            let sum = _mm_hadd_ps(product, product);
-            let root = _mm_sqrt_ps(sum);
-
-            _mm_store_ss(&mut distance, root);
-
-            distance
-        }
+        self.distance_sq(other).sqrt()
     }
 
     /// Computes the squared Euclidean distance between two `FVector2` instances.
@@ -214,31 +113,14 @@ impl FVector2 {
     /// assert_eq!(distance_sq, 2.0);
     /// ```
     #[inline]
-    #[allow(clippy::uninit_assumed_init)]
-    #[allow(invalid_value)]
     pub fn distance_sq(self, other: Self) -> f32 {
-        unsafe {
-            let a = UnionCast {
-                v2: (self, Self::ZERO),
-            }
-            .m128;
-            let b = UnionCast {
-                v2: (other, Self::ZERO),
-            }
-            .m128;
+        let x = self.x - other.x;
+        let y = self.y - other.y;
 
-            let mut distance_sq: f32 = MaybeUninit::uninit().assume_init();
-            let sub = _mm_sub_ps(a, b);
-            let product = _mm_mul_ps(sub, sub);
-            let sum = _mm_hadd_ps(product, product);
-
-            _mm_store_ss(&mut distance_sq, sum);
-
-            distance_sq
-        }
+        x.mul_add(x, y * y)
     }
 
-    /// The `normalize` function normalizes a vector using SIMD instructions for efficiency.
+    /// The `normalize` function normalizes a vector.
     /// if the vector is at the origin `(0.0, 0.0)`, as this would lead
     /// to a division by zero when calculating the reciprocal of the root. The result in such case
     /// would be `(f32::NAN, f32::NAN)`. It is recommended to check if the vector is at the origin before
@@ -258,28 +140,12 @@ impl FVector2 {
     /// let normalized_v = v.normalize();
     /// ```
     #[inline]
-    #[allow(clippy::uninit_assumed_init)]
-    #[allow(invalid_value)]
     pub fn normalize(self) -> Self {
-        unsafe {
-            let a = UnionCast {
-                v2: (self, Self::ZERO),
-            }
-            .m128;
-            let mut normalized_vec: (Self, Self) =
-                MaybeUninit::uninit().assume_init();
+        let length_inv = self.length_inv();
 
-            let product = _mm_mul_ps(a, a);
-            let sum = _mm_hadd_ps(product, product);
-            let root = _mm_sqrt_ps(sum);
-            let recip = _mm_set1_ps(_mm_cvtss_f32(_mm_rcp_ps(root)));
-            let normalized = _mm_mul_ps(a, recip);
-
-            _mm_store_ps(
-                (&mut normalized_vec as *mut (Self, Self)) as *mut f32,
-                normalized,
-            );
-            normalized_vec.0
+        Self {
+            x: self.x * length_inv,
+            y: self.y * length_inv,
         }
     }
 
@@ -297,15 +163,15 @@ impl FVector2 {
     ///
     /// # Returns
     ///
-    /// A new `FVector4` representing the projection of the current vector onto `normal`.
+    /// A new `FVector2` representing the projection of the current vector onto `normal`.
     ///
     /// # Example
     ///
     /// ```rust
-    /// use axion::math::FVector4;
+    /// use axion::math::FVector2;
     ///
-    /// let vec1 = FVector4::new(1.0, 2.0, 3.0, 5.0);
-    /// let normalized = FVector4::new(4.0, 5.0, 6.0, 5.0).normalize();
+    /// let vec1 = FVector2::new(1.0, 2.0);
+    /// let normalized = FVector2::new(4.0, 5.0).normalize();
     ///
     /// let projection = vec1.project(normalized);
     /// println!("Projection: {:?}", projection);
@@ -313,30 +179,12 @@ impl FVector2 {
     ///
     /// Note: Ensure that the `normal` vector is normalized before passing it to this function.
     #[inline]
-    #[allow(clippy::uninit_assumed_init)]
-    #[allow(invalid_value)]
     pub fn project(self, normal: Self) -> Self {
-        unsafe {
-            let a = UnionCast {
-                v2: (self, Self::ZERO),
-            }
-            .m128;
-            let b = UnionCast {
-                v2: (normal, Self::ZERO),
-            }
-            .m128;
+        let dot_product = self.dot(normal);
 
-            let mut dot_product: f32 = MaybeUninit::uninit().assume_init();
-            let product = _mm_mul_ps(a, b);
-            let sum = _mm_hadd_ps(product, product);
-
-            _mm_store_ss(&mut dot_product, sum);
-
-            UnionCast {
-                m128: _mm_mul_ps(_mm_shuffle_ps::<0x00>(sum, sum), b),
-            }
-            .v2
-            .0
+        Self {
+            x: dot_product * normal.x,
+            y: dot_product * normal.y,
         }
     }
 
@@ -371,25 +219,12 @@ impl FVector2 {
     /// ```
     #[inline]
     pub fn lerp(self, end: Self, scalar: f32) -> Self {
-        unsafe {
-            let a = UnionCast {
-                v2: (self, Self::ZERO),
-            }
-            .m128;
+        let x = self.x - end.x;
+        let y = self.y - end.y;
 
-            let b = UnionCast {
-                v2: (end, Self::ZERO),
-            }
-            .m128;
-
-            UnionCast {
-                m128: _mm_add_ps(
-                    a,
-                    _mm_mul_ps(_mm_sub_ps(b, a), _mm_set1_ps(scalar)),
-                ),
-            }
-            .v2
-            .0
+        Self {
+            x: x.mul_add(scalar, self.x),
+            y: y.mul_add(scalar, self.y),
         }
     }
 
@@ -419,7 +254,10 @@ impl FVector2 {
     /// ```
     #[inline]
     pub fn clamp(self, min: Self, max: Self) -> Self {
-        self.max(min).min(max)
+        Self {
+            x: self.x.clamp(min.x, max.x),
+            y: self.y.clamp(min.y, max.y),
+        }
     }
 
     /// Returns an `FVector2` with each component set to the minimum of the corresponding components of `self` and `value`.
@@ -446,25 +284,10 @@ impl FVector2 {
     /// assert_eq!(min_vector, FVector2::new(1.0, 3.0));
     /// ```
     #[inline]
-    #[allow(clippy::uninit_assumed_init)]
-    #[allow(invalid_value)]
     pub fn min(self, value: Self) -> Self {
-        unsafe {
-            let a = UnionCast {
-                v2: (self, Self::ZERO),
-            }
-            .m128;
-
-            let b = UnionCast {
-                v2: (value, Self::ZERO),
-            }
-            .m128;
-
-            UnionCast {
-                m128: _mm_min_ps(a, b),
-            }
-            .v2
-            .0
+        Self {
+            x: self.x.min(value.x),
+            y: self.y.min(value.y),
         }
     }
 
@@ -492,25 +315,10 @@ impl FVector2 {
     /// assert_eq!(max_vector, FVector2::new(2.0, 5.0));
     /// ```
     #[inline]
-    #[allow(clippy::uninit_assumed_init)]
-    #[allow(invalid_value)]
     pub fn max(self, value: Self) -> Self {
-        unsafe {
-            let a = UnionCast {
-                v2: (self, Self::ZERO),
-            }
-            .m128;
-
-            let b = UnionCast {
-                v2: (value, Self::ZERO),
-            }
-            .m128;
-
-            UnionCast {
-                m128: _mm_max_ps(a, b),
-            }
-            .v2
-            .0
+        Self {
+            x: self.x.max(value.x),
+            y: self.y.max(value.y),
         }
     }
 
@@ -536,21 +344,7 @@ impl FVector2 {
     /// ```
     #[inline]
     pub fn is_zero(self) -> bool {
-        unsafe {
-            let a = UnionCast {
-                v2: (self, Self::ZERO),
-            }
-            .m128;
-
-            let b = UnionCast {
-                v2: (Self::ZERO, Self::ZERO),
-            }
-            .m128;
-
-            let cmp_result = _mm_cmpeq_ps(a, b);
-
-            _mm_movemask_ps(cmp_result) == 0xf
-        }
+        self.x == 0.0 && self.y == 0.0
     }
 
     /// Checks if any component of the `FVector2` is NaN (Not-a-Number).
@@ -575,105 +369,7 @@ impl FVector2 {
     /// ```
     #[inline]
     pub fn is_nan(self) -> bool {
-        unsafe {
-            let a = UnionCast {
-                v2: (self, Self::ZERO),
-            }
-            .m128;
-
-            let cmp_result = _mm_cmpunord_ps(a, a);
-
-            _mm_movemask_ps(cmp_result) != 0
-        }
-    }
-}
-
-impl PartialEq for FVector2 {
-    /// Checks if two `FVector2` instances are equal.
-    ///
-    /// This implementation compares each component of two `FVector2` instances for equality
-    /// and returns `true` if all components are equal, and `false` otherwise.
-    ///
-    /// # Arguments
-    ///
-    /// * `rhs` - The right-hand side `FVector2` to compare with.
-    ///
-    /// # Returns
-    ///
-    /// `true` if all components of the two `FVector2` instances are equal, `false` otherwise.
-    ///
-    /// # Example
-    ///
-    /// ```
-    /// use axion::math::FVector2;
-    ///
-    /// let vector1 = FVector2::new(2.0, 3.0);
-    /// let vector2 = FVector2::new(2.0, 3.0);
-    /// let vector3 = FVector2::new(1.0, 2.0);
-    ///
-    /// assert_eq!(vector1, vector2);
-    /// assert_ne!(vector1, vector3);
-    /// ```
-    #[inline]
-    fn eq(&self, rhs: &Self) -> bool {
-        unsafe {
-            let a = UnionCast {
-                v2: (*self, Self::ZERO),
-            }
-            .m128;
-            let b = UnionCast {
-                v2: (*rhs, Self::ZERO),
-            }
-            .m128;
-
-            let cmp_result = _mm_cmpeq_ps(a, b);
-
-            _mm_movemask_ps(cmp_result) == 0xf
-        }
-    }
-
-    /// Checks if two `FVector2` instances are not equal.
-    ///
-    /// This implementation compares each component of two `FVector2` instances for inequality
-    /// and returns `true` if at least one component is not equal, and `false` if all components
-    /// are equal.
-    ///
-    /// # Arguments
-    ///
-    /// * `rhs` - The right-hand side `FVector2` to compare with.
-    ///
-    /// # Returns
-    ///
-    /// `true` if at least one component of the two `FVector2` instances is not equal, `false` if all components are equal.
-    ///
-    /// # Example
-    ///
-    /// ```
-    /// use axion::math::FVector2;
-    ///
-    /// let vector1 = FVector2::new(2.0, 3.0);
-    /// let vector2 = FVector2::new(1.0, 2.0);
-    ///
-    /// assert_ne!(vector1, vector2);
-    /// ```
-
-    #[inline]
-    #[allow(clippy::partialeq_ne_impl)]
-    fn ne(&self, rhs: &Self) -> bool {
-        unsafe {
-            let a = UnionCast {
-                v2: (*self, Self::ZERO),
-            }
-            .m128;
-            let b = UnionCast {
-                v2: (*rhs, Self::ZERO),
-            }
-            .m128;
-
-            let cmp_result = _mm_cmpeq_ps(a, b);
-
-            _mm_movemask_ps(cmp_result) != 0xf
-        }
+        self.x.is_finite() && self.y.is_finite()
     }
 }
 
@@ -707,21 +403,9 @@ impl ops::Add<Self> for FVector2 {
     /// ```
     #[inline]
     fn add(self, rhs: Self) -> Self::Output {
-        unsafe {
-            let a = UnionCast {
-                v2: (self, Self::ZERO),
-            }
-            .m128;
-            let b = UnionCast {
-                v2: (rhs, Self::ZERO),
-            }
-            .m128;
-
-            UnionCast {
-                m128: _mm_add_ps(a, b),
-            }
-            .v2
-            .0
+        Self {
+            x: self.x + rhs.x,
+            y: self.y + rhs.y,
         }
     }
 }
@@ -756,21 +440,9 @@ impl ops::Sub<Self> for FVector2 {
     /// ```
     #[inline]
     fn sub(self, rhs: Self) -> Self::Output {
-        unsafe {
-            let a = UnionCast {
-                v2: (self, Self::ZERO),
-            }
-            .m128;
-            let b = UnionCast {
-                v2: (rhs, Self::ZERO),
-            }
-            .m128;
-
-            UnionCast {
-                m128: _mm_sub_ps(a, b),
-            }
-            .v2
-            .0
+        Self {
+            x: self.x - rhs.x,
+            y: self.y - rhs.y,
         }
     }
 }
@@ -805,21 +477,9 @@ impl ops::Mul<Self> for FVector2 {
     /// ```
     #[inline]
     fn mul(self, rhs: Self) -> Self::Output {
-        unsafe {
-            let a = UnionCast {
-                v2: (self, Self::ZERO),
-            }
-            .m128;
-            let b = UnionCast {
-                v2: (rhs, Self::ZERO),
-            }
-            .m128;
-
-            UnionCast {
-                m128: _mm_mul_ps(a, b),
-            }
-            .v2
-            .0
+        Self {
+            x: self.x * rhs.x,
+            y: self.y * rhs.y,
         }
     }
 }
@@ -854,21 +514,9 @@ impl ops::Div<Self> for FVector2 {
     /// ```
     #[inline]
     fn div(self, rhs: Self) -> Self::Output {
-        unsafe {
-            let a = UnionCast {
-                v2: (self, Self::ZERO),
-            }
-            .m128;
-            let b = UnionCast {
-                v2: (rhs, Self::ZERO),
-            }
-            .m128;
-
-            UnionCast {
-                m128: _mm_div_ps(a, b),
-            }
-            .v2
-            .0
+        Self {
+            x: self.x / rhs.x,
+            y: self.y / rhs.y,
         }
     }
 }
@@ -903,24 +551,9 @@ impl ops::Rem<Self> for FVector2 {
     /// ```
     #[inline]
     fn rem(self, rhs: Self) -> Self::Output {
-        unsafe {
-            let a = UnionCast {
-                v2: (self, Self::ZERO),
-            }
-            .m128;
-            let b = UnionCast {
-                v2: (rhs, Self::ZERO),
-            }
-            .m128;
-
-            UnionCast {
-                m128: _mm_sub_ps(
-                    a,
-                    _mm_mul_ps(b, _mm_floor_ps(_mm_div_ps(a, b))),
-                ),
-            }
-            .v2
-            .0
+        Self {
+            x: self.x % rhs.x,
+            y: self.y % rhs.y,
         }
     }
 }
@@ -947,7 +580,10 @@ impl ops::AddAssign<Self> for FVector2 {
     /// ```
     #[inline]
     fn add_assign(&mut self, rhs: Self) {
-        *self = *self + rhs;
+        *self = Self {
+            x: self.x + rhs.x,
+            y: self.y + rhs.y,
+        }
     }
 }
 
@@ -973,7 +609,10 @@ impl ops::SubAssign<Self> for FVector2 {
     /// ```
     #[inline]
     fn sub_assign(&mut self, rhs: Self) {
-        *self = *self - rhs;
+        *self = Self {
+            x: self.x - rhs.x,
+            y: self.y - rhs.y,
+        }
     }
 }
 
@@ -999,7 +638,10 @@ impl ops::MulAssign<Self> for FVector2 {
     /// ```
     #[inline]
     fn mul_assign(&mut self, rhs: Self) {
-        *self = *self * rhs;
+        *self = Self {
+            x: self.x * rhs.x,
+            y: self.y * rhs.y,
+        }
     }
 }
 
@@ -1025,7 +667,10 @@ impl ops::DivAssign<Self> for FVector2 {
     /// ```
     #[inline]
     fn div_assign(&mut self, rhs: Self) {
-        *self = *self / rhs;
+        *self = Self {
+            x: self.x / rhs.x,
+            y: self.y / rhs.y,
+        }
     }
 }
 
@@ -1051,158 +696,9 @@ impl ops::RemAssign<Self> for FVector2 {
     /// ```
     #[inline]
     fn rem_assign(&mut self, rhs: Self) {
-        *self = *self % rhs;
-    }
-}
-
-#[test]
-fn test_fvector2_sse2() {
-    use std::time::SystemTime;
-
-    let a = FVector2::new(3.0, 4.0);
-    let b = FVector2::new(4.0, 3.2);
-    let w = a.dot(b); // warm up
-    println!("Warm up dot = {w}");
-
-    let ref_time = SystemTime::now();
-    let dot = a.dot(b);
-
-    let span_dot = SystemTime::now()
-        .duration_since(ref_time)
-        .unwrap()
-        .as_nanos();
-
-    let ref_time = SystemTime::now();
-    let length = a.length();
-
-    let span_length = SystemTime::now()
-        .duration_since(ref_time)
-        .unwrap()
-        .as_nanos();
-
-    let ref_time = SystemTime::now();
-    let normalize = a.normalize();
-
-    let span_normalize = SystemTime::now()
-        .duration_since(ref_time)
-        .unwrap()
-        .as_nanos();
-
-    let ref_time = SystemTime::now();
-    let distance = a.distance(b);
-
-    let span_distance = SystemTime::now()
-        .duration_since(ref_time)
-        .unwrap()
-        .as_nanos();
-
-    let ref_time = SystemTime::now();
-    let is_zero = FVector2::ZERO.is_zero();
-
-    let span_is_zero = SystemTime::now()
-        .duration_since(ref_time)
-        .unwrap()
-        .as_nanos();
-
-    let ref_time = SystemTime::now();
-    let is_nan = FVector2::NAN.is_nan();
-
-    let span_is_nan = SystemTime::now()
-        .duration_since(ref_time)
-        .unwrap()
-        .as_nanos();
-
-    let ref_time = SystemTime::now();
-    let is_finite = FVector2::INFINITY.is_finite();
-
-    let span_is_finite = SystemTime::now()
-        .duration_since(ref_time)
-        .unwrap()
-        .as_nanos();
-
-    assert!(dot == 24.8, "FVector2::dot | Wrong output");
-    assert!(length == 5.0, "FVector2::length | Wrong output");
-
-    println!("FVector2::dot | {span_dot} ns | {a} ⋅ {b} = {dot}",);
-
-    println!("FVector2::length | {span_length} ns | {a} = {length}",);
-
-    println!("FVector2::normalize | {span_normalize} ns | {a} = {normalize}",);
-
-    println!("FVector2::distance | {span_distance} ns | {a} {b} = {distance}",);
-
-    println!(
-        "FVector2::is_nan | {span_is_nan} ns | {}  = {is_nan}",
-        FVector2::NAN,
-    );
-
-    println!(
-        "FVector2::is_nan | {span_is_zero} ns | {}  = {is_zero}",
-        FVector2::ZERO,
-    );
-
-    println!(
-        "FVector2::is_finite | {span_is_finite} ns | {}  = {is_finite}",
-        FVector2::INFINITY,
-    );
-
-    {
-        let start = FVector2::new(1.0, 2.0);
-        let end = FVector2::new(3.0, 4.0);
-
-        let ref_time = SystemTime::now();
-
-        let lerp = start.lerp(end, 0.5);
-
-        let span_lerp = SystemTime::now()
-            .duration_since(ref_time)
-            .unwrap()
-            .as_nanos();
-
-        println!("FVector2::lerp | {span_lerp} ns | {start} {end} = {lerp}");
-    }
-
-    {
-        let a = FVector2::new(1.0, 2.0);
-        let b = FVector2::new(1.0, 2.0);
-
-        let ref_time = SystemTime::now();
-
-        let eq = a == b;
-
-        let span = SystemTime::now()
-            .duration_since(ref_time)
-            .unwrap()
-            .as_nanos();
-
-        println!("FVector2::eq | {span} ns | {a} == {b} = {eq}");
-    }
-
-    {
-        let a = FVector2::new(1.0, 2.0);
-        let b = FVector2::new(1.0, 2.0);
-
-        let ref_time = SystemTime::now();
-
-        let ne = a != b;
-
-        let span = SystemTime::now()
-            .duration_since(ref_time)
-            .unwrap()
-            .as_nanos();
-
-        println!("FVector2::ne | {span} ns | {a} != {b} = {ne}");
-    }
-
-    {
-        let ref_time = SystemTime::now();
-        let distance_sq = a.distance_sq(b);
-
-        let span = SystemTime::now()
-            .duration_since(ref_time)
-            .unwrap()
-            .as_nanos();
-
-        println!("FVector2::distance_sq | {span} ns | {a} {b} = {distance_sq}");
+        *self = Self {
+            x: self.x % rhs.x,
+            y: self.y % rhs.y,
+        }
     }
 }
