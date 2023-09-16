@@ -12,6 +12,8 @@ mod ordinary;
 
 // Public structs
 
+pub use angles::{radians, Radians};
+
 /// `FVector2` is a structure that represents a 2D vector with `f32` components.
 /// It encapsulates two floating-point values and is used for various purposes in graphical applications
 /// including points, vectors, and texture coordinates.
