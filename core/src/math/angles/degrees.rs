@@ -61,6 +61,50 @@ impl Degrees {
     }
 }
 
+impl Degrees {
+    /// Conversion factor from degrees to radians (tau represents a full turn).
+    const FACTOR_DEG_TO_RAD: f32 = std::f32::consts::TAU / 360.0;
+
+    /// Conversion factor from degrees to turns.
+    const FACTOR_DEG_TO_TR: f32 = 1.0 / 360.0;
+
+    /// Converts an angle in degrees to radians.
+    ///
+    /// This method multiplies the angle in degrees by the conversion factor
+    /// `f32::consts::TAU / 360.0` to obtain the equivalent angle in radians.
+    ///
+    /// # Examples
+    ///
+    /// ```
+    /// use axion::math::Degree;
+    ///
+    /// let thirty_degrees = Degree::new(30.0);
+    /// let radians = thirty_degrees.into_radians();
+    /// ```
+    #[inline]
+    pub fn into_radians(self) -> super::Radians {
+        super::Radians(self.0 * Self::FACTOR_DEG_TO_RAD)
+    }
+
+    /// Converts an angle in degrees to turns.
+    ///
+    /// This method multiplies the angle in degrees by the conversion factor
+    /// `1.0 / 360.0` to obtain the equivalent angle in turns.
+    ///
+    /// # Examples
+    ///
+    /// ```
+    /// use axion::math::Degree;
+    ///
+    /// let ninety_degrees = Degree::new(90.0);
+    /// let turns = ninety_degrees.into_turns();
+    /// ```
+    #[inline]
+    pub fn into_turns(self) -> super::Turns {
+        super::Turns(self.0 * Self::FACTOR_DEG_TO_TR)
+    }
+}
+
 impl fmt::Debug for Degrees {
     /// Formats the `Degrees` value for debugging purposes.
     ///

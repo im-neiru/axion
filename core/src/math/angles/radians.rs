@@ -16,6 +16,19 @@ use std::fmt;
 #[derive(Clone, Copy)]
 pub struct Radians(pub(in crate::math) f32);
 
+/// Creates a new `Radians` instance with the specified angle in radians.
+///
+/// # Parameters
+///
+/// * `rad`: The angle value in radians.
+///
+/// # Examples
+///
+/// ```
+/// use axion::math::Radians;
+///
+/// let pi_radians = Radians::radians(std::f32::consts::PI);
+/// ```
 #[inline]
 pub const fn radians(rad: f32) -> Radians {
     Radians(rad)
@@ -64,6 +77,49 @@ impl Radians {
     #[inline]
     pub const fn new(radians: f32) -> Self {
         Self(radians)
+    }
+}
+impl Radians {
+    /// Conversion factor from radians to degrees.
+    const FACTOR_RAD_TO_DEG: f32 = 360.0 / std::f32::consts::TAU;
+
+    /// Conversion factor from radians to turns (tau represents a full turn).
+    const FACTOR_RAD_TO_TR: f32 = 1.0 / std::f32::consts::TAU;
+
+    // Converts an angle in radians to degrees.
+    ///
+    /// This method multiplies the angle in radians by the conversion factor
+    /// `360.0 / f32::consts::TAU` to obtain the equivalent angle in degrees.
+    ///
+    /// # Examples
+    ///
+    /// ```
+    /// use axion::math::Radians;
+    ///
+    /// let pi_radians = Radians::new(std::f32::consts::PI);
+    /// let degrees = pi_radians.into_degrees();
+    /// ```
+    #[inline]
+    pub fn into_degrees(self) -> super::Degrees {
+        super::Degrees(self.0 * Self::FACTOR_RAD_TO_DEG)
+    }
+
+    /// Converts an angle in radians to turns.
+    ///
+    /// This method multiplies the angle in radians by the conversion factor
+    /// `1.0 / f32::consts::TAU` to obtain the equivalent angle in turns.
+    ///
+    /// # Examples
+    ///
+    /// ```
+    /// use axion::math::Radians;
+    ///
+    /// let pi_radians = Radians::new(std::f32::consts::PI);
+    /// let turns = pi_radians.into_turns();
+    /// ```
+    #[inline]
+    pub fn into_turns(self) -> super::Turns {
+        super::Turns(self.0 * Self::FACTOR_RAD_TO_TR)
     }
 }
 
