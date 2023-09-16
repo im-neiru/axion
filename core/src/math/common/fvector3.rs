@@ -490,6 +490,30 @@ impl FVector3 {
         self.x.is_finite() && self.y.is_finite() && self.z.is_finite()
     }
 
+    /// Calculates the spherical angles from this point to another point in radians.
+    ///
+    /// This method calculates the spherical angles from this point to another point
+    /// specified by `other` in radians. It computes the azimuthal angle and the polar
+    /// angle, which represent the direction from this point to the `other` point.
+    ///
+    /// # Parameters
+    ///
+    /// - `other`: The other `FVector3` point to calculate angles to.
+    ///
+    /// # Returns
+    ///
+    /// Spherical angles in radians representing the direction from this point to `other`.
+    ///
+    /// # Examples
+    ///
+    /// ```
+    /// use axion::math::{FVector3, Radians};
+    ///
+    /// let point1 = FVector3::new(1.0, 0.0, 0.0);
+    /// let point2 = FVector3::new(1.0, 1.0, 0.0);
+    ///
+    /// let angles = point1.angles_to(point2);
+    /// ```
     #[inline]
     pub fn angles_to(self, other: Self) -> SphericalAngles<Radians> {
         let diff = other - self;
@@ -501,6 +525,25 @@ impl FVector3 {
         }
     }
 
+    /// Calculates the spherical angles for this point in radians.
+    ///
+    /// This method calculates the spherical angles for this point in radians.
+    /// It computes the azimuthal angle and the polar angle, which represent the
+    /// direction from the origin to this point.
+    ///
+    /// # Returns
+    ///
+    /// Spherical angles in radians representing the direction from the origin to this point.
+    ///
+    /// # Examples
+    ///
+    /// ```
+    /// use axion::math::{FVector3, Radians};
+    ///
+    /// let point = FVector3::new(1.0, 0.0, 0.0);
+    ///
+    /// let angles = point.spherical_angles();
+    /// ```
     #[inline]
     pub fn spherical_angles(self) -> SphericalAngles<Radians> {
         let xz = self.axis_xz();
