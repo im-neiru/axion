@@ -43,6 +43,9 @@ impl Degrees {
     /// A constant representing a full rotation, equal to `360.0` degrees.
     pub const FULL_ROTATION: Self = Self(360.0);
 
+    /// A constant representing a right angle, equal to `90.0` degrees.
+    pub const NAN: Self = Self(f32::NAN);
+
     /// Creates a new `Degrees` instance with the specified angle in degrees.
     ///
     /// # Parameters
@@ -103,6 +106,208 @@ impl Degrees {
     #[inline]
     pub fn into_turns(self) -> super::Turns {
         super::Turns(self.0 * Self::FACTOR_DEG_TO_TR)
+    }
+}
+
+impl Degrees {
+    /// Returns the cosine of the angle in degrees.
+    ///
+    /// # Examples
+    ///
+    /// ```
+    /// use axion::math::Degrees;
+    ///
+    /// let thirty_degrees = Degrees::new(30.0);
+    /// let cos = thirty_degrees.cos();
+    /// ```
+    #[inline]
+    pub fn cos(self) -> f32 {
+        (self.0 * Self::FACTOR_DEG_TO_RAD).cos()
+    }
+
+    /// Returns the sine of the angle in degrees.
+    ///
+    /// # Examples
+    ///
+    /// ```
+    /// use axion::math::Degrees;
+    ///
+    /// let sixty_degrees = Degrees::new(60.0);
+    /// let sin = sixty_degrees.sin();
+    /// ```
+    #[inline]
+    pub fn sin(self) -> f32 {
+        (self.0 * Self::FACTOR_DEG_TO_RAD).sin()
+    }
+
+    /// Returns the tangent of the angle in degrees.
+    ///
+    /// # Examples
+    ///
+    /// ```
+    /// use axion::math::Degrees;
+    ///
+    /// let forty_five_degrees = Degrees::new(45.0);
+    /// let tan = forty_five_degrees.tan();
+    /// ```
+    #[inline]
+    pub fn tan(self) -> f32 {
+        (self.0 * Self::FACTOR_DEG_TO_RAD).tan()
+    }
+
+    /// Returns the secant of the angle in degrees.
+    ///
+    /// The secant is the reciprocal of the cosine.
+    ///
+    /// # Examples
+    ///
+    /// ```
+    /// use axion::math::Degrees;
+    ///
+    /// let sixty_degrees = Degrees::new(60.0);
+    /// let sec = sixty_degrees.sec();
+    /// ```
+    #[inline]
+    pub fn sec(self) -> f32 {
+        (self.0 * Self::FACTOR_DEG_TO_RAD).cos().recip()
+    }
+
+    /// Returns the cosecant of the angle in degrees.
+    ///
+    /// The cosecant is the reciprocal of the sine.
+    ///
+    /// # Examples
+    ///
+    /// ```
+    /// use axion::math::Degrees;
+    ///
+    /// let forty_five_degrees = Degrees::new(45.0);
+    /// let csc = forty_five_degrees.csc();
+    /// ```
+    #[inline]
+    pub fn csc(self) -> f32 {
+        (self.0 * Self::FACTOR_DEG_TO_RAD).sin().recip()
+    }
+
+    /// Returns the cotangent of the angle in degrees.
+    ///
+    /// The cotangent is the reciprocal of the tangent.
+    ///
+    /// # Examples
+    ///
+    /// ```
+    /// use axion::math::Degrees;
+    ///
+    /// let thirty_degrees = Degrees::new(30.0);
+    /// let cot = thirty_degrees.cot();
+    /// ```
+    #[inline]
+    pub fn cot(self) -> f32 {
+        (self.0 * Self::FACTOR_DEG_TO_RAD).tan().recip()
+    }
+
+    /// Returns a unit vector in the direction of the angle in degrees.
+    ///
+    /// The `normal` method computes the cosine and sine of the angle in degrees
+    /// and returns a `axion::math::FVector2` representing the unit vector.
+    ///
+    /// # Examples
+    ///
+    /// ```
+    /// use axion::math::Degrees;
+    ///
+    /// let thirty_degrees = Degrees::new(30.0);
+    /// let normal_vector = thirty_degrees.normal();
+    /// ```
+    #[inline]
+    pub fn normal(self) -> crate::math::FVector2 {
+        let (cos, sin) = {
+            let radians = self.0 * Self::FACTOR_DEG_TO_RAD;
+            (radians.cos(), radians.sin())
+        };
+
+        crate::math::FVector2 { x: cos, y: sin }
+    }
+
+    /// Computes the arccosine of the `scalar` value in degrees.
+    ///
+    /// The result is in the range \[`0.0deg`, `180.0deg`\], or NaN if the `scalar` is
+    /// outside the range \[`-1.0`, `1.0`\].
+    ///
+    /// # Examples
+    ///
+    /// ```
+    /// use axion::math::Degrees;
+    ///
+    /// let scalar = 0.5;
+    /// let angle = Degrees::acos(scalar);
+    /// ```
+    #[inline]
+    pub fn acos(scalar: f32) -> Self {
+        Self(scalar.acos() * super::Radians::FACTOR_RAD_TO_DEG)
+    }
+
+    /// Computes the arcsine of the `scalar` value in degrees.
+    ///
+    /// The result is in the range \[`-90.0deg`, `90.0deg`\], or `NaN` if the `scalar` is
+    /// outside the range \[`-1.0`, `1.0`\].
+    ///
+    /// # Examples
+    ///
+    /// ```
+    /// use axion::math::Degrees;
+    ///
+    /// let scalar = 0.5;
+    /// let angle = Degrees::asin(scalar);
+    /// ```
+    #[inline]
+    pub fn asin(scalar: f32) -> Self {
+        Self(scalar.asin() * super::Radians::FACTOR_RAD_TO_DEG)
+    }
+
+    /// Computes the arc tangent of the `scalar` value in degrees.
+    ///
+    /// The result is in the range \[`-90.0deg`, `90.0deg`\].
+    ///
+    /// # Examples
+    ///
+    /// ```
+    /// use axion::math::Degrees;
+    ///
+    /// let scalar = 0.5;
+    /// let angle = Degrees::atan(scalar);
+    /// ```
+
+    #[inline]
+    pub fn atan(scalar: f32) -> Self {
+        Self(scalar.atan() * super::Radians::FACTOR_RAD_TO_DEG)
+    }
+
+    /// Computes the four-quadrant arctangent of the `y` and `x` coordinates
+    /// in degrees, which corresponds to the vector direction.
+    ///
+    /// The result has the following range:
+    ///
+    ///   - When `x` = `0.0` and `y` = `0.0`: `0.0deg`
+    ///   - When `x` >= `0.0`: arctan(`y`/`x`) -> \[-90.0deg, 90.0deg\]
+    ///   - When `y` >= `0.0`: arctan(`y`/`x`) + π -> (90.0deg, 180.0deg]
+    ///   - When `y` < `0.0`: arctan(`y`/`x`) - π -> (-180.0deg, -90.0deg)
+    ///
+    /// # Parameters
+    ///
+    /// * `y`: The `y` coordinate of the vector.
+    /// * `x`: The `x` coordinate of the vector.
+    ///
+    /// # Examples
+    ///
+    /// ```
+    /// use axion::math::Degrees;
+    ///
+    /// let angle = Degrees::atan2(1.0, 1.0);
+    /// ```
+    #[inline]
+    pub fn atan2(y: f32, x: f32) -> Self {
+        Self(f32::atan2(y, x) * super::Radians::FACTOR_RAD_TO_DEG)
     }
 }
 
