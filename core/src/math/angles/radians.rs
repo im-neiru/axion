@@ -82,10 +82,10 @@ impl Radians {
 }
 impl Radians {
     /// Conversion factor from radians to degrees.
-    const FACTOR_RAD_TO_DEG: f32 = 360.0 / std::f32::consts::TAU;
+    pub(super) const FACTOR_RAD_TO_DEG: f32 = 360.0 / std::f32::consts::TAU;
 
     /// Conversion factor from radians to turns (tau represents a full turn).
-    const FACTOR_RAD_TO_TR: f32 = 1.0 / std::f32::consts::TAU;
+    pub(super) const FACTOR_RAD_TO_TR: f32 = 1.0 / std::f32::consts::TAU;
 
     // Converts an angle in radians to degrees.
     ///
