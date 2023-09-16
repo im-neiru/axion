@@ -1,5 +1,7 @@
 use std::fmt;
 
+use super::Radians;
+
 /// A type representing an angle measured in degrees.
 ///
 /// `Degrees` is a simple wrapper around an `f32` value, providing a clear
@@ -247,7 +249,7 @@ impl Degrees {
     /// ```
     #[inline]
     pub fn acos(scalar: f32) -> Self {
-        Self(scalar.acos() * super::Radians::FACTOR_RAD_TO_DEG)
+        Self(scalar.acos() * Radians::FACTOR_RAD_TO_DEG)
     }
 
     /// Computes the arcsine of the `scalar` value in degrees.
@@ -265,7 +267,7 @@ impl Degrees {
     /// ```
     #[inline]
     pub fn asin(scalar: f32) -> Self {
-        Self(scalar.asin() * super::Radians::FACTOR_RAD_TO_DEG)
+        Self(scalar.asin() * Radians::FACTOR_RAD_TO_DEG)
     }
 
     /// Computes the arc tangent of the `scalar` value in degrees.
@@ -283,7 +285,7 @@ impl Degrees {
 
     #[inline]
     pub fn atan(scalar: f32) -> Self {
-        Self(scalar.atan() * super::Radians::FACTOR_RAD_TO_DEG)
+        Self(scalar.atan() * Radians::FACTOR_RAD_TO_DEG)
     }
 
     /// Computes the four-quadrant arctangent of the `y` and `x` coordinates
@@ -310,7 +312,43 @@ impl Degrees {
     /// ```
     #[inline]
     pub fn atan2(y: f32, x: f32) -> Self {
-        Self(f32::atan2(y, x) * super::Radians::FACTOR_RAD_TO_DEG)
+        Self(f32::atan2(y, x) * Radians::FACTOR_RAD_TO_DEG)
+    }
+
+    /// Returns the hyperbolic cosine of the angle in degrees.
+    #[inline]
+    pub fn cosh(self) -> f32 {
+        (self.0 * Self::FACTOR_DEG_TO_RAD).cosh()
+    }
+
+    /// Returns the hyperbolic sine of the angle in degrees.
+    #[inline]
+    pub fn sinh(self) -> f32 {
+        (self.0 * Self::FACTOR_DEG_TO_RAD).sinh()
+    }
+
+    /// Returns the hyperbolic tangent of the angle in degrees.
+    #[inline]
+    pub fn tanh(self) -> f32 {
+        (self.0 * Self::FACTOR_DEG_TO_RAD).tanh()
+    }
+
+    /// Returns the inverse hyperbolic cosine of the angle in degrees.
+    #[inline]
+    pub fn acosh(self) -> Self {
+        Self(self.0.acosh() * Radians::FACTOR_RAD_TO_DEG)
+    }
+
+    /// Returns the inverse hyperbolic sine of the angle in degrees.
+    #[inline]
+    pub fn asinh(self) -> Self {
+        Self(self.0.asinh() * Radians::FACTOR_RAD_TO_DEG)
+    }
+
+    /// Returns the inverse hyperbolic tangent of the angle in degrees.
+    #[inline]
+    pub fn atanh(self) -> Self {
+        Self(self.0.atanh() * Radians::FACTOR_RAD_TO_DEG)
     }
 }
 
