@@ -13,6 +13,7 @@ use std::fmt;
 /// let pi_over_2 = Radians::new(std::f32::consts::FRAC_PI_2);
 /// let angle = pi_over_2.0; // Access the inner f32 value
 /// ```
+#[derive(Clone, Copy)]
 pub struct Radians(pub(in crate::math) f32);
 
 #[inline]

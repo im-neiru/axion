@@ -4,6 +4,7 @@ use std::fmt;
 ///
 /// `Degrees` is a simple wrapper around an `f32` value, providing a clear
 /// and type-safe way to work with angles in degrees.
+#[derive(Clone, Copy)]
 pub struct Degrees(pub(in crate::math) f32);
 
 /// Creates a new `Degrees` instance with the specified angle in degrees.

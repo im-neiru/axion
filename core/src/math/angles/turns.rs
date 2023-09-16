@@ -4,6 +4,7 @@ use std::fmt;
 ///
 /// `Turns` is a simple wrapper around an `f32` value, providing a clear
 /// and type-safe way to work with angles in turns.
+#[derive(Clone, Copy)]
 pub struct Turns(pub(in crate::math) f32);
 
 /// Creates a new `Turns` instance with the specified angle in turns.
