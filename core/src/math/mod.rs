@@ -12,6 +12,7 @@ mod ordinary;
 
 // Public structs
 
+pub use angles::{degrees, Degrees};
 pub use angles::{radians, Radians};
 
 /// `FVector2` is a structure that represents a 2D vector with `f32` components.
