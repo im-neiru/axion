@@ -1,6 +1,7 @@
 // Within this module, is the implementations for vectors, matrices, and more...
 
 // Sub modules
+mod angles;
 mod common;
 #[cfg(feature = "simd")]
 #[cfg(any(target_arch = "x86_64", target_arch = "x86"))]
