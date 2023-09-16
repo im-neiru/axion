@@ -324,6 +324,42 @@ impl Radians {
     pub fn atan2(y: f32, x: f32) -> Self {
         Self(f32::atan2(y, x))
     }
+
+    /// Returns the hyperbolic cosine of the angle in radians.
+    #[inline]
+    pub fn cosh(self) -> f32 {
+        self.0.cosh()
+    }
+
+    /// Returns the hyperbolic sine of the angle in radians.
+    #[inline]
+    pub fn sinh(self) -> f32 {
+        self.0.sinh()
+    }
+
+    /// Returns the hyperbolic tangent of the angle in radians.
+    #[inline]
+    pub fn tanh(self) -> f32 {
+        self.0.tanh()
+    }
+
+    /// Returns the inverse hyperbolic cosine of the angle in radians.
+    #[inline]
+    pub fn acosh(self) -> Self {
+        Self(self.0.acosh())
+    }
+
+    /// Returns the inverse hyperbolic sine of the angle in radians.
+    #[inline]
+    pub fn asinh(self) -> Self {
+        Self(self.0.asinh())
+    }
+
+    /// Returns the inverse hyperbolic tangent of the angle in radians.
+    #[inline]
+    pub fn atanh(self) -> Self {
+        Self(self.0.atanh())
+    }
 }
 
 impl fmt::Debug for Radians {
