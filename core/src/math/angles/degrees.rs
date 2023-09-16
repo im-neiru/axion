@@ -27,6 +27,7 @@ pub const fn degrees(deg: f32) -> Degrees {
 
 impl Default for Degrees {
     /// Creates a new `Degrees` instance with the default value of `0.0` degrees.
+    #[inline]
     fn default() -> Self {
         Self(Default::default())
     }

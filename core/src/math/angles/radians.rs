@@ -36,6 +36,7 @@ pub const fn radians(rad: f32) -> Radians {
 
 impl Default for Radians {
     /// Creates a new `Radians` instance with the default value of `0.0` radians.
+    #[inline]
     fn default() -> Self {
         Self(Default::default())
     }

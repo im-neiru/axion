@@ -27,6 +27,7 @@ pub const fn turns(turns: f32) -> Turns {
 
 impl Default for Turns {
     /// Creates a new `Turns` instance with the default value of `0.0` turns.
+    #[inline]
     fn default() -> Self {
         Self(Default::default())
     }
