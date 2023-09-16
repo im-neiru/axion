@@ -1,7 +1,8 @@
 use std::fmt;
 use std::ops;
 
-use crate::math::{FVector2, FVector3, FVector4};
+use crate::math::Radians;
+use crate::math::{FVector2, FVector3, FVector4, SphericalAngles};
 
 impl FVector3 {
     /// A constant `FVector3` instance with all `x`, `y` and `z` components set to 0.0.
@@ -487,6 +488,27 @@ impl FVector3 {
     #[inline]
     pub fn is_finite(self) -> bool {
         self.x.is_finite() && self.y.is_finite() && self.z.is_finite()
+    }
+
+    #[inline]
+    pub fn angles_to(self, other: Self) -> SphericalAngles<Radians> {
+        let diff = other - self;
+        let xz = diff.axis_xz();
+
+        SphericalAngles {
+            azimuthal: xz.azimuthal(),
+            polar: Radians::atan2(diff.y, xz.length()),
+        }
+    }
+
+    #[inline]
+    pub fn spherical_angles(self) -> SphericalAngles<Radians> {
+        let xz = self.axis_xz();
+
+        SphericalAngles {
+            azimuthal: xz.azimuthal(),
+            polar: Radians::atan2(self.y, xz.length()),
+        }
     }
 }
 
