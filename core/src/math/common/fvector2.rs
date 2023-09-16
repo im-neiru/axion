@@ -274,11 +274,11 @@ impl FVector2 {
     /// use axion::math::FVector2;
     ///
     /// let point = FVector2 { x: 3.0, y: 4.0 };
-    /// let angle = point.azimuth();
+    /// let angle = point.azimuthal();
     /// ```
     ///
     #[inline]
-    pub fn azimuth(self) -> Radians {
+    pub fn azimuthal(self) -> Radians {
         Radians::atan2(self.y, self.x)
     }
 }
