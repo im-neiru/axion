@@ -16,6 +16,9 @@ use std::fmt;
 #[derive(Clone, Copy)]
 pub struct Radians(pub(in crate::math) f32);
 
+impl super::Angle for Radians {}
+impl super::PrivateAngle for Radians {}
+
 /// Creates a new `Radians` instance with the specified angle in radians.
 ///
 /// # Parameters
@@ -80,6 +83,7 @@ impl Radians {
         Self(radians)
     }
 }
+
 impl Radians {
     /// Conversion factor from radians to degrees.
     pub(super) const FACTOR_RAD_TO_DEG: f32 = 360.0 / std::f32::consts::TAU;

@@ -12,6 +12,8 @@ mod ordinary;
 
 // Public structs
 
+pub use angles::Angle;
+pub use angles::SphericalAngles;
 pub use angles::{degrees, Degrees};
 pub use angles::{radians, Radians};
 pub use angles::{turns, Turns};

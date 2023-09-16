@@ -7,6 +7,9 @@ use std::fmt;
 #[derive(Clone, Copy)]
 pub struct Degrees(pub(in crate::math) f32);
 
+impl super::Angle for Degrees {}
+impl super::PrivateAngle for Degrees {}
+
 /// Creates a new `Degrees` instance with the specified angle in degrees.
 ///
 /// # Parameters

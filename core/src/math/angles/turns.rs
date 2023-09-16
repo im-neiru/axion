@@ -25,6 +25,9 @@ pub const fn turns(turns: f32) -> Turns {
     Turns(turns)
 }
 
+impl super::Angle for Turns {}
+impl super::PrivateAngle for Turns {}
+
 impl Default for Turns {
     /// Creates a new `Turns` instance with the default value of `0.0` turns.
     #[inline]
