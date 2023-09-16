@@ -231,7 +231,7 @@ impl Degrees {
 
     /// Computes the arccosine of the `scalar` value in degrees.
     ///
-    /// The result is in the range \[`0.0deg`, `180.0deg`\], or NaN if the `scalar` is
+    /// The result is in the range \[`0°`, `180°`\], or NaN if the `scalar` is
     /// outside the range \[`-1.0`, `1.0`\].
     ///
     /// # Examples
@@ -249,7 +249,7 @@ impl Degrees {
 
     /// Computes the arcsine of the `scalar` value in degrees.
     ///
-    /// The result is in the range \[`-90.0deg`, `90.0deg`\], or `NaN` if the `scalar` is
+    /// The result is in the range \[`-90°`, `90°`\], or `NaN` if the `scalar` is
     /// outside the range \[`-1.0`, `1.0`\].
     ///
     /// # Examples
@@ -267,7 +267,7 @@ impl Degrees {
 
     /// Computes the arc tangent of the `scalar` value in degrees.
     ///
-    /// The result is in the range \[`-90.0deg`, `90.0deg`\].
+    /// The result is in the range \[`-90°`, `90°`\].
     ///
     /// # Examples
     ///
@@ -288,10 +288,10 @@ impl Degrees {
     ///
     /// The result has the following range:
     ///
-    ///   - When `x` = `0.0` and `y` = `0.0`: `0.0deg`
-    ///   - When `x` >= `0.0`: arctan(`y`/`x`) -> \[-90.0deg, 90.0deg\]
-    ///   - When `y` >= `0.0`: arctan(`y`/`x`) + π -> (90.0deg, 180.0deg]
-    ///   - When `y` < `0.0`: arctan(`y`/`x`) - π -> (-180.0deg, -90.0deg)
+    ///   - When `x` = `0.0` and `y` = `0.0`: `0°`
+    ///   - When `x` >= `0.0`: arctan(`y`/`x`) -> \[-90°, 90°\]
+    ///   - When `y` >= `0.0`: arctan(`y`/`x`) + π -> (90°, 180°]
+    ///   - When `y` < `0.0`: arctan(`y`/`x`) - π -> (-180°, -90°)
     ///
     /// # Parameters
     ///
