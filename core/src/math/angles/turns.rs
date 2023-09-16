@@ -106,6 +106,208 @@ impl Turns {
     }
 }
 
+impl Turns {
+    /// Returns the cosine of the angle in turns.
+    ///
+    /// # Examples
+    ///
+    /// ```
+    /// use axion::math::Turns;
+    ///
+    /// let quarter_turn = Turns::new(0.25);
+    /// let cos = quarter_turn.cos();
+    /// ```
+    #[inline]
+    pub fn cos(self) -> f32 {
+        (self.0 * Self::FACTOR_TR_TO_RAD).cos()
+    }
+
+    /// Returns the sine of the angle in turns.
+    ///
+    /// # Examples
+    ///
+    /// ```
+    /// use axion::math::Turns;
+    ///
+    /// let half_turn = Turns::new(0.5);
+    /// let sin = half_turn.sin();
+    /// ```
+    #[inline]
+    pub fn sin(self) -> f32 {
+        (self.0 * Self::FACTOR_TR_TO_RAD).sin()
+    }
+
+    /// Returns the tangent of the angle in turns.
+    ///
+    /// # Examples
+    ///
+    /// ```
+    /// use axion::math::Turns;
+    ///
+    /// let quater_turn = Turns::new(0.25);
+    /// let tan = quater_turn.tan();
+    /// ```
+    #[inline]
+    pub fn tan(self) -> f32 {
+        (self.0 * Self::FACTOR_TR_TO_RAD).tan()
+    }
+
+    /// Returns the secant of the angle in turns.
+    ///
+    /// The secant is the reciprocal of the cosine.
+    ///
+    /// # Examples
+    ///
+    /// ```
+    /// use axion::math::Turns;
+    ///
+    /// let half_turn = Turns::new(0.5);
+    /// let sec = half_turn.sec();
+    /// ```
+    #[inline]
+    pub fn sec(self) -> f32 {
+        (self.0 * Self::FACTOR_TR_TO_RAD).cos().recip()
+    }
+
+    /// Returns the cosecant of the angle in turns.
+    ///
+    /// The cosecant is the reciprocal of the sine.
+    ///
+    /// # Examples
+    ///
+    /// ```
+    /// use axion::math::Turns;
+    ///
+    /// let quater_turn = Turns::new(0.25);
+    /// let csc = quater_turn.csc();
+    /// ```
+    #[inline]
+    pub fn csc(self) -> f32 {
+        (self.0 * Self::FACTOR_TR_TO_RAD).sin().recip()
+    }
+
+    /// Returns the cotangent of the angle in turns.
+    ///
+    /// The cotangent is the reciprocal of the tangent.
+    ///
+    /// # Examples
+    ///
+    /// ```
+    /// use axion::math::Turns;
+    ///
+    /// let quarter_turn = Turns::new(0.25);
+    /// let cot = quarter_turn.cot();
+    /// ```
+    #[inline]
+    pub fn cot(self) -> f32 {
+        (self.0 * Self::FACTOR_TR_TO_RAD).tan().recip()
+    }
+
+    /// Returns a unit vector in the direction of the angle in turns.
+    ///
+    /// The `normal` method computes the cosine and sine of the angle in turns
+    /// and returns a `axion::math::FVector2` representing the unit vector.
+    ///
+    /// # Examples
+    ///
+    /// ```
+    /// use axion::math::Turns;
+    ///
+    /// let quarter_turn = Turns::new(0.25);
+    /// let normal_vector = quarter_turn.normal();
+    /// ```
+    #[inline]
+    pub fn normal(self) -> crate::math::FVector2 {
+        let (cos, sin) = {
+            let radians = self.0 * Self::FACTOR_TR_TO_RAD;
+            (radians.cos(), radians.sin())
+        };
+
+        crate::math::FVector2 { x: cos, y: sin }
+    }
+
+    /// Computes the arccosine of the `scalar` value in turns.
+    ///
+    /// The result is in the range \[`0 tr`, `½ tr`\], or NaN if the `scalar` is
+    /// outside the range \[`-1.0`, `1.0`\].
+    ///
+    /// # Examples
+    ///
+    /// ```
+    /// use axion::math::Turns;
+    ///
+    /// let scalar = 0.5;
+    /// let angle = Turns::acos(scalar);
+    /// ```
+    #[inline]
+    pub fn acos(scalar: f32) -> Self {
+        Self(scalar.acos() * super::Radians::FACTOR_RAD_TO_TR)
+    }
+
+    /// Computes the arcsine of the `scalar` value in turns.
+    ///
+    /// The result is in the range \[`-¼ tr`, `¼ tr`\], or `NaN` if the `scalar` is
+    /// outside the range \[`-1.0`, `1.0`\].
+    ///
+    /// # Examples
+    ///
+    /// ```
+    /// use axion::math::Turns;
+    ///
+    /// let scalar = 0.5;
+    /// let angle = Turns::asin(scalar);
+    /// ```
+    #[inline]
+    pub fn asin(scalar: f32) -> Self {
+        Self(scalar.asin() * super::Radians::FACTOR_RAD_TO_TR)
+    }
+
+    /// Computes the arc tangent of the `scalar` value in turns.
+    ///
+    /// The result is in the range \[`-¼ tr`, `¼ tr`\].
+    ///
+    /// # Examples
+    ///
+    /// ```
+    /// use axion::math::Turns;
+    ///
+    /// let scalar = 0.5;
+    /// let angle = Turns::atan(scalar);
+    /// ```
+
+    #[inline]
+    pub fn atan(scalar: f32) -> Self {
+        Self(scalar.atan() * super::Radians::FACTOR_RAD_TO_TR)
+    }
+
+    /// Computes the four-quadrant arctangent of the `y` and `x` coordinates
+    /// in turns, which corresponds to the vector direction.
+    ///
+    /// The result has the following range:
+    ///
+    ///   - When `x` = `0.0` and `y` = `0.0`: `0 tr`
+    ///   - When `x` >= `0.0`: arctan(`y`/`x`) -> \[-¼ tr, ¼ tr\]
+    ///   - When `y` >= `0.0`: arctan(`y`/`x`) + π -> (¼ tr, ½ tr]
+    ///   - When `y` < `0.0`: arctan(`y`/`x`) - π -> (-½ tr, -¼ tr)
+    ///
+    /// # Parameters
+    ///
+    /// * `y`: The `y` coordinate of the vector.
+    /// * `x`: The `x` coordinate of the vector.
+    ///
+    /// # Examples
+    ///
+    /// ```
+    /// use axion::math::Turns;
+    ///
+    /// let angle = Turns::atan2(1.0, 1.0);
+    /// ```
+    #[inline]
+    pub fn atan2(y: f32, x: f32) -> Self {
+        Self(f32::atan2(y, x) * super::Radians::FACTOR_RAD_TO_TR)
+    }
+}
+
 impl fmt::Debug for Turns {
     /// Formats the `Turns` value for debugging purposes.
     ///
