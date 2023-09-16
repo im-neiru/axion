@@ -1,6 +1,7 @@
 // Within this module, is the implementations for vectors, matrices, and more...
 
 // Sub modules
+mod angles;
 mod common;
 #[cfg(feature = "simd")]
 #[cfg(any(target_arch = "x86_64", target_arch = "x86"))]
@@ -10,6 +11,12 @@ mod sse;
 mod ordinary;
 
 // Public structs
+
+pub use angles::Angle;
+pub use angles::SphericalAngles;
+pub use angles::{degrees, Degrees};
+pub use angles::{radians, Radians};
+pub use angles::{turns, Turns};
 
 /// `FVector2` is a structure that represents a 2D vector with `f32` components.
 /// It encapsulates two floating-point values and is used for various purposes in graphical applications

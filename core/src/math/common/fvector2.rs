@@ -1,7 +1,7 @@
 use std::fmt;
 use std::ops;
 
-use crate::math::{FVector2, FVector3};
+use crate::math::{FVector2, FVector3, Radians};
 
 impl FVector2 {
     /// A constant `FVector2` instance with both `x` and `y` components set to 0.0.
@@ -226,6 +226,60 @@ impl FVector2 {
     #[inline]
     pub fn is_finite(self) -> bool {
         self.x.is_finite() && self.y.is_finite()
+    }
+
+    /// Calculates the angle from this point to another point in radians.
+    ///
+    /// Computes the angle from this point to the `other` point in radians. The result
+    /// represents the direction of the vector from this point to the `other` point.
+    ///
+    /// # Parameters
+    ///
+    /// * `other`: The destination point to which the angle is calculated.
+    ///
+    /// # Returns
+    ///
+    /// The angle in radians between this point and the `other` point.
+    ///
+    /// # Examples
+    ///
+    /// ```
+    /// use axion::math::FVector2;
+    ///
+    /// let point1 = FVector2 { x: 1.0, y: 0.0 };
+    /// let point2 = FVector2 { x: 0.0, y: 1.0 };
+    /// let angle = point1.angle_to(point2);
+    /// ```
+    #[inline]
+    pub fn angle_to(self, other: Self) -> Radians {
+        let x = other.x - self.x;
+        let y = other.y - self.y;
+
+        Radians::atan2(y, x)
+    }
+
+    /// Calculates the azimuthal angle of the vector in radians.
+    ///
+    /// Computes the azimuthal angle of the vector, representing the angle in radians
+    /// between the positive x-axis and the vector originating from the origin (0,0)
+    /// to the point represented by `self`.
+    ///
+    /// # Returns
+    ///
+    /// The azimuthal angle in radians.
+    ///
+    /// # Examples
+    ///
+    /// ```
+    /// use axion::math::FVector2;
+    ///
+    /// let point = FVector2 { x: 3.0, y: 4.0 };
+    /// let angle = point.azimuthal();
+    /// ```
+    ///
+    #[inline]
+    pub fn azimuthal(self) -> Radians {
+        Radians::atan2(self.y, self.x)
     }
 }
 
