@@ -18,6 +18,7 @@ pub use angles::{degrees, Degrees};
 pub use angles::{radians, Radians};
 pub use angles::{turns, Turns};
 
+pub use common::{quat, Quaternion};
 pub use common::{vec2, FVector2};
 pub use common::{vec3, FVector3};
 pub use common::{vec4, FVector4};
