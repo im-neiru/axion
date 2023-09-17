@@ -14,7 +14,7 @@ use std::ops;
 /// let pi_over_2 = Radians::new(std::f32::consts::FRAC_PI_2);
 /// let angle = pi_over_2.0; // Access the inner f32 value
 /// ```
-#[derive(Clone, Copy)]
+#[derive(Clone, Copy, PartialEq, PartialOrd)]
 pub struct Radians(pub(in crate::math) f32);
 
 impl super::Angle for Radians {}

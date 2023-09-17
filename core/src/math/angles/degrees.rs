@@ -7,7 +7,7 @@ use super::Radians;
 ///
 /// `Degrees` is a simple wrapper around an `f32` value, providing a clear
 /// and type-safe way to work with angles in degrees.
-#[derive(Clone, Copy)]
+#[derive(Clone, Copy, PartialEq, PartialOrd)]
 pub struct Degrees(pub(in crate::math) f32);
 
 impl super::Angle for Degrees {}
