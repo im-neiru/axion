@@ -2,13 +2,13 @@ use std::fmt;
 use std::ops;
 
 use crate::math::Radians;
-use crate::math::{FVector2, FVector4, SphericalAngles};
+use crate::math::{SphericalAngles, Vector2, Vector4};
 
-/// `FVector3` is a structure that represents a 3D vector with `f32` components.
+/// `Vector3` is a structure that represents a 3D vector with `f32` components.
 /// It encapsulates three floating-point values and is used for various purposes in graphical applications
 /// including points, vectors, and texture coordinates.
 #[derive(Clone, Copy, Debug)]
-pub struct FVector3 {
+pub struct Vector3 {
     /// The X component of the vector.
     pub x: f32,
     /// The Y component of the vector.
@@ -17,9 +17,9 @@ pub struct FVector3 {
     pub z: f32,
 }
 
-/// Convenience function for creating a 3D vector (FVector3).
+/// Convenience function for creating a 3D vector (Vector3).
 ///
-/// This function is a convenient way to create a 3D vector (FVector3)
+/// This function is a convenient way to create a 3D vector (Vector3)
 /// with the given components.
 ///
 /// # Arguments
@@ -30,76 +30,76 @@ pub struct FVector3 {
 ///
 /// # Returns
 ///
-/// A new `FVector3` with the specified components.
+/// A new `Vector3` with the specified components.
 ///
 /// # Example
 ///
 /// ```
-/// use axion::math::{FVector3, vec3};
+/// use axion::math::{Vector3, vec3};
 ///
 /// let vector = vec3(1.0, 2.0, 3.0); // Create a 3D vector
 /// ```
 #[inline(always)]
-pub const fn vec3(x: f32, y: f32, z: f32) -> FVector3 {
-    FVector3 { x, y, z }
+pub const fn vec3(x: f32, y: f32, z: f32) -> Vector3 {
+    Vector3 { x, y, z }
 }
 
-impl FVector3 {
-    /// A constant `FVector3` instance with all `x`, `y` and `z` components set to 0.0.
+impl Vector3 {
+    /// A constant `Vector3` instance with all `x`, `y` and `z` components set to 0.0.
     ///
-    /// This constant represents an `FVector3` with all `x`, `y` and `z` components
+    /// This constant represents an `Vector3` with all `x`, `y` and `z` components
     /// initialized to 0.0.
     pub const ZERO: Self = Self::splat(0.0);
 
-    /// A constant `FVector3` instance with all `x`, `y` and `z` components set to 1.0.
+    /// A constant `Vector3` instance with all `x`, `y` and `z` components set to 1.0.
     ///
-    /// This constant represents an `FVector3` with all `x`, `y` and `z` components
+    /// This constant represents an `Vector3` with all `x`, `y` and `z` components
     /// initialized to 1.0.
     pub const ONE: Self = Self::splat(1.0);
 
-    /// A constant `FVector3` instance with all `x`, `y` and `z` components set to -1.0.
+    /// A constant `Vector3` instance with all `x`, `y` and `z` components set to -1.0.
     ///
-    /// This constant represents an `FVector3` with all `x`, `y` and `z` components
+    /// This constant represents an `Vector3` with all `x`, `y` and `z` components
     /// initialized to -1.0.
     pub const NEG_ONE: Self = Self::splat(-1.0);
 
-    /// A constant `FVector3` instance with all `x`, `y` and `z` components set to the minimum finite value representable by `f32`.
+    /// A constant `Vector3` instance with all `x`, `y` and `z` components set to the minimum finite value representable by `f32`.
     ///
-    /// This constant represents an `FVector3` with all `x`, `y` and `z` components
+    /// This constant represents an `Vector3` with all `x`, `y` and `z` components
     /// initialized to the minimum finite value representable by `f32`.
     pub const MIN: Self = Self::splat(f32::MIN);
 
-    /// A constant `FVector3` instance with all `x`, `y` and `z` components set to the maximum finite value representable by `f32`.
+    /// A constant `Vector3` instance with all `x`, `y` and `z` components set to the maximum finite value representable by `f32`.
     ///
-    /// This constant represents an `FVector3` with all `x`, `y` and `z` components
+    /// This constant represents an `Vector3` with all `x`, `y` and `z` components
     /// initialized to the maximum finite value representable by `f32`.
     pub const MAX: Self = Self::splat(f32::MAX);
 
-    /// A constant `FVector3` instance with all `x`, `y` and `z` components set to a NaN (Not-a-Number) value.
+    /// A constant `Vector3` instance with all `x`, `y` and `z` components set to a NaN (Not-a-Number) value.
     ///
-    /// This constant represents an `FVector3` with all `x`, `y` and `z` components
+    /// This constant represents an `Vector3` with all `x`, `y` and `z` components
     /// initialized to a NaN (Not-a-Number) value.
     pub const NAN: Self = Self::splat(f32::NAN);
 
-    /// A constant `FVector3` instance with all `x`, `y` and `z` components set to positive infinity.
+    /// A constant `Vector3` instance with all `x`, `y` and `z` components set to positive infinity.
     ///
-    /// This constant represents an `FVector3` with all `x`, `y` and `z` components
+    /// This constant represents an `Vector3` with all `x`, `y` and `z` components
     /// initialized to positive infinity.
     pub const INFINITY: Self = Self::splat(f32::INFINITY);
 
-    /// A constant `FVector3` instance with all `x`, `y` and `z` components set to negative infinity.
+    /// A constant `Vector3` instance with all `x`, `y` and `z` components set to negative infinity.
     ///
-    /// This constant represents an `FVector3` with all `x`, `y` and `z` components
+    /// This constant represents an `Vector3` with all `x`, `y` and `z` components
     /// initialized to negative infinity.
     pub const NEG_INFINITY: Self = Self::splat(f32::NEG_INFINITY);
 
-    /// A constant `FVector3` instance with all `x`, `y` and `z` components set to the smallest positive value representable by `f32`.
+    /// A constant `Vector3` instance with all `x`, `y` and `z` components set to the smallest positive value representable by `f32`.
     ///
-    /// This constant represents an `FVector3` with all `x`, `y` and `z` components
+    /// This constant represents an `Vector3` with all `x`, `y` and `z` components
     /// initialized to the smallest positive value representable by `f32`.
     pub const EPSILON: Self = Self::splat(f32::EPSILON);
 
-    /// A constant `FVector3` representing the positive X-axis.
+    /// A constant `Vector3` representing the positive X-axis.
     ///
     /// This constant vector has a value of (1.0, 0.0, 0.0), representing the positive X-axis in 3D space.
     pub const AXIS_X: Self = Self {
@@ -108,7 +108,7 @@ impl FVector3 {
         z: 0.0,
     };
 
-    /// A constant `FVector3` representing the positive Y-axis.
+    /// A constant `Vector3` representing the positive Y-axis.
     ///
     /// This constant vector has a value of (0.0, 1.0, 0.0), representing the positive Y-axis in 3D space.
     pub const AXIS_Y: Self = Self {
@@ -117,7 +117,7 @@ impl FVector3 {
         z: 0.0,
     };
 
-    /// A constant `FVector3` representing the positive Z-axis.
+    /// A constant `Vector3` representing the positive Z-axis.
     ///
     /// This constant vector has a value of (0.0, 0.0, 1.0), representing the positive Z-axis in 3D space.
     pub const AXIS_Z: Self = Self {
@@ -126,7 +126,7 @@ impl FVector3 {
         z: 1.0,
     };
 
-    /// A constant `FVector3` representing the negative X-axis.
+    /// A constant `Vector3` representing the negative X-axis.
     ///
     /// This constant vector has a value of (-1.0, 0.0, 0.0), representing the negative X-axis in 3D space.
     pub const NEG_AXIS_X: Self = Self {
@@ -135,7 +135,7 @@ impl FVector3 {
         z: 0.0,
     };
 
-    /// A constant `FVector3` representing the negative Y-axis.
+    /// A constant `Vector3` representing the negative Y-axis.
     ///
     /// This constant vector has a value of (0.0, -1.0, 0.0), representing the negative Y-axis in 3D space.
     pub const NEG_AXIS_Y: Self = Self {
@@ -144,7 +144,7 @@ impl FVector3 {
         z: 0.0,
     };
 
-    /// A constant `FVector3` representing the negative Z-axis.
+    /// A constant `Vector3` representing the negative Z-axis.
     ///
     /// This constant vector has a value of (0.0, 0.0, -1.0), representing the negative Z-axis in 3D space.
     pub const NEG_AXIS_Z: Self = Self {
@@ -153,7 +153,7 @@ impl FVector3 {
         z: -1.0,
     };
 
-    /// Constructs a new `FVector3`.
+    /// Constructs a new `Vector3`.
     ///
     /// # Arguments
     ///
@@ -165,33 +165,33 @@ impl FVector3 {
         Self { x, y, z }
     }
 
-    /// Converts the `FVector3` into a `FVector4` by adding a fourth component `w`.
+    /// Converts the `Vector3` into a `Vector4` by adding a fourth component `w`.
     ///
-    /// This method creates a new `FVector4` by taking the `x`, `y`, and `z` components of the
-    /// `FVector3` and adding a fourth component `w`. This can be useful when working with
+    /// This method creates a new `Vector4` by taking the `x`, `y`, and `z` components of the
+    /// `Vector3` and adding a fourth component `w`. This can be useful when working with
     /// homogeneous coordinates, where the fourth component typically represents a weight or scale.
     ///
     /// # Arguments
     ///
-    /// * `w` - The value of the fourth component to add to the resulting `FVector4`.
+    /// * `w` - The value of the fourth component to add to the resulting `Vector4`.
     ///
     /// # Returns
     ///
-    /// A new `FVector4` with `x`, `y`, `z`, and `w` components.
+    /// A new `Vector4` with `x`, `y`, `z`, and `w` components.
     ///
     /// # Example
     ///
     /// ```
-    /// use axion::math::FVector3;
+    /// use axion::math::Vector3;
     ///
-    /// let vector3 = FVector3::new(2.0, 3.0, 4.0);
+    /// let vector3 = Vector3::new(2.0, 3.0, 4.0);
     /// let vector4 = vector3.add_axis(1.0);
     ///
-    /// assert_eq!(vector4, FVector4::new(2.0, 3.0, 4.0, 1.0));
+    /// assert_eq!(vector4, Vector4::new(2.0, 3.0, 4.0, 1.0));
     /// ```
     #[inline]
-    pub const fn add_axis(self, w: f32) -> FVector4 {
-        FVector4 {
+    pub const fn add_axis(self, w: f32) -> Vector4 {
+        Vector4 {
             x: self.x,
             y: self.y,
             z: self.z,
@@ -199,25 +199,25 @@ impl FVector3 {
         }
     }
 
-    /// Create a new instance of `FVector3` with all `x`, `y` and `z` components set to the given `value`.
+    /// Create a new instance of `Vector3` with all `x`, `y` and `z` components set to the given `value`.
     ///
-    /// This function creates a new `FVector3` instance with all `x`, `y` and `z` components
+    /// This function creates a new `Vector3` instance with all `x`, `y` and `z` components
     /// initialized to the specified `value`.
     ///
     /// # Arguments
     ///
-    /// * `value` - The value to set for all `x`, `y` and `z` components of the `FVector3`.
+    /// * `value` - The value to set for all `x`, `y` and `z` components of the `Vector3`.
     ///
     /// # Returns
     ///
-    /// A new `FVector3` instance with all `x`, `y` and `z` components set to `value`.
+    /// A new `Vector3` instance with all `x`, `y` and `z` components set to `value`.
     ///
     /// # Example
     ///
     /// ```
-    /// use axion::math::FVector3;
+    /// use axion::math::Vector3;
     ///
-    /// let vector = FVector3::splat(5.0);
+    /// let vector = Vector3::splat(5.0);
     /// assert_eq!(vector.x, 5.0);
     /// assert_eq!(vector.y, 5.0);
     /// ```
@@ -338,186 +338,186 @@ impl FVector3 {
         (self.z, self.z, self.z)
     }
 
-    /// Returns the x and y components of the vector as an `FVector2`.
+    /// Returns the x and y components of the vector as an `Vector2`.
     #[inline]
-    pub const fn axis_xy(self) -> FVector2 {
-        FVector2 {
+    pub const fn axis_xy(self) -> Vector2 {
+        Vector2 {
             x: self.x,
             y: self.y,
         }
     }
 
-    /// Returns the x and z components of the vector as an `FVector2`.
+    /// Returns the x and z components of the vector as an `Vector2`.
     #[inline]
-    pub const fn axis_xz(self) -> FVector2 {
-        FVector2 {
+    pub const fn axis_xz(self) -> Vector2 {
+        Vector2 {
             x: self.x,
             y: self.z,
         }
     }
 
-    /// Returns the y and x components of the vector as an `FVector2`.
+    /// Returns the y and x components of the vector as an `Vector2`.
     #[inline]
-    pub const fn axis_yx(self) -> FVector2 {
-        FVector2 {
+    pub const fn axis_yx(self) -> Vector2 {
+        Vector2 {
             x: self.y,
             y: self.x,
         }
     }
 
-    /// Returns the y and z components of the vector as an `FVector2`.
+    /// Returns the y and z components of the vector as an `Vector2`.
     #[inline]
-    pub const fn axis_yz(self) -> FVector2 {
-        FVector2 {
+    pub const fn axis_yz(self) -> Vector2 {
+        Vector2 {
             x: self.y,
             y: self.z,
         }
     }
 
-    /// Returns the z and x components of the vector as an `FVector2`.
+    /// Returns the z and x components of the vector as an `Vector2`.
     #[inline]
-    pub const fn axis_zx(self) -> FVector2 {
-        FVector2 {
+    pub const fn axis_zx(self) -> Vector2 {
+        Vector2 {
             x: self.z,
             y: self.x,
         }
     }
 
-    /// Returns the z and y components of the vector as an `FVector2`.
+    /// Returns the z and y components of the vector as an `Vector2`.
     #[inline]
-    pub const fn axis_zy(self) -> FVector2 {
-        FVector2 {
+    pub const fn axis_zy(self) -> Vector2 {
+        Vector2 {
             x: self.z,
             y: self.y,
         }
     }
 
-    /// Returns the x component of the vector twice as an `FVector2`.
+    /// Returns the x component of the vector twice as an `Vector2`.
     #[inline]
-    pub const fn axis_xx(self) -> FVector2 {
-        FVector2 {
+    pub const fn axis_xx(self) -> Vector2 {
+        Vector2 {
             x: self.x,
             y: self.x,
         }
     }
 
-    /// Returns the y component of the vector twice as an `FVector2`.
+    /// Returns the y component of the vector twice as an `Vector2`.
     #[inline]
-    pub const fn axis_yy(self) -> FVector2 {
-        FVector2 {
+    pub const fn axis_yy(self) -> Vector2 {
+        Vector2 {
             x: self.y,
             y: self.y,
         }
     }
 
-    /// Returns the z component of the vector twice as an `FVector2`.
+    /// Returns the z component of the vector twice as an `Vector2`.
     #[inline]
-    pub const fn axis_zz(self) -> FVector2 {
-        FVector2 {
+    pub const fn axis_zz(self) -> Vector2 {
+        Vector2 {
             x: self.z,
             y: self.z,
         }
     }
 
-    /// Returns the z, y, and x components of the vector as an `FVector3`.
+    /// Returns the z, y, and x components of the vector as an `Vector3`.
     #[inline]
-    pub const fn axis_zyx(self) -> FVector3 {
-        FVector3 {
+    pub const fn axis_zyx(self) -> Vector3 {
+        Vector3 {
             x: self.z,
             y: self.y,
             z: self.x,
         }
     }
 
-    /// Returns the x, z, and y components of the vector as an `FVector3`.
+    /// Returns the x, z, and y components of the vector as an `Vector3`.
     #[inline]
-    pub const fn axis_xzy(self) -> FVector3 {
-        FVector3 {
+    pub const fn axis_xzy(self) -> Vector3 {
+        Vector3 {
             x: self.x,
             y: self.z,
             z: self.y,
         }
     }
 
-    /// Returns the y, z, and x components of the vector as an `FVector3`.
+    /// Returns the y, z, and x components of the vector as an `Vector3`.
     #[inline]
-    pub const fn axis_yzx(self) -> FVector3 {
-        FVector3 {
+    pub const fn axis_yzx(self) -> Vector3 {
+        Vector3 {
             x: self.y,
             y: self.z,
             z: self.x,
         }
     }
 
-    /// Returns the y, x, and z components of the vector as an `FVector3`.
+    /// Returns the y, x, and z components of the vector as an `Vector3`.
     #[inline]
-    pub const fn axis_yxz(self) -> FVector3 {
-        FVector3 {
+    pub const fn axis_yxz(self) -> Vector3 {
+        Vector3 {
             x: self.y,
             y: self.x,
             z: self.z,
         }
     }
 
-    /// Returns the z, x, and y components of the vector as an `FVector3`.
+    /// Returns the z, x, and y components of the vector as an `Vector3`.
     #[inline]
-    pub const fn axis_zxy(self) -> FVector3 {
-        FVector3 {
+    pub const fn axis_zxy(self) -> Vector3 {
+        Vector3 {
             x: self.z,
             y: self.x,
             z: self.y,
         }
     }
 
-    /// Returns the x component of the vector three times as an `FVector3`.
+    /// Returns the x component of the vector three times as an `Vector3`.
     #[inline]
-    pub const fn axis_xxx(self) -> FVector3 {
-        FVector3 {
+    pub const fn axis_xxx(self) -> Vector3 {
+        Vector3 {
             x: self.x,
             y: self.x,
             z: self.x,
         }
     }
 
-    /// Returns the y component of the vector three times as an `FVector3`.
+    /// Returns the y component of the vector three times as an `Vector3`.
     #[inline]
-    pub const fn axis_yyy(self) -> FVector3 {
-        FVector3 {
+    pub const fn axis_yyy(self) -> Vector3 {
+        Vector3 {
             x: self.y,
             y: self.y,
             z: self.y,
         }
     }
 
-    /// Returns the z component of the vector three times as an `FVector3`.
+    /// Returns the z component of the vector three times as an `Vector3`.
     #[inline]
-    pub const fn axis_zzz(self) -> FVector3 {
-        FVector3 {
+    pub const fn axis_zzz(self) -> Vector3 {
+        Vector3 {
             x: self.z,
             y: self.z,
             z: self.z,
         }
     }
 
-    /// Checks if any component of the `FVector3` is finite.
+    /// Checks if any component of the `Vector3` is finite.
     ///
-    /// This function checks each component of the `FVector3` for finiteness and returns
+    /// This function checks each component of the `Vector3` for finiteness and returns
     /// `true` if at least one component is finite, and `false` otherwise.
     ///
     /// # Returns
     ///
-    /// Returns `true` if any component of the `FVector3` is finite, `false` otherwise.
+    /// Returns `true` if any component of the `Vector3` is finite, `false` otherwise.
     ///
     /// # Example
     ///
     /// ```
-    /// use axion::math::FVector3;
+    /// use axion::math::Vector3;
     ///
-    /// // Create an `FVector3` with all finite components
-    /// let finite_vector = FVector3::new(2.0, 3.0, -1.0);
+    /// // Create an `Vector3` with all finite components
+    /// let finite_vector = Vector3::new(2.0, 3.0, -1.0);
     ///
-    /// // Create an `FVector3` with at least one infinite component
-    /// let infinite_vector = FVector3::new(f32::INFINITY, 2.0, 0.0);
+    /// // Create an `Vector3` with at least one infinite component
+    /// let infinite_vector = Vector3::new(f32::INFINITY, 2.0, 0.0);
     ///
     /// // Check if any component of the finite vector is finite
     /// assert_eq!(finite_vector.is_finite(), true);
@@ -538,7 +538,7 @@ impl FVector3 {
     ///
     /// # Parameters
     ///
-    /// - `other`: The other `FVector3` point to calculate angles to.
+    /// - `other`: The other `Vector3` point to calculate angles to.
     ///
     /// # Returns
     ///
@@ -547,10 +547,10 @@ impl FVector3 {
     /// # Examples
     ///
     /// ```
-    /// use axion::math::{FVector3, Radians};
+    /// use axion::math::{Vector3, Radians};
     ///
-    /// let point1 = FVector3::new(1.0, 0.0, 0.0);
-    /// let point2 = FVector3::new(1.0, 1.0, 0.0);
+    /// let point1 = Vector3::new(1.0, 0.0, 0.0);
+    /// let point2 = Vector3::new(1.0, 1.0, 0.0);
     ///
     /// let angles = point1.angles_to(point2);
     /// ```
@@ -578,9 +578,9 @@ impl FVector3 {
     /// # Examples
     ///
     /// ```
-    /// use axion::math::{FVector3, Radians};
+    /// use axion::math::{Vector3, Radians};
     ///
-    /// let point = FVector3::new(1.0, 0.0, 0.0);
+    /// let point = Vector3::new(1.0, 0.0, 0.0);
     ///
     /// let angles = point.spherical_angles();
     /// ```
@@ -595,15 +595,15 @@ impl FVector3 {
     }
 }
 
-impl Default for FVector3 {
-    /// Creates a new `FVector3` with all components initialized to the `f32::default()`.
+impl Default for Vector3 {
+    /// Creates a new `Vector3` with all components initialized to the `f32::default()`.
     /// # Example
     ///
     /// ```rust
-    /// use axion::math::FVector3;
+    /// use axion::math::Vector3;
     ///
-    /// let default_vector: FVector3 = Default::default();
-    /// assert_eq!(default_vector, FVector3::new(f32::default(), f32::default(), f32::default()));
+    /// let default_vector: Vector3 = Default::default();
+    /// assert_eq!(default_vector, Vector3::new(f32::default(), f32::default(), f32::default()));
     /// ```
     #[inline(always)]
     fn default() -> Self {
@@ -615,10 +615,10 @@ impl Default for FVector3 {
     }
 }
 
-impl fmt::Display for FVector3 {
-    /// Formats the `FVector3` as a string in the form *(x, y, z)*.
+impl fmt::Display for Vector3 {
+    /// Formats the `Vector3` as a string in the form *(x, y, z)*.
     ///
-    /// This implementation allows you to format an `FVector3` instance as a string,
+    /// This implementation allows you to format an `Vector3` instance as a string,
     /// where the `x`, `y`, and `z` components are enclosed in parentheses and separated by a comma.
     ///
     /// # Arguments
@@ -632,9 +632,9 @@ impl fmt::Display for FVector3 {
     /// # Example
     ///
     /// ```rust
-    /// use axion::math::FVector3;
+    /// use axion::math::Vector3;
     ///
-    /// let vector = FVector3::new(2.0, 5.0, 1.0); // Create a 3D vector
+    /// let vector = Vector3::new(2.0, 5.0, 1.0); // Create a 3D vector
     /// let formatted = format!("{}", vector);
     ///
     /// assert_eq!(formatted, "(2.0, 5.0, 1.0)"); // Check the formatted string representation
@@ -651,12 +651,12 @@ impl fmt::Display for FVector3 {
     }
 }
 
-impl ops::Index<usize> for FVector3 {
+impl ops::Index<usize> for Vector3 {
     type Output = f32;
 
-    /// Indexes the `FVector3` by a `usize` index.
+    /// Indexes the `Vector3` by a `usize` index.
     ///
-    /// This implementation allows you to access the components of an `FVector3` using a
+    /// This implementation allows you to access the components of an `Vector3` using a
     /// `usize` index where `0` corresponds to `x`, `1` corresponds to `y`, and `2` corresponds to `z`. It returns
     /// a reference to the component at the specified index.
     ///
@@ -666,7 +666,7 @@ impl ops::Index<usize> for FVector3 {
     ///
     /// # Returns
     ///
-    /// A reference to the specified component of the `FVector3`.
+    /// A reference to the specified component of the `Vector3`.
     ///
     /// # Panics
     ///
@@ -675,9 +675,9 @@ impl ops::Index<usize> for FVector3 {
     /// # Example
     ///
     /// ```
-    /// use axion::math::FVector3;
+    /// use axion::math::Vector3;
     ///
-    /// let vector = FVector3::new(2.0, 3.0, 4.0); // Create a 3D vector
+    /// let vector = Vector3::new(2.0, 3.0, 4.0); // Create a 3D vector
     /// let x_component = vector[0]; // Access the x component using index 0
     ///
     /// assert_eq!(x_component, 2.0); // Check if the accessed component is correct
@@ -693,10 +693,10 @@ impl ops::Index<usize> for FVector3 {
     }
 }
 
-impl ops::IndexMut<usize> for FVector3 {
-    /// Mutable indexing for the `FVector3` by a `usize` index.
+impl ops::IndexMut<usize> for Vector3 {
+    /// Mutable indexing for the `Vector3` by a `usize` index.
     ///
-    /// This implementation allows you to mutably access and modify the components of an `FVector3`
+    /// This implementation allows you to mutably access and modify the components of an `Vector3`
     /// using a `usize` index where `0` corresponds to `x`, `1` corresponds to `y`, and `2` corresponds to `z`. It returns
     /// a mutable reference to the component at the specified index.
     ///
@@ -706,7 +706,7 @@ impl ops::IndexMut<usize> for FVector3 {
     ///
     /// # Returns
     ///
-    /// A mutable reference to the specified component of the `FVector3`.
+    /// A mutable reference to the specified component of the `Vector3`.
     ///
     /// # Panics
     ///
@@ -715,9 +715,9 @@ impl ops::IndexMut<usize> for FVector3 {
     /// # Example
     ///
     /// ```
-    /// use axion::math::FVector3;
+    /// use axion::math::Vector3;
     ///
-    /// let mut vector = FVector3::new(2.0, 3.0, 4.0); // Create a 3D vector
+    /// let mut vector = Vector3::new(2.0, 3.0, 4.0); // Create a 3D vector
     /// vector[0] = 4.0; // Modify the x component using index 0
     ///
     /// assert_eq!(vector[0], 4.0); // Check if the modified component is correct
@@ -733,12 +733,12 @@ impl ops::IndexMut<usize> for FVector3 {
     }
 }
 
-impl ops::Index<u32> for FVector3 {
+impl ops::Index<u32> for Vector3 {
     type Output = f32;
 
-    /// Indexes the `FVector3` by a `u32` index.
+    /// Indexes the `Vector3` by a `u32` index.
     ///
-    /// This implementation allows you to access the components of an `FVector3` using a
+    /// This implementation allows you to access the components of an `Vector3` using a
     /// `u32` index where `0` corresponds to `x`, `1` corresponds to `y`, and `2` corresponds to `z`. It returns
     /// a reference to the component at the specified index.
     ///
@@ -748,7 +748,7 @@ impl ops::Index<u32> for FVector3 {
     ///
     /// # Returns
     ///
-    /// A reference to the specified component of the `FVector3`.
+    /// A reference to the specified component of the `Vector3`.
     ///
     /// # Panics
     ///
@@ -757,9 +757,9 @@ impl ops::Index<u32> for FVector3 {
     /// # Example
     ///
     /// ```
-    /// use axion::math::FVector3;
+    /// use axion::math::Vector3;
     ///
-    /// let vector = FVector3::new(2.0, 3.0, 4.0); // Create a 3D vector
+    /// let vector = Vector3::new(2.0, 3.0, 4.0); // Create a 3D vector
     /// let x_component = vector[0u32]; // Access the x component using a u32 index
     ///
     /// assert_eq!(x_component, 2.0); // Check if the accessed component is correct
@@ -775,10 +775,10 @@ impl ops::Index<u32> for FVector3 {
     }
 }
 
-impl ops::IndexMut<u32> for FVector3 {
-    /// Mutable indexing for the `FVector3` by a `u32` index.
+impl ops::IndexMut<u32> for Vector3 {
+    /// Mutable indexing for the `Vector3` by a `u32` index.
     ///
-    /// This implementation allows you to mutably access and modify the components of an `FVector3`
+    /// This implementation allows you to mutably access and modify the components of an `Vector3`
     /// using a `u32` index where `0` corresponds to `x`, `1` corresponds to `y`, and `2` corresponds to `z`. It returns
     /// a mutable reference to the component at the specified index.
     ///
@@ -788,7 +788,7 @@ impl ops::IndexMut<u32> for FVector3 {
     ///
     /// # Returns
     ///
-    /// A mutable reference to the specified component of the `FVector3`.
+    /// A mutable reference to the specified component of the `Vector3`.
     ///
     /// # Panics
     ///
@@ -797,9 +797,9 @@ impl ops::IndexMut<u32> for FVector3 {
     /// # Example
     ///
     /// ```
-    /// use axion::math::FVector3;
+    /// use axion::math::Vector3;
     ///
-    /// let mut vector = FVector3::new(2.0, 3.0, 4.0); // Create a 3D vector
+    /// let mut vector = Vector3::new(2.0, 3.0, 4.0); // Create a 3D vector
     /// vector[0u32] = 4.0; // Modify the x component using a u32 index
     ///
     /// assert_eq!(vector[0u32], 4.0); // Check if the modified component is correct

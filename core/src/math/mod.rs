@@ -19,9 +19,9 @@ pub use angles::{radians, Radians};
 pub use angles::{turns, Turns};
 
 pub use common::{quat, Quaternion};
-pub use common::{vec2, FVector2};
-pub use common::{vec3, FVector3};
-pub use common::{vec4, FVector4};
+pub use common::{vec2, Vector2};
+pub use common::{vec3, Vector3};
+pub use common::{vec4, Vector4};
 
 #[cfg(feature = "simd")]
 #[cfg(any(target_arch = "x86_64", target_arch = "x86"))]

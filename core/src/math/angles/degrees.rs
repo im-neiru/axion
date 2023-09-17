@@ -215,7 +215,7 @@ impl Degrees {
     /// Returns a unit vector in the direction of the angle in degrees.
     ///
     /// The `normal` method computes the cosine and sine of the angle in degrees
-    /// and returns a `axion::math::FVector2` representing the unit vector.
+    /// and returns a `axion::math::Vector2` representing the unit vector.
     ///
     /// # Examples
     ///
@@ -226,13 +226,13 @@ impl Degrees {
     /// let normal_vector = thirty_degrees.normal();
     /// ```
     #[inline]
-    pub fn normal(self) -> crate::math::FVector2 {
+    pub fn normal(self) -> crate::math::Vector2 {
         let (cos, sin) = {
             let radians = self.0 * Self::FACTOR_DEG_TO_RAD;
             (radians.cos(), radians.sin())
         };
 
-        crate::math::FVector2 { x: cos, y: sin }
+        crate::math::Vector2 { x: cos, y: sin }
     }
 
     /// Computes the arccosine of the `scalar` value in degrees.
