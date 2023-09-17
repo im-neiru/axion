@@ -1,4 +1,5 @@
 use crate::math::{Radians, Vector2, Vector3};
+use std::fmt;
 
 /// A quaternion representing a rotation in 3D space.
 ///
@@ -84,6 +85,7 @@ impl Quaternion {
     /// let axis = Vector3::new(1.0, 0.0, 0.0);
     /// let theta = Radians::PI_HALF;
     /// let quat = Quaternion::from_axis(axis, theta);
+    /// println!("{quat}");
     /// ```
     pub fn from_axis(axis: Vector3, theta: Radians) -> Self {
         let Vector2 { x: cos, y: sin } = (theta / 2.0).normal();
@@ -95,5 +97,31 @@ impl Quaternion {
             y: sin * normal.y,
             z: sin * normal.z,
         }
+    }
+}
+
+impl fmt::Display for Quaternion {
+    /// Formats the quaternion as a human-readable string in the format:
+    ///
+    /// `w + x𝑖 + y𝑗 + z𝑘`
+    ///
+    /// # Examples
+    ///
+    /// ```rust
+    /// use axion::math::{Quaternion, quat};
+    ///
+    /// let quat = quat(2.0, 3.0, 4.0, 1.0);
+    /// let formatted = format!("{quat:.1}");
+    /// assert_eq!(formatted, "1.0 + 2.0𝑖 + 3.0𝑗 + 4.0𝑘");
+    /// ```
+    fn fmt(&self, formatter: &mut fmt::Formatter<'_>) -> fmt::Result {
+        fmt::Display::fmt(&self.w, formatter)?;
+        formatter.write_str(" + ")?;
+        fmt::Display::fmt(&self.x, formatter)?;
+        formatter.write_str("𝑖 + ")?;
+        fmt::Display::fmt(&self.y, formatter)?;
+        formatter.write_str("𝑗 + ")?;
+        fmt::Display::fmt(&self.z, formatter)?;
+        formatter.write_str("𝑘")
     }
 }
