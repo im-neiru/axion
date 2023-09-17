@@ -1,4 +1,5 @@
 use std::fmt;
+use std::ops;
 
 /// A type representing an angle measured in radians.
 ///
@@ -381,5 +382,324 @@ impl fmt::Display for Radians {
     fn fmt(&self, formatter: &mut fmt::Formatter<'_>) -> fmt::Result {
         self.0.fmt(formatter)?; // Delegate formatting of the inner f32 value
         formatter.write_str("rad") // Append "rad" unit
+    }
+}
+
+impl ops::Add for Radians {
+    type Output = Self;
+
+    /// Adds two `Radians` values together.
+    ///
+    /// # Parameters
+    ///
+    /// - `self`: The left-hand side `Radians` value.
+    /// - `rhs`: The right-hand side `Radians` value to be added.
+    ///
+    /// # ReRadians
+    ///
+    /// A new `Radians` value resulting from the addition.
+    #[inline]
+    fn add(self, rhs: Self) -> Self::Output {
+        Self(self.0 + rhs.0)
+    }
+}
+
+impl ops::Sub for Radians {
+    type Output = Self;
+
+    /// Subtracts one `Radians` value from another.
+    ///
+    /// # Parameters
+    ///
+    /// - `self`: The left-hand side `Radians` value.
+    /// - `rhs`: The right-hand side `Radians` value to be subtracted.
+    ///
+    /// # ReRadians
+    ///
+    /// A new `Radians` value resulting from the subtraction.
+    #[inline]
+    fn sub(self, rhs: Self) -> Self::Output {
+        Self(self.0 - rhs.0)
+    }
+}
+
+impl ops::Mul for Radians {
+    type Output = Self;
+
+    /// Multiplies two `Radians` values together.
+    ///
+    /// # Parameters
+    ///
+    /// - `self`: The left-hand side `Radians` value.
+    /// - `rhs`: The right-hand side `Radians` value to be multiplied.
+    ///
+    /// # ReRadians
+    ///
+    /// A new `Radians` value resulting from the multiplication.
+    #[inline]
+    fn mul(self, rhs: Self) -> Self::Output {
+        Self(self.0 * rhs.0)
+    }
+}
+
+impl ops::Div for Radians {
+    type Output = Self;
+
+    /// Divides one `Radians` value by another.
+    ///
+    /// # Parameters
+    ///
+    /// - `self`: The left-hand side `Radians` value.
+    /// - `rhs`: The right-hand side `Radians` value to be divided by.
+    ///
+    /// # ReRadians
+    ///
+    /// A new `Radians` value resulting from the division.
+    #[inline]
+    fn div(self, rhs: Self) -> Self::Output {
+        Self(self.0 / rhs.0)
+    }
+}
+
+impl ops::Rem for Radians {
+    type Output = Self;
+
+    /// Computes the remainder of dividing one `Radians` value by another.
+    ///
+    /// # Parameters
+    ///
+    /// - `self`: The left-hand side `Radians` value.
+    /// - `rhs`: The right-hand side `Radians` value to compute the remainder with.
+    ///
+    /// # ReRadians
+    ///
+    /// A new `Radians` value representing the remainder.
+    #[inline]
+    fn rem(self, rhs: Self) -> Self::Output {
+        Self(self.0 % rhs.0)
+    }
+}
+
+impl ops::Add<f32> for Radians {
+    type Output = Self;
+
+    /// Adds a `f32` value to a `Radians` value.
+    ///
+    /// # Parameters
+    ///
+    /// - `self`: The `Radians` value.
+    /// - `rhs`: The `f32` value to be added.
+    ///
+    /// # ReRadians
+    ///
+    /// A new `Radians` value resulting from the addition.
+    #[inline]
+    fn add(self, rhs: f32) -> Self::Output {
+        Self(self.0 + rhs)
+    }
+}
+
+impl ops::Sub<f32> for Radians {
+    type Output = Self;
+
+    /// Subtracts a `f32` value from a `Radians` value.
+    ///
+    /// # Parameters
+    ///
+    /// - `self`: The `Radians` value.
+    /// - `rhs`: The `f32` value to be subtracted.
+    ///
+    /// # ReRadians
+    ///
+    /// A new `Radians` value resulting from the subtraction.
+    #[inline]
+    fn sub(self, rhs: f32) -> Self::Output {
+        Self(self.0 - rhs)
+    }
+}
+
+impl ops::Mul<f32> for Radians {
+    type Output = Self;
+
+    /// Multiplies a `Radians` value by a `f32` value.
+    ///
+    /// # Parameters
+    ///
+    /// - `self`: The `Radians` value.
+    /// - `rhs`: The `f32` value to be multiplied.
+    ///
+    /// # ReRadians
+    ///
+    /// A new `Radians` value resulting from the multiplication.
+    #[inline]
+    fn mul(self, rhs: f32) -> Self::Output {
+        Self(self.0 * rhs)
+    }
+}
+
+impl ops::Div<f32> for Radians {
+    type Output = Self;
+
+    /// Divides a `Radians` value by a `f32` value.
+    ///
+    /// # Parameters
+    ///
+    /// - `self`: The `Radians` value.
+    /// - `rhs`: The `f32` value to divide by.
+    ///
+    /// # ReRadians
+    ///
+    /// A new `Radians` value resulting from the division.
+    #[inline]
+    fn div(self, rhs: f32) -> Self::Output {
+        Self(self.0 / rhs)
+    }
+}
+
+impl ops::Rem<f32> for Radians {
+    type Output = Self;
+
+    /// Computes the remainder of dividing a `Radians` value by a `f32` value.
+    ///
+    /// # Parameters
+    ///
+    /// - `self`: The `Radians` value.
+    /// - `rhs`: The `f32` value to compute the remainder with.
+    ///
+    /// # ReRadians
+    ///
+    /// A new `Radians` value representing the remainder.
+    #[inline]
+    fn rem(self, rhs: f32) -> Self::Output {
+        Self(self.0 % rhs)
+    }
+}
+impl ops::AddAssign for Radians {
+    /// Adds another `Radians` value to this one and assigns the result to this `Radians` value.
+    ///
+    /// # Parameters
+    ///
+    /// - `self`: The mutable reference to this `Radians` value.
+    /// - `rhs`: The `Radians` value to be added.
+    #[inline]
+    fn add_assign(&mut self, rhs: Self) {
+        *self = Self(self.0 + rhs.0)
+    }
+}
+
+impl ops::SubAssign for Radians {
+    /// Subtracts another `Radians` value from this one and assigns the result to this `Radians` value.
+    ///
+    /// # Parameters
+    ///
+    /// - `self`: The mutable reference to this `Radians` value.
+    /// - `rhs`: The `Radians` value to be subtracted.
+    #[inline]
+    fn sub_assign(&mut self, rhs: Self) {
+        *self = Self(self.0 - rhs.0)
+    }
+}
+
+impl ops::MulAssign for Radians {
+    /// Multiplies this `Radians` value by another `Radians` value and assigns the result to this `Radians` value.
+    ///
+    /// # Parameters
+    ///
+    /// - `self`: The mutable reference to this `Radians` value.
+    /// - `rhs`: The `Radians` value to be multiplied.
+    #[inline]
+    fn mul_assign(&mut self, rhs: Self) {
+        *self = Self(self.0 * rhs.0)
+    }
+}
+
+impl ops::DivAssign for Radians {
+    /// Divides this `Radians` value by another `Radians` value and assigns the result to this `Radians` value.
+    ///
+    /// # Parameters
+    ///
+    /// - `self`: The mutable reference to this `Radians` value.
+    /// - `rhs`: The `Radians` value to divide by.
+    #[inline]
+    fn div_assign(&mut self, rhs: Self) {
+        *self = Self(self.0 / rhs.0)
+    }
+}
+
+impl ops::RemAssign for Radians {
+    /// Computes the remainder of dividing this `Radians` value by another `Radians` value and assigns the result to this `Radians` value.
+    ///
+    /// # Parameters
+    ///
+    /// - `self`: The mutable reference to this `Radians` value.
+    /// - `rhs`: The `Radians` value to compute the remainder with.
+    #[inline]
+    fn rem_assign(&mut self, rhs: Self) {
+        *self = Self(self.0 % rhs.0)
+    }
+}
+
+impl ops::AddAssign<f32> for Radians {
+    /// Adds a `f32` scalar to this `Radians` value and assigns the result to this `Radians` value.
+    ///
+    /// # Parameters
+    ///
+    /// - `self`: The mutable reference to this `Radians` value.
+    /// - `rhs`: The `f32` scalar to be added.
+    #[inline]
+    fn add_assign(&mut self, rhs: f32) {
+        *self = Self(self.0 + rhs)
+    }
+}
+
+impl ops::SubAssign<f32> for Radians {
+    /// Subtracts a `f32` scalar from this `Radians` value and assigns the result to this `Radians` value.
+    ///
+    /// # Parameters
+    ///
+    /// - `self`: The mutable reference to this `Radians` value.
+    /// - `rhs`: The `f32` scalar to be subtracted.
+    #[inline]
+    fn sub_assign(&mut self, rhs: f32) {
+        *self = Self(self.0 - rhs)
+    }
+}
+
+impl ops::MulAssign<f32> for Radians {
+    /// Multiplies this `Radians` value by a `f32` scalar and assigns the result to this `Radians` value.
+    ///
+    /// # Parameters
+    ///
+    /// - `self`: The mutable reference to this `Radians` value.
+    /// - `rhs`: The `f32` scalar to be multiplied.
+    #[inline]
+    fn mul_assign(&mut self, rhs: f32) {
+        *self = Self(self.0 * rhs)
+    }
+}
+
+impl ops::DivAssign<f32> for Radians {
+    /// Divides this `Radians` value by a `f32` scalar and assigns the result to this `Radians` value.
+    ///
+    /// # Parameters
+    ///
+    /// - `self`: The mutable reference to this `Radians` value.
+    /// - `rhs`: The `f32` scalar to divide by.
+    #[inline]
+    fn div_assign(&mut self, rhs: f32) {
+        *self = Self(self.0 / rhs)
+    }
+}
+
+impl ops::RemAssign<f32> for Radians {
+    /// Computes the remainder of dividing this `Radians` value by a `f32` scalar and assigns the result to this `Radians` value.
+    ///
+    /// # Parameters
+    ///
+    /// - `self`: The mutable reference to this `Radians` value.
+    /// - `rhs`: The `f32` scalar to compute the remainder with.
+    #[inline]
+    fn rem_assign(&mut self, rhs: f32) {
+        *self = Self(self.0 % rhs)
     }
 }
