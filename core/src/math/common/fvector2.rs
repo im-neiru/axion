@@ -1,7 +1,44 @@
 use std::fmt;
 use std::ops;
 
-use crate::math::{FVector2, FVector3, Radians};
+use crate::math::{FVector3, Radians};
+
+/// `FVector2` is a structure that represents a 2D vector with `f32` components.
+/// It encapsulates two floating-point values and is used for various purposes in graphical applications
+/// including points, vectors, and texture coordinates.
+#[derive(Clone, Copy, Debug)]
+pub struct FVector2 {
+    /// The X component of the vector.
+    pub x: f32,
+    /// The Y component of the vector.
+    pub y: f32,
+}
+
+/// Convenience function for creating a 2D vector (FVector2).
+///
+/// This function is a convenient way to create a 2D vector (FVector2)
+/// with the given components.
+///
+/// # Arguments
+///
+/// * `x` - The x-component of the vector.
+/// * `y` - The y-component of the vector.
+///
+/// # Returns
+///
+/// A new `FVector2` with the specified components.
+///
+/// # Example
+///
+/// ```
+/// use axion::math::{FVector2, vec2};
+///
+/// let vector = vec2(1.0, 2.0); // Create a 2D vector
+/// ```
+#[inline(always)]
+pub const fn vec2(x: f32, y: f32) -> FVector2 {
+    FVector2 { x, y }
+}
 
 impl FVector2 {
     /// A constant `FVector2` instance with both `x` and `y` components set to 0.0.

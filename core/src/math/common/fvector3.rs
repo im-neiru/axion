@@ -2,7 +2,47 @@ use std::fmt;
 use std::ops;
 
 use crate::math::Radians;
-use crate::math::{FVector2, FVector3, FVector4, SphericalAngles};
+use crate::math::{FVector2, FVector4, SphericalAngles};
+
+/// `FVector3` is a structure that represents a 3D vector with `f32` components.
+/// It encapsulates three floating-point values and is used for various purposes in graphical applications
+/// including points, vectors, and texture coordinates.
+#[derive(Clone, Copy, Debug)]
+pub struct FVector3 {
+    /// The X component of the vector.
+    pub x: f32,
+    /// The Y component of the vector.
+    pub y: f32,
+    /// The Z component of the vector.
+    pub z: f32,
+}
+
+/// Convenience function for creating a 3D vector (FVector3).
+///
+/// This function is a convenient way to create a 3D vector (FVector3)
+/// with the given components.
+///
+/// # Arguments
+///
+/// * `x` - The x-component of the vector.
+/// * `y` - The y-component of the vector.
+/// * `z` - The z-component of the vector.
+///
+/// # Returns
+///
+/// A new `FVector3` with the specified components.
+///
+/// # Example
+///
+/// ```
+/// use axion::math::{FVector3, vec3};
+///
+/// let vector = vec3(1.0, 2.0, 3.0); // Create a 3D vector
+/// ```
+#[inline(always)]
+pub const fn vec3(x: f32, y: f32, z: f32) -> FVector3 {
+    FVector3 { x, y, z }
+}
 
 impl FVector3 {
     /// A constant `FVector3` instance with all `x`, `y` and `z` components set to 0.0.
