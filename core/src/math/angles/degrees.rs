@@ -1,4 +1,5 @@
 use std::fmt;
+use std::ops;
 
 use super::Radians;
 
@@ -371,5 +372,324 @@ impl fmt::Display for Degrees {
     fn fmt(&self, formatter: &mut fmt::Formatter<'_>) -> fmt::Result {
         self.0.fmt(formatter)?; // Delegate formatting of the inner f32 value
         formatter.write_str("deg") // Append "deg" unit
+    }
+}
+
+impl ops::Add for Degrees {
+    type Output = Self;
+
+    /// Adds two `Degrees` values together.
+    ///
+    /// # Parameters
+    ///
+    /// - `self`: The left-hand side `Degrees` value.
+    /// - `rhs`: The right-hand side `Degrees` value to be added.
+    ///
+    /// # ReDegrees
+    ///
+    /// A new `Degrees` value resulting from the addition.
+    #[inline]
+    fn add(self, rhs: Self) -> Self::Output {
+        Self(self.0 + rhs.0)
+    }
+}
+
+impl ops::Sub for Degrees {
+    type Output = Self;
+
+    /// Subtracts one `Degrees` value from another.
+    ///
+    /// # Parameters
+    ///
+    /// - `self`: The left-hand side `Degrees` value.
+    /// - `rhs`: The right-hand side `Degrees` value to be subtracted.
+    ///
+    /// # ReDegrees
+    ///
+    /// A new `Degrees` value resulting from the subtraction.
+    #[inline]
+    fn sub(self, rhs: Self) -> Self::Output {
+        Self(self.0 - rhs.0)
+    }
+}
+
+impl ops::Mul for Degrees {
+    type Output = Self;
+
+    /// Multiplies two `Degrees` values together.
+    ///
+    /// # Parameters
+    ///
+    /// - `self`: The left-hand side `Degrees` value.
+    /// - `rhs`: The right-hand side `Degrees` value to be multiplied.
+    ///
+    /// # ReDegrees
+    ///
+    /// A new `Degrees` value resulting from the multiplication.
+    #[inline]
+    fn mul(self, rhs: Self) -> Self::Output {
+        Self(self.0 * rhs.0)
+    }
+}
+
+impl ops::Div for Degrees {
+    type Output = Self;
+
+    /// Divides one `Degrees` value by another.
+    ///
+    /// # Parameters
+    ///
+    /// - `self`: The left-hand side `Degrees` value.
+    /// - `rhs`: The right-hand side `Degrees` value to be divided by.
+    ///
+    /// # ReDegrees
+    ///
+    /// A new `Degrees` value resulting from the division.
+    #[inline]
+    fn div(self, rhs: Self) -> Self::Output {
+        Self(self.0 / rhs.0)
+    }
+}
+
+impl ops::Rem for Degrees {
+    type Output = Self;
+
+    /// Computes the remainder of dividing one `Degrees` value by another.
+    ///
+    /// # Parameters
+    ///
+    /// - `self`: The left-hand side `Degrees` value.
+    /// - `rhs`: The right-hand side `Degrees` value to compute the remainder with.
+    ///
+    /// # ReDegrees
+    ///
+    /// A new `Degrees` value representing the remainder.
+    #[inline]
+    fn rem(self, rhs: Self) -> Self::Output {
+        Self(self.0 % rhs.0)
+    }
+}
+
+impl ops::Add<f32> for Degrees {
+    type Output = Self;
+
+    /// Adds a `f32` value to a `Degrees` value.
+    ///
+    /// # Parameters
+    ///
+    /// - `self`: The `Degrees` value.
+    /// - `rhs`: The `f32` value to be added.
+    ///
+    /// # ReDegrees
+    ///
+    /// A new `Degrees` value resulting from the addition.
+    #[inline]
+    fn add(self, rhs: f32) -> Self::Output {
+        Self(self.0 + rhs)
+    }
+}
+
+impl ops::Sub<f32> for Degrees {
+    type Output = Self;
+
+    /// Subtracts a `f32` value from a `Degrees` value.
+    ///
+    /// # Parameters
+    ///
+    /// - `self`: The `Degrees` value.
+    /// - `rhs`: The `f32` value to be subtracted.
+    ///
+    /// # ReDegrees
+    ///
+    /// A new `Degrees` value resulting from the subtraction.
+    #[inline]
+    fn sub(self, rhs: f32) -> Self::Output {
+        Self(self.0 - rhs)
+    }
+}
+
+impl ops::Mul<f32> for Degrees {
+    type Output = Self;
+
+    /// Multiplies a `Degrees` value by a `f32` value.
+    ///
+    /// # Parameters
+    ///
+    /// - `self`: The `Degrees` value.
+    /// - `rhs`: The `f32` value to be multiplied.
+    ///
+    /// # ReDegrees
+    ///
+    /// A new `Degrees` value resulting from the multiplication.
+    #[inline]
+    fn mul(self, rhs: f32) -> Self::Output {
+        Self(self.0 * rhs)
+    }
+}
+
+impl ops::Div<f32> for Degrees {
+    type Output = Self;
+
+    /// Divides a `Degrees` value by a `f32` value.
+    ///
+    /// # Parameters
+    ///
+    /// - `self`: The `Degrees` value.
+    /// - `rhs`: The `f32` value to divide by.
+    ///
+    /// # ReDegrees
+    ///
+    /// A new `Degrees` value resulting from the division.
+    #[inline]
+    fn div(self, rhs: f32) -> Self::Output {
+        Self(self.0 / rhs)
+    }
+}
+
+impl ops::Rem<f32> for Degrees {
+    type Output = Self;
+
+    /// Computes the remainder of dividing a `Degrees` value by a `f32` value.
+    ///
+    /// # Parameters
+    ///
+    /// - `self`: The `Degrees` value.
+    /// - `rhs`: The `f32` value to compute the remainder with.
+    ///
+    /// # ReDegrees
+    ///
+    /// A new `Degrees` value representing the remainder.
+    #[inline]
+    fn rem(self, rhs: f32) -> Self::Output {
+        Self(self.0 % rhs)
+    }
+}
+impl ops::AddAssign for Degrees {
+    /// Adds another `Degrees` value to this one and assigns the result to this `Degrees` value.
+    ///
+    /// # Parameters
+    ///
+    /// - `self`: The mutable reference to this `Degrees` value.
+    /// - `rhs`: The `Degrees` value to be added.
+    #[inline]
+    fn add_assign(&mut self, rhs: Self) {
+        *self = Self(self.0 + rhs.0)
+    }
+}
+
+impl ops::SubAssign for Degrees {
+    /// Subtracts another `Degrees` value from this one and assigns the result to this `Degrees` value.
+    ///
+    /// # Parameters
+    ///
+    /// - `self`: The mutable reference to this `Degrees` value.
+    /// - `rhs`: The `Degrees` value to be subtracted.
+    #[inline]
+    fn sub_assign(&mut self, rhs: Self) {
+        *self = Self(self.0 - rhs.0)
+    }
+}
+
+impl ops::MulAssign for Degrees {
+    /// Multiplies this `Degrees` value by another `Degrees` value and assigns the result to this `Degrees` value.
+    ///
+    /// # Parameters
+    ///
+    /// - `self`: The mutable reference to this `Degrees` value.
+    /// - `rhs`: The `Degrees` value to be multiplied.
+    #[inline]
+    fn mul_assign(&mut self, rhs: Self) {
+        *self = Self(self.0 * rhs.0)
+    }
+}
+
+impl ops::DivAssign for Degrees {
+    /// Divides this `Degrees` value by another `Degrees` value and assigns the result to this `Degrees` value.
+    ///
+    /// # Parameters
+    ///
+    /// - `self`: The mutable reference to this `Degrees` value.
+    /// - `rhs`: The `Degrees` value to divide by.
+    #[inline]
+    fn div_assign(&mut self, rhs: Self) {
+        *self = Self(self.0 / rhs.0)
+    }
+}
+
+impl ops::RemAssign for Degrees {
+    /// Computes the remainder of dividing this `Degrees` value by another `Degrees` value and assigns the result to this `Degrees` value.
+    ///
+    /// # Parameters
+    ///
+    /// - `self`: The mutable reference to this `Degrees` value.
+    /// - `rhs`: The `Degrees` value to compute the remainder with.
+    #[inline]
+    fn rem_assign(&mut self, rhs: Self) {
+        *self = Self(self.0 % rhs.0)
+    }
+}
+
+impl ops::AddAssign<f32> for Degrees {
+    /// Adds a `f32` scalar to this `Degrees` value and assigns the result to this `Degrees` value.
+    ///
+    /// # Parameters
+    ///
+    /// - `self`: The mutable reference to this `Degrees` value.
+    /// - `rhs`: The `f32` scalar to be added.
+    #[inline]
+    fn add_assign(&mut self, rhs: f32) {
+        *self = Self(self.0 + rhs)
+    }
+}
+
+impl ops::SubAssign<f32> for Degrees {
+    /// Subtracts a `f32` scalar from this `Degrees` value and assigns the result to this `Degrees` value.
+    ///
+    /// # Parameters
+    ///
+    /// - `self`: The mutable reference to this `Degrees` value.
+    /// - `rhs`: The `f32` scalar to be subtracted.
+    #[inline]
+    fn sub_assign(&mut self, rhs: f32) {
+        *self = Self(self.0 - rhs)
+    }
+}
+
+impl ops::MulAssign<f32> for Degrees {
+    /// Multiplies this `Degrees` value by a `f32` scalar and assigns the result to this `Degrees` value.
+    ///
+    /// # Parameters
+    ///
+    /// - `self`: The mutable reference to this `Degrees` value.
+    /// - `rhs`: The `f32` scalar to be multiplied.
+    #[inline]
+    fn mul_assign(&mut self, rhs: f32) {
+        *self = Self(self.0 * rhs)
+    }
+}
+
+impl ops::DivAssign<f32> for Degrees {
+    /// Divides this `Degrees` value by a `f32` scalar and assigns the result to this `Degrees` value.
+    ///
+    /// # Parameters
+    ///
+    /// - `self`: The mutable reference to this `Degrees` value.
+    /// - `rhs`: The `f32` scalar to divide by.
+    #[inline]
+    fn div_assign(&mut self, rhs: f32) {
+        *self = Self(self.0 / rhs)
+    }
+}
+
+impl ops::RemAssign<f32> for Degrees {
+    /// Computes the remainder of dividing this `Degrees` value by a `f32` scalar and assigns the result to this `Degrees` value.
+    ///
+    /// # Parameters
+    ///
+    /// - `self`: The mutable reference to this `Degrees` value.
+    /// - `rhs`: The `f32` scalar to compute the remainder with.
+    #[inline]
+    fn rem_assign(&mut self, rhs: f32) {
+        *self = Self(self.0 % rhs)
     }
 }
