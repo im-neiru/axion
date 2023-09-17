@@ -1,4 +1,4 @@
-use std::fmt;
+use std::{fmt, ops};
 
 use super::Radians;
 
@@ -6,7 +6,7 @@ use super::Radians;
 ///
 /// `Turns` is a simple wrapper around an `f32` value, providing a clear
 /// and type-safe way to work with angles in turns.
-#[derive(Clone, Copy)]
+#[derive(Clone, Copy, PartialEq, PartialOrd)]
 pub struct Turns(pub(in crate::math) f32);
 
 /// Creates a new `Turns` instance with the specified angle in turns.
@@ -365,5 +365,324 @@ impl fmt::Display for Turns {
     fn fmt(&self, formatter: &mut fmt::Formatter<'_>) -> fmt::Result {
         self.0.fmt(formatter)?; // Delegate formatting of the inner f32 value
         formatter.write_str("tr") // Append "tr" unit
+    }
+}
+
+impl ops::Add for Turns {
+    type Output = Self;
+
+    /// Adds two `Turns` values together.
+    ///
+    /// # Parameters
+    ///
+    /// - `self`: The left-hand side `Turns` value.
+    /// - `rhs`: The right-hand side `Turns` value to be added.
+    ///
+    /// # Returns
+    ///
+    /// A new `Turns` value resulting from the addition.
+    #[inline]
+    fn add(self, rhs: Self) -> Self::Output {
+        Self(self.0 + rhs.0)
+    }
+}
+
+impl ops::Sub for Turns {
+    type Output = Self;
+
+    /// Subtracts one `Turns` value from another.
+    ///
+    /// # Parameters
+    ///
+    /// - `self`: The left-hand side `Turns` value.
+    /// - `rhs`: The right-hand side `Turns` value to be subtracted.
+    ///
+    /// # Returns
+    ///
+    /// A new `Turns` value resulting from the subtraction.
+    #[inline]
+    fn sub(self, rhs: Self) -> Self::Output {
+        Self(self.0 - rhs.0)
+    }
+}
+
+impl ops::Mul for Turns {
+    type Output = Self;
+
+    /// Multiplies two `Turns` values together.
+    ///
+    /// # Parameters
+    ///
+    /// - `self`: The left-hand side `Turns` value.
+    /// - `rhs`: The right-hand side `Turns` value to be multiplied.
+    ///
+    /// # Returns
+    ///
+    /// A new `Turns` value resulting from the multiplication.
+    #[inline]
+    fn mul(self, rhs: Self) -> Self::Output {
+        Self(self.0 * rhs.0)
+    }
+}
+
+impl ops::Div for Turns {
+    type Output = Self;
+
+    /// Divides one `Turns` value by another.
+    ///
+    /// # Parameters
+    ///
+    /// - `self`: The left-hand side `Turns` value.
+    /// - `rhs`: The right-hand side `Turns` value to be divided by.
+    ///
+    /// # Returns
+    ///
+    /// A new `Turns` value resulting from the division.
+    #[inline]
+    fn div(self, rhs: Self) -> Self::Output {
+        Self(self.0 / rhs.0)
+    }
+}
+
+impl ops::Rem for Turns {
+    type Output = Self;
+
+    /// Computes the remainder of dividing one `Turns` value by another.
+    ///
+    /// # Parameters
+    ///
+    /// - `self`: The left-hand side `Turns` value.
+    /// - `rhs`: The right-hand side `Turns` value to compute the remainder with.
+    ///
+    /// # Returns
+    ///
+    /// A new `Turns` value representing the remainder.
+    #[inline]
+    fn rem(self, rhs: Self) -> Self::Output {
+        Self(self.0 % rhs.0)
+    }
+}
+
+impl ops::Add<f32> for Turns {
+    type Output = Self;
+
+    /// Adds a `f32` value to a `Turns` value.
+    ///
+    /// # Parameters
+    ///
+    /// - `self`: The `Turns` value.
+    /// - `rhs`: The `f32` value to be added.
+    ///
+    /// # Returns
+    ///
+    /// A new `Turns` value resulting from the addition.
+    #[inline]
+    fn add(self, rhs: f32) -> Self::Output {
+        Self(self.0 + rhs)
+    }
+}
+
+impl ops::Sub<f32> for Turns {
+    type Output = Self;
+
+    /// Subtracts a `f32` value from a `Turns` value.
+    ///
+    /// # Parameters
+    ///
+    /// - `self`: The `Turns` value.
+    /// - `rhs`: The `f32` value to be subtracted.
+    ///
+    /// # Returns
+    ///
+    /// A new `Turns` value resulting from the subtraction.
+    #[inline]
+    fn sub(self, rhs: f32) -> Self::Output {
+        Self(self.0 - rhs)
+    }
+}
+
+impl ops::Mul<f32> for Turns {
+    type Output = Self;
+
+    /// Multiplies a `Turns` value by a `f32` value.
+    ///
+    /// # Parameters
+    ///
+    /// - `self`: The `Turns` value.
+    /// - `rhs`: The `f32` value to be multiplied.
+    ///
+    /// # Returns
+    ///
+    /// A new `Turns` value resulting from the multiplication.
+    #[inline]
+    fn mul(self, rhs: f32) -> Self::Output {
+        Self(self.0 * rhs)
+    }
+}
+
+impl ops::Div<f32> for Turns {
+    type Output = Self;
+
+    /// Divides a `Turns` value by a `f32` value.
+    ///
+    /// # Parameters
+    ///
+    /// - `self`: The `Turns` value.
+    /// - `rhs`: The `f32` value to divide by.
+    ///
+    /// # Returns
+    ///
+    /// A new `Turns` value resulting from the division.
+    #[inline]
+    fn div(self, rhs: f32) -> Self::Output {
+        Self(self.0 / rhs)
+    }
+}
+
+impl ops::Rem<f32> for Turns {
+    type Output = Self;
+
+    /// Computes the remainder of dividing a `Turns` value by a `f32` value.
+    ///
+    /// # Parameters
+    ///
+    /// - `self`: The `Turns` value.
+    /// - `rhs`: The `f32` value to compute the remainder with.
+    ///
+    /// # Returns
+    ///
+    /// A new `Turns` value representing the remainder.
+    #[inline]
+    fn rem(self, rhs: f32) -> Self::Output {
+        Self(self.0 % rhs)
+    }
+}
+impl ops::AddAssign for Turns {
+    /// Adds another `Turns` value to this one and assigns the result to this `Turns` value.
+    ///
+    /// # Parameters
+    ///
+    /// - `self`: The mutable reference to this `Turns` value.
+    /// - `rhs`: The `Turns` value to be added.
+    #[inline]
+    fn add_assign(&mut self, rhs: Self) {
+        *self = Self(self.0 + rhs.0)
+    }
+}
+
+impl ops::SubAssign for Turns {
+    /// Subtracts another `Turns` value from this one and assigns the result to this `Turns` value.
+    ///
+    /// # Parameters
+    ///
+    /// - `self`: The mutable reference to this `Turns` value.
+    /// - `rhs`: The `Turns` value to be subtracted.
+    #[inline]
+    fn sub_assign(&mut self, rhs: Self) {
+        *self = Self(self.0 - rhs.0)
+    }
+}
+
+impl ops::MulAssign for Turns {
+    /// Multiplies this `Turns` value by another `Turns` value and assigns the result to this `Turns` value.
+    ///
+    /// # Parameters
+    ///
+    /// - `self`: The mutable reference to this `Turns` value.
+    /// - `rhs`: The `Turns` value to be multiplied.
+    #[inline]
+    fn mul_assign(&mut self, rhs: Self) {
+        *self = Self(self.0 * rhs.0)
+    }
+}
+
+impl ops::DivAssign for Turns {
+    /// Divides this `Turns` value by another `Turns` value and assigns the result to this `Turns` value.
+    ///
+    /// # Parameters
+    ///
+    /// - `self`: The mutable reference to this `Turns` value.
+    /// - `rhs`: The `Turns` value to divide by.
+    #[inline]
+    fn div_assign(&mut self, rhs: Self) {
+        *self = Self(self.0 / rhs.0)
+    }
+}
+
+impl ops::RemAssign for Turns {
+    /// Computes the remainder of dividing this `Turns` value by another `Turns` value and assigns the result to this `Turns` value.
+    ///
+    /// # Parameters
+    ///
+    /// - `self`: The mutable reference to this `Turns` value.
+    /// - `rhs`: The `Turns` value to compute the remainder with.
+    #[inline]
+    fn rem_assign(&mut self, rhs: Self) {
+        *self = Self(self.0 % rhs.0)
+    }
+}
+
+impl ops::AddAssign<f32> for Turns {
+    /// Adds a `f32` scalar to this `Turns` value and assigns the result to this `Turns` value.
+    ///
+    /// # Parameters
+    ///
+    /// - `self`: The mutable reference to this `Turns` value.
+    /// - `rhs`: The `f32` scalar to be added.
+    #[inline]
+    fn add_assign(&mut self, rhs: f32) {
+        *self = Self(self.0 + rhs)
+    }
+}
+
+impl ops::SubAssign<f32> for Turns {
+    /// Subtracts a `f32` scalar from this `Turns` value and assigns the result to this `Turns` value.
+    ///
+    /// # Parameters
+    ///
+    /// - `self`: The mutable reference to this `Turns` value.
+    /// - `rhs`: The `f32` scalar to be subtracted.
+    #[inline]
+    fn sub_assign(&mut self, rhs: f32) {
+        *self = Self(self.0 - rhs)
+    }
+}
+
+impl ops::MulAssign<f32> for Turns {
+    /// Multiplies this `Turns` value by a `f32` scalar and assigns the result to this `Turns` value.
+    ///
+    /// # Parameters
+    ///
+    /// - `self`: The mutable reference to this `Turns` value.
+    /// - `rhs`: The `f32` scalar to be multiplied.
+    #[inline]
+    fn mul_assign(&mut self, rhs: f32) {
+        *self = Self(self.0 * rhs)
+    }
+}
+
+impl ops::DivAssign<f32> for Turns {
+    /// Divides this `Turns` value by a `f32` scalar and assigns the result to this `Turns` value.
+    ///
+    /// # Parameters
+    ///
+    /// - `self`: The mutable reference to this `Turns` value.
+    /// - `rhs`: The `f32` scalar to divide by.
+    #[inline]
+    fn div_assign(&mut self, rhs: f32) {
+        *self = Self(self.0 / rhs)
+    }
+}
+
+impl ops::RemAssign<f32> for Turns {
+    /// Computes the remainder of dividing this `Turns` value by a `f32` scalar and assigns the result to this `Turns` value.
+    ///
+    /// # Parameters
+    ///
+    /// - `self`: The mutable reference to this `Turns` value.
+    /// - `rhs`: The `f32` scalar to compute the remainder with.
+    #[inline]
+    fn rem_assign(&mut self, rhs: f32) {
+        *self = Self(self.0 % rhs)
     }
 }
