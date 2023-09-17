@@ -1,6 +1,6 @@
 use crate::math::{Radians, Vector2, Vector3};
 use std::fmt;
-
+use std::ops;
 /// A quaternion representing a rotation in 3D space.
 ///
 /// Quaternions are a mathematical concept used to represent rotations in 3D space.
@@ -87,6 +87,7 @@ impl Quaternion {
     /// let quat = Quaternion::from_axis(axis, theta);
     /// println!("{quat}");
     /// ```
+    #[inline]
     pub fn from_axis(axis: Vector3, theta: Radians) -> Self {
         let Vector2 { x: cos, y: sin } = (theta / 2.0).normal();
         let normal = axis.normalize();
@@ -96,6 +97,15 @@ impl Quaternion {
             x: sin * normal.x,
             y: sin * normal.y,
             z: sin * normal.z,
+        }
+    }
+
+    #[inline]
+    pub fn vector3(self) -> Vector3 {
+        Vector3 {
+            x: self.x,
+            y: self.y,
+            z: self.z,
         }
     }
 }
