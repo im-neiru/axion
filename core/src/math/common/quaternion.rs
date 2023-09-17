@@ -1,4 +1,4 @@
-use crate::math::{Radians, Vector3};
+use crate::math::{Radians, Vector2, Vector3};
 
 /// A quaternion representing a rotation in 3D space.
 ///
@@ -60,4 +60,40 @@ pub const fn quat(x: f32, y: f32, z: f32, w: f32) -> Quaternion {
     Quaternion { x, y, z, w }
 }
 
-impl Quaternion {}
+impl Quaternion {
+    /// Creates a new `Quaternion` for a rotation around a specified axis.
+    ///
+    /// This method constructs a quaternion representing a rotation of `theta` radians
+    /// around the given `axis`.
+    ///
+    /// # Arguments
+    ///
+    /// * `axis`: The 3D vector representing the rotation axis.
+    /// * `theta`: The angle in radians for the rotation around the axis.
+    ///
+    /// # Returns
+    ///
+    /// A `Quaternion` representing the specified rotation.
+    ///
+    /// # Examples
+    ///
+    /// ```rust
+    /// use axion::math::{Quaternion, Vector3, Radians};
+    ///
+    /// // Create a quaternion for a 90-degree rotation around the X-axis.
+    /// let axis = Vector3::new(1.0, 0.0, 0.0);
+    /// let theta = Radians::PI_HALF;
+    /// let quat = Quaternion::from_axis(axis, theta);
+    /// ```
+    pub fn from_axis(axis: Vector3, theta: Radians) -> Self {
+        let Vector2 { x: cos, y: sin } = (theta / 2.0).normal();
+        let normal = axis.normalize();
+
+        Self {
+            w: cos,
+            x: sin * normal.x,
+            y: sin * normal.y,
+            z: sin * normal.z,
+        }
+    }
+}
