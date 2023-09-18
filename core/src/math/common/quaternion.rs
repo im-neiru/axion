@@ -1,4 +1,4 @@
-use crate::math::{Radians, Vector2, Vector3};
+use crate::math::{degrees, Radians, Vector2, Vector3};
 use std::fmt;
 use std::ops;
 /// A quaternion representing a rotation in 3D space.
@@ -106,6 +106,16 @@ impl Quaternion {
             x: self.x,
             y: self.y,
             z: self.z,
+        }
+    }
+
+    #[inline]
+    pub fn conjugate(self) -> Quaternion {
+        Self {
+            w: self.w,
+            x: -self.x,
+            y: -self.y,
+            z: -self.z,
         }
     }
 }
