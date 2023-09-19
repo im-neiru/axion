@@ -100,6 +100,19 @@ impl Quaternion {
         }
     }
 
+    /// Returns the components of the quaternion as a 3D vector.
+    ///
+    /// This method creates a 3D vector from the `x`, `y`, and `z` components of the quaternion.
+    ///
+    /// # Examples
+    ///
+    /// ```rust
+    /// use axion::math::{Quaternion, Vector3};
+    ///
+    /// let quat = Quaternion::new(1.0, 2.0, 3.0, 4.0);
+    /// let vec3 = quat.vector3();
+    /// assert_eq!(vec3, Vector3::new(1.0, 2.0, 3.0));
+    /// ```
     #[inline]
     pub fn vector3(self) -> Vector3 {
         Vector3 {
@@ -109,6 +122,23 @@ impl Quaternion {
         }
     }
 
+    /// Returns the conjugate of the quaternion.
+    ///
+    /// The conjugate of a quaternion `q` is denoted as `q*` and is defined as:
+    ///
+    /// `q* = w - xi - yj - zk`
+    ///
+    /// where `w`, `x`, `y`, and `z` are the components of the original quaternion `q`.
+    ///
+    /// # Examples
+    ///
+    /// ```rust
+    /// use axion::math::Quaternion;
+    ///
+    /// let quat = Quaternion::new(1.0, 2.0, 3.0, 4.0);
+    /// let conjugate = quat.conjugate();
+    /// assert_eq!(conjugate, Quaternion::new(1.0, -2.0, -3.0, -4.0));
+    /// ```
     #[inline]
     pub fn conjugate(self) -> Quaternion {
         Self {
