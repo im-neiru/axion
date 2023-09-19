@@ -1,6 +1,6 @@
-use crate::math::{degrees, Radians, Vector2, Vector3};
+use crate::math::{Radians, Vector2, Vector3};
 use std::fmt;
-use std::ops;
+
 /// A quaternion representing a rotation in 3D space.
 ///
 /// Quaternions are a mathematical concept used to represent rotations in 3D space.
