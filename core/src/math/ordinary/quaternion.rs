@@ -93,9 +93,11 @@ impl ops::Mul for Quaternion {
                 self.x
                     .mul_add(rhs.w, self.y.mul_add(rhs.z, -self.z * rhs.y)),
             ),
-            y: self.w * rhs.y - self.x * rhs.z
-                + self.y * rhs.w
-                + self.z * rhs.x,
+            y: self.w.mul_add(
+                rhs.y,
+                self.x
+                    .mul_add(-rhs.z, self.y.mul_add(rhs.w, self.z * rhs.x)),
+            ),
             z: self.w.mul_add(
                 rhs.z,
                 self.x
