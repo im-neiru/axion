@@ -89,7 +89,7 @@ impl Quaternion {
     /// ```
     #[inline]
     pub fn from_axis(axis: Vector3, theta: Radians) -> Self {
-        let Vector2 { x: cos, y: sin } = (theta / 2.0).normal();
+        let Vector2 { x: cos, y: sin } = theta.normal();
         let normal = axis.normalize();
 
         Self {
