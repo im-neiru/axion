@@ -1,7 +1,7 @@
 use std::fmt;
 use std::ops;
 
-use crate::math::Radians;
+use crate::math::{Quaternion, Radians};
 use crate::math::{SphericalAngles, Vector2, Vector4};
 
 /// `Vector3` is a structure that represents a 3D vector with `f32` components.
