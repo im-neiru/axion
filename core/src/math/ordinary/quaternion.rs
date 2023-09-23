@@ -1,6 +1,58 @@
 use std::ops;
 
-use crate::math::Quaternion;
+use crate::math::{Quaternion, Vector3};
+
+impl Quaternion {
+    /// Transforms a `Vector3` by this `Quaternion`.
+    ///
+    /// This method applies the rotation represented by the `Quaternion` to the provided
+    /// `Vector3`, returning a new `Vector3` with the transformed coordinates.
+    ///
+    /// # Parameters
+    ///
+    /// * `self`: The `Quaternion` representing the rotation.
+    /// * `vector`: The `Vector3` to be transformed.
+    ///
+    /// # Returns
+    ///
+    /// A new `Vector3` representing the result of transforming the input `Vector3` by this `Quaternion`.
+    ///
+    /// # Example
+    ///
+    /// ```
+    /// use axion::math::{Quaternion, vec3};
+    ///
+    /// let quaternion = Quaternion::identity();
+    /// let vector = vec3(1.0, 0.0, 0.0);
+    ///
+    /// let transformed_vector = quaternion.transform_vector3(vector);
+    /// ```
+    ///
+    /// In this example, an identity `Quaternion` is used to transform a `Vector3`.
+    /// Since it's an identity, the transformed `Vector3` will be the same as the input.
+    #[inline]
+    pub fn transform_vector3(self, vector: Vector3) -> Self {
+        Self {
+            w: self.x.mul_add(
+                -vector.x,
+                self.y.mul_add(-vector.y, -self.z * vector.z),
+            ),
+
+            x: self.w.mul_add(
+                vector.x,
+                self.y.mul_add(vector.z, -self.z * vector.y),
+            ),
+            y: self.w.mul_add(
+                vector.y,
+                self.x.mul_add(-vector.z, self.z * vector.x),
+            ),
+            z: self.w.mul_add(
+                vector.z,
+                self.x.mul_add(vector.y, self.y * -vector.x),
+            ),
+        }
+    }
+}
 
 impl ops::Add for Quaternion {
     type Output = Self;
