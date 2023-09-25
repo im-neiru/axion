@@ -52,6 +52,100 @@ impl Quaternion {
             ),
         }
     }
+
+    /// Calculates the magnitude (length) of the quaternion.
+    ///
+    /// The magnitude is given by the square root of the sum of the squares of all the components.
+    ///
+    /// # Examples
+    ///
+    /// ```
+    /// use axion::math::Quaternion;
+    ///
+    /// let q = Quaternion::new(1.0, 2.0, 3.0, 4.0);
+    /// let mag = q.magnitude();
+    /// ```
+    ///
+    /// # Returns
+    ///
+    /// The magnitude of the quaternion.
+    #[inline]
+    pub fn magnitude(self) -> f32 {
+        self.magnitude_sq().sqrt()
+    }
+
+    /// Calculates the reciprocal of the magnitude (length) of the quaternion.
+    ///
+    /// # Examples
+    ///
+    /// ```
+    /// use axion::math::Quaternion;
+    ///
+    /// let q = Quaternion::new(1.0, 2.0, 3.0, 4.0);
+    /// let mag_inv = q.magnitude_inv();
+    /// ```
+    ///
+    /// # Returns
+    ///
+    /// The reciprocal of the magnitude of the quaternion.
+    #[inline]
+    pub fn magnitude_inv(self) -> f32 {
+        self.magnitude_sq().sqrt().recip()
+    }
+
+    /// Calculates the squared magnitude of the quaternion.
+    ///
+    /// # Examples
+    ///
+    /// ```
+    /// use axion::math::Quaternion;
+    ///
+    /// let q = Quaternion::new(1.0, 2.0, 3.0, 4.0);
+    /// let mag_sq = q.magnitude_sq();
+    /// ```
+    ///
+    /// # Returns
+    ///
+    /// The squared magnitude of the quaternion.
+    #[inline]
+    pub fn magnitude_sq(self) -> f32 {
+        self.x.mul_add(
+            self.x,
+            self.y
+                .mul_add(self.y, self.z.mul_add(self.z, self.w * self.w)),
+        )
+    }
+
+    /// Calculates the inverse of the quaternion.
+    /// If the magnitude of the quaternion is zero, the function panics because the inverse is undefined in that case.
+    ///
+    /// # Examples
+    ///
+    /// ```
+    /// use axion::math::Quaternion;
+    ///
+    /// let q = Quaternion::new(1.0, 2.0, 3.0, 4.0);
+    /// let q_inv = q.inverse();
+    /// ```
+    ///
+    /// # Returns
+    ///
+    /// The inverse of the quaternion.
+    ///
+    /// # Remarks
+    ///
+    /// This function handles the case where the quaternion has zero magnitude to avoid division by zero.
+    #[inline]
+    pub fn inverse(self) -> Self {
+        let r = self.magnitude_sq().recip();
+
+        Self {
+            w: self.w * r,
+            x: -self.x * r,
+            y: -self.y * r,
+            z: -self.z * r,
+        }
+    }
 }
 
 impl ops::Add for Quaternion {
