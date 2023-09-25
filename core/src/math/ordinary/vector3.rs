@@ -1,6 +1,6 @@
 use std::ops;
 
-use crate::math::{Quaternion, Vector3};
+use crate::math::Vector3;
 
 impl Vector3 {
     /// Returns the dot product of the vector and another vector.
