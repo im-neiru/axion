@@ -1,13 +1,13 @@
 // Within this module, is the SSE2 implementations for vectors, matrices, and more...
 
 // Sub modules
-mod fvector2;
-mod fvector3;
-mod fvector4;
+mod vector2;
+mod vector3;
+mod vector4;
 
-pub use fvector2::*;
-pub use fvector3::*;
-pub use fvector4::*;
+pub use vector2::*;
+pub use vector3::*;
+pub use vector4::*;
 
 /// Create an SSE shuffle mask from component indices.
 ///

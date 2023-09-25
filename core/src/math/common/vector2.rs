@@ -1,84 +1,121 @@
 use std::fmt;
 use std::ops;
 
-use crate::math::{FVector2, FVector3, Radians};
+use crate::math::{Radians, Vector3};
 
-impl FVector2 {
-    /// A constant `FVector2` instance with both `x` and `y` components set to 0.0.
+/// `Vector2` is a structure that represents a 2D vector with `f32` components.
+/// It encapsulates two floating-point values and is used for various purposes in graphical applications
+/// including points, vectors, and texture coordinates.
+#[derive(Clone, Copy, Debug)]
+pub struct Vector2 {
+    /// The X component of the vector.
+    pub x: f32,
+    /// The Y component of the vector.
+    pub y: f32,
+}
+
+/// Convenience function for creating a 2D vector (Vector2).
+///
+/// This function is a convenient way to create a 2D vector (Vector2)
+/// with the given components.
+///
+/// # Arguments
+///
+/// * `x` - The x-component of the vector.
+/// * `y` - The y-component of the vector.
+///
+/// # Returns
+///
+/// A new `Vector2` with the specified components.
+///
+/// # Example
+///
+/// ```
+/// use axion::math::{Vector2, vec2};
+///
+/// let vector = vec2(1.0, 2.0); // Create a 2D vector
+/// ```
+#[inline(always)]
+pub const fn vec2(x: f32, y: f32) -> Vector2 {
+    Vector2 { x, y }
+}
+
+impl Vector2 {
+    /// A constant `Vector2` instance with both `x` and `y` components set to 0.0.
     ///
-    /// This constant represents an `FVector2` with both `x` and `y` components
+    /// This constant represents an `Vector2` with both `x` and `y` components
     /// initialized to 0.0.
     pub const ZERO: Self = Self::splat(0.0);
 
-    /// A constant `FVector2` instance with both `x` and `y` components set to 1.0.
+    /// A constant `Vector2` instance with both `x` and `y` components set to 1.0.
     ///
-    /// This constant represents an `FVector2` with both `x` and `y` components
+    /// This constant represents an `Vector2` with both `x` and `y` components
     /// initialized to 1.0.
     pub const ONE: Self = Self::splat(1.0);
 
-    /// A constant `FVector2` instance with both `x` and `y` components set to -1.0.
+    /// A constant `Vector2` instance with both `x` and `y` components set to -1.0.
     ///
-    /// This constant represents an `FVector2` with both `x` and `y` components
+    /// This constant represents an `Vector2` with both `x` and `y` components
     /// initialized to -1.0.
     pub const NEG_ONE: Self = Self::splat(-1.0);
 
-    /// A constant `FVector2` instance with both `x` and `y` components set to the minimum finite value representable by `f32`.
+    /// A constant `Vector2` instance with both `x` and `y` components set to the minimum finite value representable by `f32`.
     ///
-    /// This constant represents an `FVector2` with both `x` and `y` components
+    /// This constant represents an `Vector2` with both `x` and `y` components
     /// initialized to the minimum finite value representable by `f32`.
     pub const MIN: Self = Self::splat(f32::MIN);
 
-    /// A constant `FVector2` instance with both `x` and `y` components set to the maximum finite value representable by `f32`.
+    /// A constant `Vector2` instance with both `x` and `y` components set to the maximum finite value representable by `f32`.
     ///
-    /// This constant represents an `FVector2` with both `x` and `y` components
+    /// This constant represents an `Vector2` with both `x` and `y` components
     /// initialized to the maximum finite value representable by `f32`.
     pub const MAX: Self = Self::splat(f32::MAX);
 
-    /// A constant `FVector2` instance with both `x` and `y` components set to a NaN (Not-a-Number) value.
+    /// A constant `Vector2` instance with both `x` and `y` components set to a NaN (Not-a-Number) value.
     ///
-    /// This constant represents an `FVector2` with both `x` and `y` components
+    /// This constant represents an `Vector2` with both `x` and `y` components
     /// initialized to a NaN (Not-a-Number) value.
     pub const NAN: Self = Self::splat(f32::NAN);
 
-    /// A constant `FVector2` instance with both `x` and `y` components set to positive infinity.
+    /// A constant `Vector2` instance with both `x` and `y` components set to positive infinity.
     ///
-    /// This constant represents an `FVector2` with both `x` and `y` components
+    /// This constant represents an `Vector2` with both `x` and `y` components
     /// initialized to positive infinity.
     pub const INFINITY: Self = Self::splat(f32::INFINITY);
 
-    /// A constant `FVector2` instance with both `x` and `y` components set to negative infinity.
+    /// A constant `Vector2` instance with both `x` and `y` components set to negative infinity.
     ///
-    /// This constant represents an `FVector2` with both `x` and `y` components
+    /// This constant represents an `Vector2` with both `x` and `y` components
     /// initialized to negative infinity.
     pub const NEG_INFINITY: Self = Self::splat(f32::NEG_INFINITY);
 
-    /// A constant `FVector2` instance with both `x` and `y` components set to the smallest positive value representable by `f32`.
+    /// A constant `Vector2` instance with both `x` and `y` components set to the smallest positive value representable by `f32`.
     ///
-    /// This constant represents an `FVector2` with both `x` and `y` components
+    /// This constant represents an `Vector2` with both `x` and `y` components
     /// initialized to the smallest positive value representable by `f32`.
     pub const EPSILON: Self = Self::splat(f32::EPSILON);
 
-    /// A constant `FVector2` representing the positive X-axis.
+    /// A constant `Vector2` representing the positive X-axis.
     ///
     /// This constant vector has a value of `(1.0, 0.0)`, representing the positive X-axis in 2D space.
     pub const AXIS_X: Self = Self { x: 1.0, y: 0.0 };
 
-    /// A constant `FVector2` representing the positive Y-axis.
+    /// A constant `Vector2` representing the positive Y-axis.
     ///
     /// This constant vector has a value of `(0.0, 1.0)`, representing the positive Y-axis in 2D space.
     pub const AXIS_Y: Self = Self { x: 0.0, y: 1.0 };
 
-    /// A constant `FVector2` representing the negative X-axis.
+    /// A constant `Vector2` representing the negative X-axis.
     ///
     /// This constant vector has a value of `(-1.0, 0.0)`, representing the negative X-axis in 2D space.
     pub const NEG_AXIS_X: Self = Self { x: -1.0, y: 0.0 };
 
-    /// A constant `FVector2` representing the negative Y-axis.
+    /// A constant `Vector2` representing the negative Y-axis.
     ///
     /// This constant vector has a value of `(0.0, -1.0)`, representing the negative Y-axis in 2D space.
     pub const NEG_AXIS_Y: Self = Self { x: 0.0, y: -1.0 };
 
-    /// Constructs a new `FVector2`.
+    /// Constructs a new `Vector2`.
     ///
     /// # Arguments
     ///
@@ -89,61 +126,61 @@ impl FVector2 {
         Self { x, y }
     }
 
-    /// Adds the `z` axis value to a `FVector2`, creating a new `FVector3`.
+    /// Adds the `z` axis value to a `Vector2`, creating a new `Vector3`.
     ///
-    /// This function takes a `FVector2` and a `z` value, and returns a new `FVector3`
-    /// with the `x` and `y` components from the input `FVector2` and the provided `z` value.
+    /// This function takes a `Vector2` and a `z` value, and returns a new `Vector3`
+    /// with the `x` and `y` components from the input `Vector2` and the provided `z` value.
     ///
     /// # Arguments
     ///
-    /// * `self` - The input `FVector2` that will serve as the basis for the `x` and `y` components of the resulting `FVector3`.
-    /// * `z` - The value to be used as the `z` component of the resulting `FVector3`.
+    /// * `self` - The input `Vector2` that will serve as the basis for the `x` and `y` components of the resulting `Vector3`.
+    /// * `z` - The value to be used as the `z` component of the resulting `Vector3`.
     ///
     /// # Returns
     ///
-    /// A new `FVector3` with `x` and `y` components inherited from the input `FVector2`
+    /// A new `Vector3` with `x` and `y` components inherited from the input `Vector2`
     /// and the `z` component set to the provided `z` value.
     ///
     /// # Example
     ///
     /// ```rust
-    /// use axion::math::FVector2;
+    /// use axion::math::Vector2;
     ///
-    /// let f2 = FVector2::new(1.0, 2.0);
-    /// let f3 = f2.add_axis(3.0); // New FVector3
+    /// let f2 = Vector2::new(1.0, 2.0);
+    /// let f3 = f2.add_axis(3.0); // New Vector3
     ///
     /// assert_eq!(f3.x, 1.0);
     /// assert_eq!(f3.y, 2.0);
     /// assert_eq!(f3.z, 3.0);
     /// ```
     #[inline]
-    pub const fn add_axis(self, z: f32) -> FVector3 {
-        FVector3 {
+    pub const fn add_axis(self, z: f32) -> Vector3 {
+        Vector3 {
             x: self.x,
             y: self.y,
             z,
         }
     }
 
-    /// Create a new instance of `FVector2` with both `x` and `y` components set to the given `value`.
+    /// Create a new instance of `Vector2` with both `x` and `y` components set to the given `value`.
     ///
-    /// This function creates a new `FVector2` instance with both `x` and `y` components
+    /// This function creates a new `Vector2` instance with both `x` and `y` components
     /// initialized to the specified `value`.
     ///
     /// # Arguments
     ///
-    /// * `value` - The value to set for both `x` and `y` components of the `FVector2`.
+    /// * `value` - The value to set for both `x` and `y` components of the `Vector2`.
     ///
     /// # Returns
     ///
-    /// A new `FVector2` instance with both `x` and `y` components set to `value`.
+    /// A new `Vector2` instance with both `x` and `y` components set to `value`.
     ///
     /// # Example
     ///
     /// ```
-    /// use axion::math::FVector2;
+    /// use axion::math::Vector2;
     ///
-    /// let vector = FVector2::splat(5.0);
+    /// let vector = Vector2::splat(5.0);
     /// assert_eq!(vector.x, 5.0);
     /// assert_eq!(vector.y, 5.0);
     /// ```
@@ -176,7 +213,7 @@ impl FVector2 {
         (self.y, self.y)
     }
 
-    /// Returns the y and x components of the vector as an `FVector2`.
+    /// Returns the y and x components of the vector as an `Vector2`.
     #[inline]
     pub const fn axis_yx(self) -> Self {
         Self {
@@ -185,7 +222,7 @@ impl FVector2 {
         }
     }
 
-    /// Returns the x component of the vector twice as an `FVector2`.
+    /// Returns the x component of the vector twice as an `Vector2`.
     #[inline]
     pub const fn axis_xx(self) -> Self {
         Self {
@@ -194,7 +231,7 @@ impl FVector2 {
         }
     }
 
-    /// Returns the y component of the vector twice as an `FVector2`.
+    /// Returns the y component of the vector twice as an `Vector2`.
     #[inline]
     pub const fn axis_yy(self) -> Self {
         Self {
@@ -203,22 +240,22 @@ impl FVector2 {
         }
     }
 
-    /// Checks if any component of the `FVector2` is finite.
+    /// Checks if any component of the `Vector2` is finite.
     ///
-    /// This function checks each component of the `FVector2` for finiteness and returns
+    /// This function checks each component of the `Vector2` for finiteness and returns
     /// `true` if at least one component is finite, and `false` otherwise.
     ///
     /// # Returns
     ///
-    /// `true` if any component of the `FVector2` is finite, `false` otherwise.
+    /// `true` if any component of the `Vector2` is finite, `false` otherwise.
     ///
     /// # Example
     ///
     /// ```
-    /// use axion::math::FVector2;
+    /// use axion::math::Vector2;
     ///
-    /// let finite_vector = FVector2::new(2.0, 3.0);
-    /// let infinite_vector = FVector2::new(f32::INFINITY, 2.0);
+    /// let finite_vector = Vector2::new(2.0, 3.0);
+    /// let infinite_vector = Vector2::new(f32::INFINITY, 2.0);
     ///
     /// assert_eq!(finite_vector.is_finite(), true);
     /// assert_eq!(infinite_vector.is_finite(), false);
@@ -244,10 +281,10 @@ impl FVector2 {
     /// # Examples
     ///
     /// ```
-    /// use axion::math::FVector2;
+    /// use axion::math::Vector2;
     ///
-    /// let point1 = FVector2 { x: 1.0, y: 0.0 };
-    /// let point2 = FVector2 { x: 0.0, y: 1.0 };
+    /// let point1 = Vector2 { x: 1.0, y: 0.0 };
+    /// let point2 = Vector2 { x: 0.0, y: 1.0 };
     /// let angle = point1.angle_to(point2);
     /// ```
     #[inline]
@@ -271,9 +308,9 @@ impl FVector2 {
     /// # Examples
     ///
     /// ```
-    /// use axion::math::FVector2;
+    /// use axion::math::Vector2;
     ///
-    /// let point = FVector2 { x: 3.0, y: 4.0 };
+    /// let point = Vector2 { x: 3.0, y: 4.0 };
     /// let angle = point.azimuthal();
     /// ```
     ///
@@ -283,15 +320,15 @@ impl FVector2 {
     }
 }
 
-impl Default for FVector2 {
-    /// Creates a new `FVector2` with all components initialized to the `f32::default()`.
+impl Default for Vector2 {
+    /// Creates a new `Vector2` with all components initialized to the `f32::default()`.
     /// # Example
     ///
     /// ```rust
-    /// use axion::math::FVector2;
+    /// use axion::math::Vector2;
     ///
-    /// let default_vector: FVector2 = Default::default();
-    /// assert_eq!(default_vector, FVector2::new(f32::default(), f32::default()));
+    /// let default_vector: Vector2 = Default::default();
+    /// assert_eq!(default_vector, Vector2::new(f32::default(), f32::default()));
     /// ```
     #[inline(always)]
     fn default() -> Self {
@@ -302,10 +339,10 @@ impl Default for FVector2 {
     }
 }
 
-impl fmt::Display for FVector2 {
-    /// Formats the `FVector2` as a string in the form *(x, y)*.
+impl fmt::Display for Vector2 {
+    /// Formats the `Vector2` as a string in the form *(x, y)*.
     ///
-    /// This implementation allows you to format an `FVector2` instance as a string,
+    /// This implementation allows you to format an `Vector2` instance as a string,
     /// where the `x` and `y` components are enclosed in parentheses and separated by a comma.
     ///
     /// # Arguments
@@ -319,9 +356,9 @@ impl fmt::Display for FVector2 {
     /// # Example
     ///
     /// ```
-    /// use axion::math::FVector2;
+    /// use axion::math::Vector2;
     ///
-    /// let vector = FVector2::new(2.0, 5.0);
+    /// let vector = Vector2::new(2.0, 5.0);
     /// let formatted = format!("{}", vector);
     ///
     /// assert_eq!(formatted, "(2.0, 5.0)");
@@ -336,12 +373,12 @@ impl fmt::Display for FVector2 {
     }
 }
 
-impl ops::Index<usize> for FVector2 {
+impl ops::Index<usize> for Vector2 {
     type Output = f32;
 
-    /// Indexes the `FVector2` by a `usize` index.
+    /// Indexes the `Vector2` by a `usize` index.
     ///
-    /// This implementation allows you to access the components of an `FVector2` using a
+    /// This implementation allows you to access the components of an `Vector2` using a
     /// `usize` index where `0` corresponds to `x` and `1` corresponds to `y`. It returns
     /// a reference to the component at the specified index.
     ///
@@ -351,7 +388,7 @@ impl ops::Index<usize> for FVector2 {
     ///
     /// # Returns
     ///
-    /// A reference to the specified component of the `FVector2`.
+    /// A reference to the specified component of the `Vector2`.
     ///
     /// # Panics
     ///
@@ -360,9 +397,9 @@ impl ops::Index<usize> for FVector2 {
     /// # Example
     ///
     /// ```
-    /// use axion::math::FVector2;
+    /// use axion::math::Vector2;
     ///
-    /// let vector = FVector2::new(2.0, 3.0);
+    /// let vector = Vector2::new(2.0, 3.0);
     /// let x_component = vector[0];
     ///
     /// assert_eq!(x_component, 2.0);
@@ -377,10 +414,10 @@ impl ops::Index<usize> for FVector2 {
     }
 }
 
-impl ops::IndexMut<usize> for FVector2 {
-    /// Mutable indexing for the `FVector2` by a `usize` index.
+impl ops::IndexMut<usize> for Vector2 {
+    /// Mutable indexing for the `Vector2` by a `usize` index.
     ///
-    /// This implementation allows you to mutably access and modify the components of an `FVector2`
+    /// This implementation allows you to mutably access and modify the components of an `Vector2`
     /// using a `usize` index where `0` corresponds to `x` and `1` corresponds to `y`. It returns
     /// a mutable reference to the component at the specified index.
     ///
@@ -390,7 +427,7 @@ impl ops::IndexMut<usize> for FVector2 {
     ///
     /// # Returns
     ///
-    /// A mutable reference to the specified component of the `FVector2`.
+    /// A mutable reference to the specified component of the `Vector2`.
     ///
     /// # Panics
     ///
@@ -399,9 +436,9 @@ impl ops::IndexMut<usize> for FVector2 {
     /// # Example
     ///
     /// ```
-    /// use axion::math::FVector2;
+    /// use axion::math::Vector2;
     ///
-    /// let mut vector = FVector2::new(2.0, 3.0);
+    /// let mut vector = Vector2::new(2.0, 3.0);
     /// vector[0] = 4.0;
     ///
     /// assert_eq!(vector[0], 4.0);
@@ -416,12 +453,12 @@ impl ops::IndexMut<usize> for FVector2 {
     }
 }
 
-impl ops::Index<u32> for FVector2 {
+impl ops::Index<u32> for Vector2 {
     type Output = f32;
 
-    /// Indexes the `FVector2` by a `u32` index.
+    /// Indexes the `Vector2` by a `u32` index.
     ///
-    /// This implementation allows you to access the components of an `FVector2` using a
+    /// This implementation allows you to access the components of an `Vector2` using a
     /// `u32` index where `0` corresponds to `x` and `1` corresponds to `y`. It returns
     /// a reference to the component at the specified index.
     ///
@@ -431,7 +468,7 @@ impl ops::Index<u32> for FVector2 {
     ///
     /// # Returns
     ///
-    /// A reference to the specified component of the `FVector2`.
+    /// A reference to the specified component of the `Vector2`.
     ///
     /// # Panics
     ///
@@ -440,9 +477,9 @@ impl ops::Index<u32> for FVector2 {
     /// # Example
     ///
     /// ```
-    /// use axion::math::FVector2;
+    /// use axion::math::Vector2;
     ///
-    /// let vector = FVector2::new(2.0, 3.0);
+    /// let vector = Vector2::new(2.0, 3.0);
     /// let x_component = vector[0u32];
     ///
     /// assert_eq!(x_component, 2.0);
@@ -457,10 +494,10 @@ impl ops::Index<u32> for FVector2 {
     }
 }
 
-impl ops::IndexMut<u32> for FVector2 {
-    /// Mutable indexing for the `FVector2` by a `u32` index.
+impl ops::IndexMut<u32> for Vector2 {
+    /// Mutable indexing for the `Vector2` by a `u32` index.
     ///
-    /// This implementation allows you to mutably access and modify the components of an `FVector2`
+    /// This implementation allows you to mutably access and modify the components of an `Vector2`
     /// using a `u32` index where `0` corresponds to `x` and `1` corresponds to `y`. It returns
     /// a mutable reference to the component at the specified index.
     ///
@@ -470,7 +507,7 @@ impl ops::IndexMut<u32> for FVector2 {
     ///
     /// # Returns
     ///
-    /// A mutable reference to the specified component of the `FVector2`.
+    /// A mutable reference to the specified component of the `Vector2`.
     ///
     /// # Panics
     ///
@@ -479,9 +516,9 @@ impl ops::IndexMut<u32> for FVector2 {
     /// # Example
     ///
     /// ```
-    /// use axion::math::FVector2;
+    /// use axion::math::Vector2;
     ///
-    /// let mut vector = FVector2::new(2.0, 3.0);
+    /// let mut vector = Vector2::new(2.0, 3.0);
     /// vector[0u32] = 4.0;
     ///
     /// assert_eq!(vector[0u32], 4.0);

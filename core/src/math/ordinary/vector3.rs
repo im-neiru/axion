@@ -1,8 +1,8 @@
 use std::ops;
 
-use crate::math::FVector3;
+use crate::math::Vector3;
 
-impl FVector3 {
+impl Vector3 {
     /// Returns the dot product of the vector and another vector.
     ///
     /// # Arguments
@@ -14,30 +14,30 @@ impl FVector3 {
             .mul_add(other.x, self.y.mul_add(other.y, self.z * other.z))
     }
 
-    /// Calculates the cross product of two `FVector3` instances.
+    /// Calculates the cross product of two `Vector3` instances.
     ///
     /// This method computes the cross product between `self` and `other`. The result is another
-    /// `FVector3` that is orthogonal to both input vectors, representing the direction of the cross
+    /// `Vector3` that is orthogonal to both input vectors, representing the direction of the cross
     /// product. The cross product is commonly used for various geometric calculations.
     ///
     /// # Arguments
     ///
-    /// * `other` - The `FVector3` instance representing the other vector.
+    /// * `other` - The `Vector3` instance representing the other vector.
     ///
     /// # Returns
     ///
-    /// The cross product of `self` and `other` as a new `FVector3`.
+    /// The cross product of `self` and `other` as a new `Vector3`.
     ///
     /// # Example
     ///
     /// ```
-    /// use axion::math::FVector3;
+    /// use axion::math::Vector3;
     ///
-    /// let vector1 = FVector3::new(1.0, 0.0, 0.0);
-    /// let vector2 = FVector3::new(0.0, 1.0, 0.0);
+    /// let vector1 = Vector3::new(1.0, 0.0, 0.0);
+    /// let vector2 = Vector3::new(0.0, 1.0, 0.0);
     /// let cross_product = vector1.cross(vector2);
     ///
-    /// assert_eq!(cross_product, FVector3::new(0.0, 0.0, 1.0));
+    /// assert_eq!(cross_product, Vector3::new(0.0, 0.0, 1.0));
     /// ```
     #[inline]
     pub fn cross(self, other: Self) -> Self {
@@ -77,7 +77,7 @@ impl FVector3 {
     }
 
     //// Returns the inverse of the length (reciprocal of the magnitude) of the vector,
-    /// If the length of the vector is `FVector3::ZERO`, this function will return an `f32::INFINITY`.
+    /// If the length of the vector is `Vector3::ZERO`, this function will return an `f32::INFINITY`.
     ///
     ///
     /// The inverse length is calculated by taking the reciprocal of the length of the vector (`length` function).
@@ -85,10 +85,10 @@ impl FVector3 {
     /// # Example
     ///
     /// ```
-    /// use axion::math::FVector3;
+    /// use axion::math::Vector3;
     ///
     /// // Create a 3D vector
-    /// let v = FVector3::new(3.0, 4.0, 5.0);
+    /// let v = Vector3::new(3.0, 4.0, 5.0);
     ///
     /// // Calculate the inverse length of the 3D vector
     /// let inv_length = v.length_inv();
@@ -104,7 +104,7 @@ impl FVector3 {
 
     /// Calculates the Euclidean distance between two 3D vectors.
     ///
-    /// This function computes the Euclidean distance between two `FVector3`
+    /// This function computes the Euclidean distance between two `Vector3`
     ///
     /// # Arguments
     ///
@@ -118,11 +118,11 @@ impl FVector3 {
     /// # Example
     ///
     /// ```
-    /// use axion::math::FVector3;
+    /// use axion::math::Vector3;
     ///
     /// // Create two 3D vectors
-    /// let vector1 = FVector3::new(1.0, 2.0, 3.0);
-    /// let vector2 = FVector3::new(4.0, 6.0, 8.0);
+    /// let vector1 = Vector3::new(1.0, 2.0, 3.0);
+    /// let vector2 = Vector3::new(4.0, 6.0, 8.0);
     ///
     /// // Calculate the distance between the two vectors
     /// let distance = vector1.distance(vector2);
@@ -136,14 +136,14 @@ impl FVector3 {
         self.distance_sq(other).sqrt()
     }
 
-    /// Computes the squared Euclidean distance between two `FVector3` instances.
+    /// Computes the squared Euclidean distance between two `Vector3` instances.
     ///
     /// This method calculates the squared Euclidean distance between `self` and `other`, which is a
     /// more efficient version of the Euclidean distance as it avoids the square root operation.
     ///
     /// # Arguments
     ///
-    /// * `other` - The `FVector3` instance representing the other point in 3D space.
+    /// * `other` - The `Vector3` instance representing the other point in 3D space.
     ///
     /// # Returns
     ///
@@ -152,10 +152,10 @@ impl FVector3 {
     /// # Example
     ///
     /// ```
-    /// use axion::math::FVector3;
+    /// use axion::math::Vector3;
     ///
-    /// let point1 = FVector3::new(2.0, 3.0, 1.0);
-    /// let point2 = FVector3::new(1.0, 2.0, 3.0);
+    /// let point1 = Vector3::new(2.0, 3.0, 1.0);
+    /// let point2 = Vector3::new(1.0, 2.0, 3.0);
     /// let distance_sq = point1.distance_sq(point2);
     ///
     /// // Check if the squared distance is approximately 10.0 within a small tolerance
@@ -174,45 +174,45 @@ impl FVector3 {
     /// The `normalize` function normalizes a vector using SIMD instructions for efficiency.
     /// Be cautious when using this function with vectors at the origin `(0.0, 0.0, 0.0)`, as this would lead
     /// to a division by zero when calculating the reciprocal of the root. The result in such cases
-    /// would be ``FVector3::NAN``. It is recommended to check if the vector is at the origin before
+    /// would be ``Vector3::NAN``. It is recommended to check if the vector is at the origin before
     /// calling this function.
     ///
     /// # Arguments
     ///
-    /// * `self` - A FVector3 to be normalized.
+    /// * `self` - A Vector3 to be normalized.
     ///
     /// # Returns
     ///
-    /// * `FVector3` - A new FVector3 that is the normalized version of `self`.
+    /// * `Vector3` - A new Vector3 that is the normalized version of `self`.
     ///
     /// # Example
     ///
     /// ```
-    /// use axion::math::FVector3;
+    /// use axion::math::Vector3;
     ///
-    /// let v = FVector3::new(3.0, 4.0, 5.0); // Create a 3D vector
+    /// let v = Vector3::new(3.0, 4.0, 5.0); // Create a 3D vector
     /// let normalized_v = v.normalize(); // Normalize the 3D vector
     /// ```
     /// The `normalize` function normalizes a vector using SIMD instructions for efficiency.
     /// Be cautious when using this function with vectors at the origin `(0.0, 0.0, 0.0)`, as this would lead
     /// to a division by zero when calculating the reciprocal of the root. The result in such cases
-    /// would be ``FVector3::NAN``. It is recommended to check if the vector is at the origin before
+    /// would be ``Vector3::NAN``. It is recommended to check if the vector is at the origin before
     /// calling this function.
     ///
     /// # Arguments
     ///
-    /// * `self` - A FVector3 to be normalized.
+    /// * `self` - A Vector3 to be normalized.
     ///
     /// # Returns
     ///
-    /// * `FVector3` - A new FVector3 that is the normalized version of `self`.
+    /// * `Vector3` - A new Vector3 that is the normalized version of `self`.
     ///
     /// # Example
     ///
     /// ```
-    /// use axion::math::FVector3;
+    /// use axion::math::Vector3;
     ///
-    /// let v = FVector3::new(3.0, 4.0, 5.0); // Create a 3D vector
+    /// let v = Vector3::new(3.0, 4.0, 5.0); // Create a 3D vector
     /// let normalized_v = v.normalize(); // Normalize the 3D vector
     /// ```
     #[inline]
@@ -240,15 +240,15 @@ impl FVector3 {
     ///
     /// # Returns
     ///
-    /// A new `FVector3` representing the projection of the current vector onto `normal`.
+    /// A new `Vector3` representing the projection of the current vector onto `normal`.
     ///
     /// # Example
     ///
     /// ```rust
-    /// use axion::math::FVector3;
+    /// use axion::math::Vector3;
     ///
-    /// let vec1 = FVector3::new(1.0, 2.0, 3.0);
-    /// let normalized = FVector3::new(4.0, 5.0, 6.0).normalize();
+    /// let vec1 = Vector3::new(1.0, 2.0, 3.0);
+    /// let normalized = Vector3::new(4.0, 5.0, 6.0).normalize();
     ///
     /// let projection = vec1.project(normalized);
     /// println!("Projection: {:?}", projection);
@@ -266,15 +266,15 @@ impl FVector3 {
         }
     }
 
-    /// Performs linear interpolation between two `FVector3` instances.
+    /// Performs linear interpolation between two `Vector3` instances.
     ///
-    /// Linear interpolation, or lerp, blends between two `FVector3` instances using a specified
-    /// interpolation factor `scalar`. The result is a new `FVector3` where each component is interpolated
+    /// Linear interpolation, or lerp, blends between two `Vector3` instances using a specified
+    /// interpolation factor `scalar`. The result is a new `Vector3` where each component is interpolated
     /// between the corresponding components of `self` and `end` based on `scalar`.
     ///
     /// # Arguments
     ///
-    /// * `end` - The target `FVector3` to interpolate towards.
+    /// * `end` - The target `Vector3` to interpolate towards.
     /// * `scalar` - The interpolation factor, typically in the range `0.0`, `1.0`, where:
     ///   - `scalar = 0.0` returns `self`.
     ///   - `scalar = 1.0` returns `end`.
@@ -282,18 +282,18 @@ impl FVector3 {
     ///
     /// # Returns
     ///
-    /// A new `FVector3` instance resulting from the linear interpolation of `self` and `end` with factor `scalar`.
+    /// A new `Vector3` instance resulting from the linear interpolation of `self` and `end` with factor `scalar`.
     ///
     /// # Example
     ///
     /// ```rust
-    /// use axion::math::FVector3;
+    /// use axion::math::Vector3;
     ///
-    /// let start = FVector3::new(1.0, 2.0, 3.0);
-    /// let end = FVector3::new(3.0, 4.0, 5.0);
+    /// let start = Vector3::new(1.0, 2.0, 3.0);
+    /// let end = Vector3::new(3.0, 4.0, 5.0);
     /// let interpolated = start.lerp(end, 0.5);
     ///
-    /// assert_eq!(interpolated, FVector3::new(2.0, 3.0, 4.0));
+    /// assert_eq!(interpolated, Vector3::new(2.0, 3.0, 4.0));
     /// ```
     #[inline]
     pub fn lerp(self, end: Self, scalar: f32) -> Self {
@@ -308,9 +308,9 @@ impl FVector3 {
         }
     }
 
-    /// Clamps each component of the `FVector3` to be within the specified range.
+    /// Clamps each component of the `Vector3` to be within the specified range.
     ///
-    /// This function takes an `FVector3` instance and ensures that each component is
+    /// This function takes an `Vector3` instance and ensures that each component is
     /// within the specified `min` and `max` bounds. If a component is less than `min`,
     /// it will be set to `min`, and if it is greater than `max`, it will be set to `max`.
     ///
@@ -321,46 +321,46 @@ impl FVector3 {
     ///
     /// # Returns
     ///
-    /// A new `FVector3` instance with each component clamped to the specified range.
+    /// A new `Vector3` instance with each component clamped to the specified range.
     ///
     /// # Example
     ///
     /// ```
-    /// use axion::math::FVector3;
+    /// use axion::math::Vector3;
     ///
-    /// let vector = FVector3::new(2.0, 3.0, 5.0); // Fixed: Three components
-    /// let clamped = vector.clamp(FVector3::new(1.0, 2.0, 3.0), FVector3::new(4.0, 5.0, 6.0)); // Fixed: Three components
-    /// assert_eq!(clamped, FVector3::new(2.0, 3.0, 5.0));
+    /// let vector = Vector3::new(2.0, 3.0, 5.0); // Fixed: Three components
+    /// let clamped = vector.clamp(Vector3::new(1.0, 2.0, 3.0), Vector3::new(4.0, 5.0, 6.0)); // Fixed: Three components
+    /// assert_eq!(clamped, Vector3::new(2.0, 3.0, 5.0));
     /// ```
     #[inline]
     pub fn clamp(self, min: Self, max: Self) -> Self {
         self.max(min).min(max)
     }
 
-    /// Returns an `FVector3` with each component set to the minimum of the corresponding components of `self` and `value`.
+    /// Returns an `Vector3` with each component set to the minimum of the corresponding components of `self` and `value`.
     ///
-    /// This function compares each component of `self` and `value` and returns a new `FVector3`
+    /// This function compares each component of `self` and `value` and returns a new `Vector3`
     /// with each component set to the minimum of the corresponding components of `self` and `value`.
     ///
     /// # Arguments
     ///
-    /// * `value` - The `FVector3` to compare with `self`.
+    /// * `value` - The `Vector3` to compare with `self`.
     ///
     /// # Returns
     ///
-    /// A new `FVector3` instance with each component set to the minimum of the corresponding components of `self` and `value`.
+    /// A new `Vector3` instance with each component set to the minimum of the corresponding components of `self` and `value`.
     ///
     /// # Example
     ///
     /// ```
-    /// use axion::math::FVector3;
+    /// use axion::math::Vector3;
     ///
-    /// let vector1 = FVector3::new(2.0, 3.0, 5.0); // Create a 3D vector
-    /// let vector2 = FVector3::new(1.0, 2.0, 4.0); // Create another 3D vector
+    /// let vector1 = Vector3::new(2.0, 3.0, 5.0); // Create a 3D vector
+    /// let vector2 = Vector3::new(1.0, 2.0, 4.0); // Create another 3D vector
     /// let min_vector = vector1.min(vector2); // Find the component-wise minimum
     ///
     /// // The resulting vector should have each component as the minimum of the corresponding components of vector1 and vector2
-    /// assert_eq!(min_vector, FVector3::new(1.0, 2.0, 4.0));
+    /// assert_eq!(min_vector, Vector3::new(1.0, 2.0, 4.0));
     /// ```
     #[inline]
     pub fn min(self, value: Self) -> Self {
@@ -371,29 +371,29 @@ impl FVector3 {
         }
     }
 
-    /// Returns an `FVector3` with each component set to the maximum of the corresponding components of `self` and `value`.
+    /// Returns an `Vector3` with each component set to the maximum of the corresponding components of `self` and `value`.
     ///
-    /// This function compares each component of `self` and `value` and returns a new `FVector3`
+    /// This function compares each component of `self` and `value` and returns a new `Vector3`
     /// with each component set to the maximum of the corresponding components of `self` and `value`.
     ///
     /// # Arguments
     ///
-    /// * `value` - The `FVector3` to compare with `self`.
+    /// * `value` - The `Vector3` to compare with `self`.
     ///
     /// # Returns
     ///
-    /// A new `FVector3` instance with each component set to the maximum of the corresponding components of `self` and `value`.
+    /// A new `Vector3` instance with each component set to the maximum of the corresponding components of `self` and `value`.
     ///
     /// # Example
     ///
     /// ```
-    /// use axion::math::FVector3;
+    /// use axion::math::Vector3;
     ///
-    /// let vector1 = FVector3::new(2.0, 5.0, 8.0); // Create a 3D vector
-    /// let vector2 = FVector3::new(1.0, 3.0, 10.0); // Create another 3D vector
+    /// let vector1 = Vector3::new(2.0, 5.0, 8.0); // Create a 3D vector
+    /// let vector2 = Vector3::new(1.0, 3.0, 10.0); // Create another 3D vector
     /// let max_vector = vector1.max(vector2); // Find the maximum component-wise
     ///
-    /// assert_eq!(max_vector, FVector3::new(2.0, 5.0, 10.0)); // Check the result with 3D vectors
+    /// assert_eq!(max_vector, Vector3::new(2.0, 5.0, 10.0)); // Check the result with 3D vectors
     /// ```
     #[inline]
     pub fn max(self, value: Self) -> Self {
@@ -404,25 +404,25 @@ impl FVector3 {
         }
     }
 
-    /// Checks if all components of the `FVector3` are equal to zero.
+    /// Checks if all components of the `Vector3` are equal to zero.
     ///
-    /// This function compares each component of the `FVector3` with zero and returns
+    /// This function compares each component of the `Vector3` with zero and returns
     /// `true` if all components are equal to zero, and `false` otherwise.
     ///
     /// # Returns
     ///
-    /// Returns `true` if all components of the `FVector3` are equal to zero, `false` otherwise.
+    /// Returns `true` if all components of the `Vector3` are equal to zero, `false` otherwise.
     ///
     /// # Example
     ///
     /// ```
-    /// use axion::math::FVector3;
+    /// use axion::math::Vector3;
     ///
-    /// // Create an `FVector3` with all components set to zero
-    /// let zero_vector = FVector3::ZERO;
+    /// // Create an `Vector3` with all components set to zero
+    /// let zero_vector = Vector3::ZERO;
     ///
-    /// // Create an `FVector3` with some non-zero components
-    /// let non_zero_vector = FVector3::new(2.0, 0.0, 0.0);
+    /// // Create an `Vector3` with some non-zero components
+    /// let non_zero_vector = Vector3::new(2.0, 0.0, 0.0);
     ///
     /// // Check if all components of the zero vector are equal to zero
     /// assert_eq!(zero_vector.is_zero(), true);
@@ -436,22 +436,22 @@ impl FVector3 {
         self.x == 0.0 && self.y == 0.0 && self.z == 0.0
     }
 
-    /// Checks if any component of the `FVector3` is `f32::NAN`.
+    /// Checks if any component of the `Vector3` is `f32::NAN`.
     ///
-    /// This function checks each component of the `FVector3` for `f32::NAN` and returns `true`
+    /// This function checks each component of the `Vector3` for `f32::NAN` and returns `true`
     /// if at least one component is `f32::NAN`, and `false` otherwise.
     ///
     /// # Returns
     ///
-    /// `true` if any component of the `FVector3` is `f32::NAN`, `false` otherwise.
+    /// `true` if any component of the `Vector3` is `f32::NAN`, `false` otherwise.
     ///
     /// # Example
     ///
     /// ```
-    /// use axion::math::FVector3;
+    /// use axion::math::Vector3;
     ///
-    /// let nan_vector = FVector3::new(f32::NAN, 2.0, 1.0); // Create a 3D vector with NaN component
-    /// let valid_vector = FVector3::new(1.0, 3.0, 2.0);     // Create a 3D vector with valid components
+    /// let nan_vector = Vector3::new(f32::NAN, 2.0, 1.0); // Create a 3D vector with NaN component
+    /// let valid_vector = Vector3::new(1.0, 3.0, 2.0);     // Create a 3D vector with valid components
     ///
     /// assert_eq!(nan_vector.is_nan(), true);    // Check if any component of the nan_vector is NaN
     /// assert_eq!(valid_vector.is_nan(), false); // Check if any component of the valid_vector is NaN
@@ -463,28 +463,28 @@ impl FVector3 {
     }
 }
 
-impl PartialEq for FVector3 {
-    /// Checks if two `FVector3` instances are equal.
+impl PartialEq for Vector3 {
+    /// Checks if two `Vector3` instances are equal.
     ///
-    /// This implementation compares each component of two `FVector3` instances for equality
+    /// This implementation compares each component of two `Vector3` instances for equality
     /// and returns `true` if all components are equal, and `false` otherwise.
     ///
     /// # Arguments
     ///
-    /// * `rhs` - The right-hand side `FVector3` to compare with.
+    /// * `rhs` - The right-hand side `Vector3` to compare with.
     ///
     /// # Returns
     ///
-    /// `true` if all components of the two `FVector3` instances are equal, `false` otherwise.
+    /// `true` if all components of the two `Vector3` instances are equal, `false` otherwise.
     ///
     /// # Example
     ///
     /// ```
-    /// use axion::math::FVector3;
+    /// use axion::math::Vector3;
     ///
-    /// let vector1 = FVector3::new(2.0, 3.0, 4.0); // Create a 3D vector
-    /// let vector2 = FVector3::new(2.0, 3.0, 4.0); // Create another 3D vector with the same values
-    /// let vector3 = FVector3::new(1.0, 2.0, 3.0); // Create a different 3D vector
+    /// let vector1 = Vector3::new(2.0, 3.0, 4.0); // Create a 3D vector
+    /// let vector2 = Vector3::new(2.0, 3.0, 4.0); // Create another 3D vector with the same values
+    /// let vector3 = Vector3::new(1.0, 2.0, 3.0); // Create a different 3D vector
     ///
     /// assert_eq!(vector1, vector2); // Check if vector1 is equal to vector2
     /// assert_ne!(vector1, vector3); // Check if vector1 is not equal to vector3
@@ -494,27 +494,27 @@ impl PartialEq for FVector3 {
         self.x == rhs.x && self.y == rhs.y && self.z == rhs.z
     }
 
-    /// Checks if two `FVector3` instances are not equal.
+    /// Checks if two `Vector3` instances are not equal.
     ///
-    /// This implementation compares each component of two `FVector3` instances for inequality
+    /// This implementation compares each component of two `Vector3` instances for inequality
     /// and returns `true` if at least one component is not equal, and `false` if all components
     /// are equal.
     ///
     /// # Arguments
     ///
-    /// * `rhs` - The right-hand side `FVector3` to compare with.
+    /// * `rhs` - The right-hand side `Vector3` to compare with.
     ///
     /// # Returns
     ///
-    /// `true` if at least one component of the two `FVector3` instances is not equal, `false` if all components are equal.
+    /// `true` if at least one component of the two `Vector3` instances is not equal, `false` if all components are equal.
     ///
     /// # Example
     ///
     /// ```
-    /// use axion::math::FVector3;
+    /// use axion::math::Vector3;
     ///
-    /// let vector1 = FVector3::new(2.0, 3.0, 4.0); // Create a 3D vector
-    /// let vector2 = FVector3::new(1.0, 2.0, 4.0); // Create another 3D vector with differences in components
+    /// let vector1 = Vector3::new(2.0, 3.0, 4.0); // Create a 3D vector
+    /// let vector2 = Vector3::new(1.0, 2.0, 4.0); // Create another 3D vector with differences in components
     ///
     /// assert_ne!(vector1, vector2); // Check if vector1 is not equal to vector2 due to differing components
     /// ```
@@ -525,33 +525,33 @@ impl PartialEq for FVector3 {
     }
 }
 
-impl ops::Add<Self> for FVector3 {
+impl ops::Add<Self> for Vector3 {
     type Output = Self;
 
-    /// Adds two `FVector3` instances component-wise.
+    /// Adds two `Vector3` instances component-wise.
     ///
-    /// This implementation allows you to add two `FVector3` instances together
-    /// component-wise, resulting in a new `FVector3` where each component is the
+    /// This implementation allows you to add two `Vector3` instances together
+    /// component-wise, resulting in a new `Vector3` where each component is the
     /// sum of the corresponding components of `self` and `rhs`.
     ///
     /// # Arguments
     ///
-    /// * `rhs` - The right-hand side `FVector3` to add to `self`.
+    /// * `rhs` - The right-hand side `Vector3` to add to `self`.
     ///
     /// # Returns
     ///
-    /// A new `FVector3` instance resulting from the component-wise addition of `self` and `rhs`.
+    /// A new `Vector3` instance resulting from the component-wise addition of `self` and `rhs`.
     ///
     /// # Example
     ///
     /// ```
-    /// use axion::math::FVector3;
+    /// use axion::math::Vector3;
     ///
-    /// let vector1 = FVector3::new(2.0, 3.0, 4.0); // Create a 3D vector
-    /// let vector2 = FVector3::new(1.0, 2.0, 1.0); // Create another 3D vector
+    /// let vector1 = Vector3::new(2.0, 3.0, 4.0); // Create a 3D vector
+    /// let vector2 = Vector3::new(1.0, 2.0, 1.0); // Create another 3D vector
     /// let result = vector1 + vector2; // Perform component-wise addition
     ///
-    /// assert_eq!(result, FVector3::new(3.0, 5.0, 5.0)); // Check the result with 3D vectors
+    /// assert_eq!(result, Vector3::new(3.0, 5.0, 5.0)); // Check the result with 3D vectors
     /// ```
     #[inline]
     fn add(self, rhs: Self) -> Self::Output {
@@ -563,33 +563,33 @@ impl ops::Add<Self> for FVector3 {
     }
 }
 
-impl ops::Sub<Self> for FVector3 {
+impl ops::Sub<Self> for Vector3 {
     type Output = Self;
 
-    /// Subtracts one `FVector3` from another component-wise.
+    /// Subtracts one `Vector3` from another component-wise.
     ///
-    /// This implementation allows you to subtract one `FVector3` from another
-    /// component-wise, resulting in a new `FVector3` where each component is the
+    /// This implementation allows you to subtract one `Vector3` from another
+    /// component-wise, resulting in a new `Vector3` where each component is the
     /// difference between the corresponding components of `self` and `rhs`.
     ///
     /// # Arguments
     ///
-    /// * `rhs` - The right-hand side `FVector3` to subtract from `self`.
+    /// * `rhs` - The right-hand side `Vector3` to subtract from `self`.
     ///
     /// # Returns
     ///
-    /// A new `FVector3` instance resulting from the component-wise subtraction of `self` and `rhs`.
+    /// A new `Vector3` instance resulting from the component-wise subtraction of `self` and `rhs`.
     ///
     /// # Example
     ///
     /// ```
-    /// use axion::math::FVector3;
+    /// use axion::math::Vector3;
     ///
-    /// let vector1 = FVector3::new(2.0, 3.0, 4.0); // Create a 3D vector
-    /// let vector2 = FVector3::new(1.0, 2.0, 1.0); // Create another 3D vector
+    /// let vector1 = Vector3::new(2.0, 3.0, 4.0); // Create a 3D vector
+    /// let vector2 = Vector3::new(1.0, 2.0, 1.0); // Create another 3D vector
     /// let result = vector1 - vector2; // Perform component-wise subtraction
     ///
-    /// assert_eq!(result, FVector3::new(1.0, 1.0, 3.0)); // Check the result with 3D vectors
+    /// assert_eq!(result, Vector3::new(1.0, 1.0, 3.0)); // Check the result with 3D vectors
     /// ```
     #[inline]
     fn sub(self, rhs: Self) -> Self::Output {
@@ -601,33 +601,33 @@ impl ops::Sub<Self> for FVector3 {
     }
 }
 
-impl ops::Mul<Self> for FVector3 {
+impl ops::Mul<Self> for Vector3 {
     type Output = Self;
 
-    /// Multiplies two `FVector3` instances component-wise.
+    /// Multiplies two `Vector3` instances component-wise.
     ///
-    /// This implementation allows you to multiply two `FVector3` instances together
-    /// component-wise, resulting in a new `FVector3` where each component is the
+    /// This implementation allows you to multiply two `Vector3` instances together
+    /// component-wise, resulting in a new `Vector3` where each component is the
     /// product of the corresponding components of `self` and `rhs`.
     ///
     /// # Arguments
     ///
-    /// * `rhs` - The right-hand side `FVector3` to multiply with `self`.
+    /// * `rhs` - The right-hand side `Vector3` to multiply with `self`.
     ///
     /// # Returns
     ///
-    /// A new `FVector3` instance resulting from the component-wise multiplication of `self` and `rhs`.
+    /// A new `Vector3` instance resulting from the component-wise multiplication of `self` and `rhs`.
     ///
     /// # Example
     ///
     /// ```
-    /// use axion::math::FVector3;
+    /// use axion::math::Vector3;
     ///
-    /// let vector1 = FVector3::new(2.0, 3.0, 4.0); // Create a 3D vector
-    /// let vector2 = FVector3::new(1.0, 2.0, 2.0); // Create another 3D vector
+    /// let vector1 = Vector3::new(2.0, 3.0, 4.0); // Create a 3D vector
+    /// let vector2 = Vector3::new(1.0, 2.0, 2.0); // Create another 3D vector
     /// let result = vector1 * vector2; // Perform component-wise multiplication
     ///
-    /// assert_eq!(result, FVector3::new(2.0, 6.0, 8.0)); // Check the result with 3D vectors
+    /// assert_eq!(result, Vector3::new(2.0, 6.0, 8.0)); // Check the result with 3D vectors
     /// ```
     #[inline]
     fn mul(self, rhs: Self) -> Self::Output {
@@ -639,33 +639,33 @@ impl ops::Mul<Self> for FVector3 {
     }
 }
 
-impl ops::Div<Self> for FVector3 {
+impl ops::Div<Self> for Vector3 {
     type Output = Self;
 
-    /// Divides one `FVector3` by another component-wise.
+    /// Divides one `Vector3` by another component-wise.
     ///
-    /// This implementation allows you to divide one `FVector3` by another component-wise,
-    /// resulting in a new `FVector3` where each component is the result of dividing the
+    /// This implementation allows you to divide one `Vector3` by another component-wise,
+    /// resulting in a new `Vector3` where each component is the result of dividing the
     /// corresponding components of `self` by `rhs`.
     ///
     /// # Arguments
     ///
-    /// * `rhs` - The right-hand side `FVector3` to divide `self` by.
+    /// * `rhs` - The right-hand side `Vector3` to divide `self` by.
     ///
     /// # Returns
     ///
-    /// A new `FVector3` instance resulting from the component-wise division of `self` by `rhs`.
+    /// A new `Vector3` instance resulting from the component-wise division of `self` by `rhs`.
     ///
     /// # Example
     ///
     /// ```
-    /// use axion::math::FVector3;
+    /// use axion::math::Vector3;
     ///
-    /// let vector1 = FVector3::new(2.0, 6.0, 8.0); // Create a 3D vector
-    /// let vector2 = FVector3::new(1.0, 2.0, 4.0); // Create another 3D vector
+    /// let vector1 = Vector3::new(2.0, 6.0, 8.0); // Create a 3D vector
+    /// let vector2 = Vector3::new(1.0, 2.0, 4.0); // Create another 3D vector
     /// let result = vector1 / vector2; // Perform component-wise division
     ///
-    /// assert_eq!(result, FVector3::new(2.0, 3.0, 2.0)); // Check the result with 3D vectors
+    /// assert_eq!(result, Vector3::new(2.0, 3.0, 2.0)); // Check the result with 3D vectors
     /// ```
     #[inline]
     fn div(self, rhs: Self) -> Self::Output {
@@ -677,33 +677,33 @@ impl ops::Div<Self> for FVector3 {
     }
 }
 
-impl ops::Rem<Self> for FVector3 {
+impl ops::Rem<Self> for Vector3 {
     type Output = Self;
 
-    /// Computes the remainder of dividing one `FVector3` by another component-wise.
+    /// Computes the remainder of dividing one `Vector3` by another component-wise.
     ///
-    /// This implementation allows you to compute the remainder of dividing one `FVector3`
-    /// by another component-wise, resulting in a new `FVector3` where each component is
+    /// This implementation allows you to compute the remainder of dividing one `Vector3`
+    /// by another component-wise, resulting in a new `Vector3` where each component is
     /// the remainder of dividing the corresponding components of `self` by `rhs`.
     ///
     /// # Arguments
     ///
-    /// * `rhs` - The right-hand side `FVector3` to compute the remainder of division with `self`.
+    /// * `rhs` - The right-hand side `Vector3` to compute the remainder of division with `self`.
     ///
     /// # Returns
     ///
-    /// A new `FVector3` instance resulting from the component-wise remainder of division of `self` by `rhs`.
+    /// A new `Vector3` instance resulting from the component-wise remainder of division of `self` by `rhs`.
     ///
     /// # Example
     ///
     /// ```
-    /// use axion::math::FVector3;
+    /// use axion::math::Vector3;
     ///
-    /// let vector1 = FVector3::new(7.0, 10.0, 13.0); // Create a 3D vector
-    /// let vector2 = FVector3::new(3.0, 4.0, 5.0);   // Create another 3D vector
+    /// let vector1 = Vector3::new(7.0, 10.0, 13.0); // Create a 3D vector
+    /// let vector2 = Vector3::new(3.0, 4.0, 5.0);   // Create another 3D vector
     /// let result = vector1 % vector2;                // Perform component-wise remainder
     ///
-    /// assert_eq!(result, FVector3::new(1.0, 2.0, 3.0)); // Check the result with 3D vectors
+    /// assert_eq!(result, Vector3::new(1.0, 2.0, 3.0)); // Check the result with 3D vectors
     /// ```
     #[inline]
     fn rem(self, rhs: Self) -> Self::Output {
@@ -715,25 +715,25 @@ impl ops::Rem<Self> for FVector3 {
     }
 }
 
-impl ops::AddAssign<Self> for FVector3 {
-    /// Adds another `FVector3` to `self` in place.
+impl ops::AddAssign<Self> for Vector3 {
+    /// Adds another `Vector3` to `self` in place.
     ///
-    /// This implementation allows you to add another `FVector3` to `self` in place, modifying
+    /// This implementation allows you to add another `Vector3` to `self` in place, modifying
     /// `self` to be the result of the addition.
     ///
     /// # Arguments
     ///
-    /// * `rhs` - The right-hand side `FVector3` to add to `self`.
+    /// * `rhs` - The right-hand side `Vector3` to add to `self`.
     ///
     /// # Example
     ///
     /// ```
-    /// use axion::math::FVector3;
+    /// use axion::math::Vector3;
     ///
-    /// let mut vector = FVector3::new(2.0, 3.0, 4.0); // Create a 3D vector
-    /// vector += FVector3::new(1.0, 2.0, 1.0);        // Perform in-place addition
+    /// let mut vector = Vector3::new(2.0, 3.0, 4.0); // Create a 3D vector
+    /// vector += Vector3::new(1.0, 2.0, 1.0);        // Perform in-place addition
     ///
-    /// assert_eq!(vector, FVector3::new(3.0, 5.0, 5.0)); // Check the result with 3D vectors
+    /// assert_eq!(vector, Vector3::new(3.0, 5.0, 5.0)); // Check the result with 3D vectors
     /// ```
     #[inline]
     fn add_assign(&mut self, rhs: Self) {
@@ -745,25 +745,25 @@ impl ops::AddAssign<Self> for FVector3 {
     }
 }
 
-impl ops::SubAssign<Self> for FVector3 {
-    /// Subtracts another `FVector3` from `self` in place.
+impl ops::SubAssign<Self> for Vector3 {
+    /// Subtracts another `Vector3` from `self` in place.
     ///
-    /// This implementation allows you to subtract another `FVector3` from `self` in place,
+    /// This implementation allows you to subtract another `Vector3` from `self` in place,
     /// modifying `self` to be the result of the subtraction.
     ///
     /// # Arguments
     ///
-    /// * `rhs` - The right-hand side `FVector3` to subtract from `self`.
+    /// * `rhs` - The right-hand side `Vector3` to subtract from `self`.
     ///
     /// # Example
     ///
     /// ```
-    /// use axion::math::FVector3;
+    /// use axion::math::Vector3;
     ///
-    /// let mut vector = FVector3::new(2.0, 3.0, 4.0); // Create a 3D vector
-    /// vector -= FVector3::new(1.0, 2.0, 1.0);        // Perform in-place subtraction
+    /// let mut vector = Vector3::new(2.0, 3.0, 4.0); // Create a 3D vector
+    /// vector -= Vector3::new(1.0, 2.0, 1.0);        // Perform in-place subtraction
     ///
-    /// assert_eq!(vector, FVector3::new(1.0, 1.0, 3.0)); // Check the result with 3D vectors
+    /// assert_eq!(vector, Vector3::new(1.0, 1.0, 3.0)); // Check the result with 3D vectors
     /// ```
     #[inline]
     fn sub_assign(&mut self, rhs: Self) {
@@ -775,25 +775,25 @@ impl ops::SubAssign<Self> for FVector3 {
     }
 }
 
-impl ops::MulAssign<Self> for FVector3 {
-    /// Multiplies `self` by another `FVector3` in place.
+impl ops::MulAssign<Self> for Vector3 {
+    /// Multiplies `self` by another `Vector3` in place.
     ///
-    /// This implementation allows you to multiply `self` by another `FVector3` in place,
+    /// This implementation allows you to multiply `self` by another `Vector3` in place,
     /// modifying `self` to be the result of the multiplication.
     ///
     /// # Arguments
     ///
-    /// * `rhs` - The right-hand side `FVector3` to multiply `self` with.
+    /// * `rhs` - The right-hand side `Vector3` to multiply `self` with.
     ///
     /// # Example
     ///
     /// ```
-    /// use axion::math::FVector3;
+    /// use axion::math::Vector3;
     ///
-    /// let mut vector = FVector3::new(2.0, 3.0, 4.0); // Create a 3D vector
-    /// vector *= FVector3::new(1.0, 2.0, 2.0);        // Perform in-place multiplication
+    /// let mut vector = Vector3::new(2.0, 3.0, 4.0); // Create a 3D vector
+    /// vector *= Vector3::new(1.0, 2.0, 2.0);        // Perform in-place multiplication
     ///
-    /// assert_eq!(vector, FVector3::new(2.0, 6.0, 8.0)); // Check the result with 3D vectors
+    /// assert_eq!(vector, Vector3::new(2.0, 6.0, 8.0)); // Check the result with 3D vectors
     /// ```
     #[inline]
     fn mul_assign(&mut self, rhs: Self) {
@@ -805,25 +805,25 @@ impl ops::MulAssign<Self> for FVector3 {
     }
 }
 
-impl ops::DivAssign<Self> for FVector3 {
-    /// Divides `self` by another `FVector3` in place.
+impl ops::DivAssign<Self> for Vector3 {
+    /// Divides `self` by another `Vector3` in place.
     ///
-    /// This implementation allows you to divide `self` by another `FVector3` in place,
+    /// This implementation allows you to divide `self` by another `Vector3` in place,
     /// modifying `self` to be the result of the division.
     ///
     /// # Arguments
     ///
-    /// * `rhs` - The right-hand side `FVector3` to divide `self` by.
+    /// * `rhs` - The right-hand side `Vector3` to divide `self` by.
     ///
     /// # Example
     ///
     /// ```
-    /// use axion::math::FVector3;
+    /// use axion::math::Vector3;
     ///
-    /// let mut vector = FVector3::new(2.0, 6.0, 8.0); // Create a 3D vector
-    /// vector /= FVector3::new(1.0, 2.0, 4.0);        // Perform in-place division
+    /// let mut vector = Vector3::new(2.0, 6.0, 8.0); // Create a 3D vector
+    /// vector /= Vector3::new(1.0, 2.0, 4.0);        // Perform in-place division
     ///
-    /// assert_eq!(vector, FVector3::new(2.0, 3.0, 2.0)); // Check the result with 3D vectors
+    /// assert_eq!(vector, Vector3::new(2.0, 3.0, 2.0)); // Check the result with 3D vectors
     /// ```
     #[inline]
     fn div_assign(&mut self, rhs: Self) {
@@ -835,25 +835,25 @@ impl ops::DivAssign<Self> for FVector3 {
     }
 }
 
-impl ops::RemAssign<Self> for FVector3 {
-    /// Computes the remainder of dividing `self` by another `FVector3` in place.
+impl ops::RemAssign<Self> for Vector3 {
+    /// Computes the remainder of dividing `self` by another `Vector3` in place.
     ///
     /// This implementation allows you to compute the remainder of dividing `self` by another
-    /// `FVector3` in place, modifying `self` to be the result of the remainder operation.
+    /// `Vector3` in place, modifying `self` to be the result of the remainder operation.
     ///
     /// # Arguments
     ///
-    /// * `rhs` - The right-hand side `FVector3` to compute the remainder of division with `self`.
+    /// * `rhs` - The right-hand side `Vector3` to compute the remainder of division with `self`.
     ///
     /// # Example
     ///
     /// ```
-    /// use axion::math::FVector3;
+    /// use axion::math::Vector3;
     ///
-    /// let mut vector = FVector3::new(7.0, 10.0, 12.0); // Create a 3D vector
-    /// vector %= FVector3::new(3.0, 4.0, 5.0);           // Perform in-place remainder
+    /// let mut vector = Vector3::new(7.0, 10.0, 12.0); // Create a 3D vector
+    /// vector %= Vector3::new(3.0, 4.0, 5.0);           // Perform in-place remainder
     ///
-    /// assert_eq!(vector, FVector3::new(1.0, 2.0, 2.0));  // Check the result with 3D vectors
+    /// assert_eq!(vector, Vector3::new(1.0, 2.0, 2.0));  // Check the result with 3D vectors
     /// ```
     #[inline]
     fn rem_assign(&mut self, rhs: Self) {

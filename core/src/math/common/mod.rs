@@ -1,7 +1,9 @@
-mod fvector2;
-mod fvector3;
-mod fvector4;
+mod quaternion;
+mod vector2;
+mod vector3;
+mod vector4;
 
-pub use fvector2::*;
-pub use fvector3::*;
-pub use fvector4::*;
+pub use quaternion::*;
+pub use vector2::*;
+pub use vector3::*;
+pub use vector4::*;

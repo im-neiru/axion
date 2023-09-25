@@ -229,7 +229,7 @@ impl Radians {
     /// Returns a unit vector in the direction of the angle in radians.
     ///
     /// The `normal` method computes the cosine and sine of the angle in radians
-    /// and returns a `axion::math::FVector2` representing the unit vector.
+    /// and returns a `axion::math::Vector2` representing the unit vector.
     ///
     /// # Examples
     ///
@@ -240,9 +240,9 @@ impl Radians {
     /// let normal_vector = pi.normal();
     /// ```
     #[inline]
-    pub fn normal(self) -> crate::math::FVector2 {
+    pub fn normal(self) -> crate::math::Vector2 {
         let (cos, sin) = (self.0.cos(), self.0.sin());
-        crate::math::FVector2 { x: cos, y: sin }
+        crate::math::Vector2 { x: cos, y: sin }
     }
 
     /// Computes the arccosine of the `scalar` value in radians.
